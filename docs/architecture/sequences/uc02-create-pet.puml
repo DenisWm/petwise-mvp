@@ -1,0 +1,55 @@
+@startuml
+title UC02 - Create Pet (PetWise MVP)\nInfrastructure + Application + Domain
+
+actor User as U
+participant "Web UI" as UI
+participant "PetController\n(infrastructure)" as C
+participant "CreatePetUseCase\n(application)" as UC
+participant "PetGateway\n(port)" as GPet
+participant "TutorGateway\n(port)" as GTutor
+participant "JpaPetRepository\n(adapter)" as APet
+participant "JpaTutorRepository\n(adapter)" as ATutor
+database "SQLite DB" as DB
+
+== Create Pet Happy Path ==
+
+U -> UI : Select tutor\nFill pet form
+UI -> C : POST /api/v1/pets\nPetCreateRequest
+C -> UC : execute(command)
+
+UC -> GTutor : findById(tutorId)
+GTutor -> ATutor : findById
+ATutor -> DB : SELECT * FROM tutor WHERE id = ?
+DB --> ATutor : Tutor row
+ATutor --> GTutor : Optional<Tutor> (present)
+GTutor --> UC : Tutor aggregate
+
+UC -> UC : validate pet data\n(name, birthDate, etc.)
+
+UC -> GPet : createPet(petAggregate)
+GPet -> APet : createPet
+APet -> DB : INSERT INTO pet(...)
+DB --> APet : new row with id
+APet --> GPet : persisted Pet
+GPet --> UC : persisted Pet
+
+UC --> C : PetResponse DTO
+C --> UI : 201 Created\nPet JSON
+
+== Error: Tutor Not Found ==
+
+U -> UI : Submit pet with invalid tutorId
+UI -> C : POST /api/v1/pets
+C -> UC : execute(command)
+UC -> GTutor : findById(tutorId)
+GTutor -> ATutor : SELECT ...
+ATutor -> DB : no rows
+DB --> ATutor : (empty)
+ATutor --> GTutor : Optional.empty()
+GTutor --> UC : empty
+
+UC --> C : throws DomainException(NotFound: Tutor)
+C -> "ApiExceptionHandler" as H : handle(DomainException)
+H --> UI : 404 Not Found\napplication/problem+json
+
+@enduml

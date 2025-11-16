@@ -1,0 +1,15 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(attendant, "Attendant", "Pet shop employee who registers tutors, pets, and manages appointments.")
+Person(manager, "Manager", "Supervisor/manager who views operational schedule and daily agenda.")
+
+System(petwise, "PetWise ERP (MVP)", "Lightweight ERP for tutor and pet registration, and appointment scheduling.")
+
+Rel(attendant, petwise, "Uses via Web UI")
+Rel(manager, petwise, "Views schedule")
+
+SHOW_LEGEND()
+@enduml

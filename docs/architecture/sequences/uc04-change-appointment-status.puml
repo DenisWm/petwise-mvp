@@ -1,0 +1,73 @@
+@startuml
+title UC04 - Change Appointment Status (PetWise MVP)\nInfrastructure + Application + Domain
+
+actor User as U
+participant "Web UI" as UI
+participant "AppointmentController\n(infrastructure)" as C
+participant "ChangeAppointmentStatusUseCase\n(application)" as UC
+participant "AppointmentGateway\n(port)" as GApp
+participant "JpaAppointmentRepository\n(adapter)" as AApp
+participant "AppointmentValidator\n(domain)" as V
+database "SQLite DB" as DB
+
+== Change Status Happy Path ==
+
+U -> UI : Choose appointment\nChange status (e.g. PENDING -> ACTIVE)
+UI -> C : PATCH /api/v1/appointments/{id}/status\n{ status: ACTIVE }
+C -> UC : execute(command)
+
+UC -> GApp : findById(id)
+GApp -> AApp : findById
+AApp -> DB : SELECT * FROM appointment WHERE id = ?
+DB --> AApp : Appointment row
+AApp --> GApp : Appointment
+GApp --> UC : Appointment aggregate
+
+UC -> V : validateStatusTransition(currentStatus, newStatus)
+V --> UC : ok
+
+UC -> GApp : updateStatus(appointmentAggregate)
+GApp -> AApp : save(appointment)
+AApp -> DB : UPDATE appointment SET status = ? WHERE id = ?
+DB --> AApp : updated row
+AApp --> GApp : updated Appointment
+GApp --> UC : updated Appointment
+
+UC --> C : AppointmentResponse DTO
+C --> UI : 200 OK\nAppointment JSON (new status)
+
+== Error: Invalid Transition ==
+
+U -> UI : Try COMPLETED -> ACTIVE
+UI -> C : PATCH /api/v1/appointments/{id}/status
+C -> UC : execute(command)
+UC -> GApp : findById(id)
+GApp -> AApp : SELECT ...
+AApp -> DB : row
+DB --> AApp : Appointment row
+AApp --> GApp : Appointment
+GApp --> UC : Appointment aggregate
+
+UC -> V : validateStatusTransition(COMPLETED, ACTIVE)
+V --> UC : error (invalid transition)
+UC --> C : throws DomainException(INVALID_STATUS_TRANSITION)
+C -> "ApiExceptionHandler" as H : handle(DomainException)
+H --> UI : 409 Conflict\napplication/problem+json
+
+== Error: Appointment Not Found ==
+
+U -> UI : Change status of non-existing appointment
+UI -> C : PATCH /api/v1/appointments/{id}/status
+C -> UC : execute(command)
+UC -> GApp : findById(id)
+GApp -> AApp : SELECT ... WHERE id = ?
+AApp -> DB : no rows
+DB --> AApp : (empty)
+AApp --> GApp : Optional.empty()
+GApp --> UC : empty
+
+UC --> C : throws DomainException(NotFound: Appointment)
+C -> H : handle(DomainException)
+H --> UI : 404 Not Found\napplication/problem+json
+
+@enduml

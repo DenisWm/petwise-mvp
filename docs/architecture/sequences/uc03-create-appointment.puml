@@ -1,0 +1,86 @@
+@startuml
+title UC03 - Create Appointment (PetWise MVP)\nInfrastructure + Application + Domain
+
+actor User as U
+participant "Web UI" as UI
+participant "AppointmentController\n(infrastructure)" as C
+participant "CreateAppointmentUseCase\n(application)" as UC
+participant "PetGateway\n(port)" as GPet
+participant "AppointmentGateway\n(port)" as GApp
+participant "JpaPetRepository\n(adapter)" as APet
+participant "JpaAppointmentRepository\n(adapter)" as AApp
+participant "AppointmentValidator\n(domain)" as V
+database "SQLite DB" as DB
+
+== Create Appointment Happy Path ==
+
+U -> UI : Select pet\nFill appointment form\n(type, start, end)
+UI -> C : POST /api/v1/appointments\nAppointmentCreateRequest
+C -> UC : execute(command)
+
+UC -> GPet : findById(petId)
+GPet -> APet : findById
+APet -> DB : SELECT * FROM pet WHERE id = ?
+DB --> APet : Pet row
+APet --> GPet : Pet
+GPet --> UC : Pet aggregate
+
+UC -> V : validateDateRange(start, end)
+V --> UC : ok
+
+UC -> V : checkConflicts(petId, start, end)
+V -> GApp : findActiveAppointmentsInRange(petId, start, end)
+GApp -> AApp : queryActiveAppointmentsInRange(...)
+AApp -> DB : SELECT ... FROM appointment WHERE pet_id = ? AND status IN ('PENDING','ACTIVE') ...
+DB --> AApp : no conflicting rows
+AApp --> GApp : empty list
+GApp --> V : empty list
+V --> UC : no conflict
+
+UC -> GApp : createAppointment(appointmentAggregate)
+GApp -> AApp : createAppointment
+AApp -> DB : INSERT INTO appointment(...)
+DB --> AApp : new row with id
+AApp --> GApp : persisted Appointment
+GApp --> UC : persisted Appointment
+
+UC --> C : AppointmentResponse DTO
+C --> UI : 201 Created\nAppointment JSON
+
+== Error: Invalid Date Range ==
+
+U -> UI : Submit start >= end
+UI -> C : POST /api/v1/appointments
+C -> UC : execute(command)
+UC -> V : validateDateRange(start, end)
+V --> UC : error (invalid range)
+UC --> C : throws DomainException(Validation)
+C -> "ApiExceptionHandler" as H : handle(DomainException)
+H --> UI : 400 Bad Request\napplication/problem+json
+
+== Error: Conflict ==
+
+U -> UI : Submit overlapping appointment
+UI -> C : POST /api/v1/appointments
+C -> UC : execute(command)
+UC -> GPet : findById
+GPet -> APet : SELECT ...
+APet -> DB : row
+DB --> APet : Pet row
+APet --> GPet : Pet
+GPet --> UC : Pet
+
+UC -> V : checkConflicts(petId, start, end)
+V -> GApp : findActiveAppointmentsInRange(...)
+GApp -> AApp : SELECT overlapping appointments...
+AApp -> DB : rows with conflicts
+DB --> AApp : conflicting rows
+AApp --> GApp : conflicts list
+GApp --> V : conflicts
+V --> UC : conflict detected
+
+UC --> C : throws DomainException(OVERLAPPING_APPOINTMENT)
+C -> H : handle(DomainException)
+H --> UI : 409 Conflict\napplication/problem+json
+
+@enduml

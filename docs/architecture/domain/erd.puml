@@ -1,0 +1,82 @@
+@startuml
+' Simple ERD for PetWise MVP with DDD hints (Aggregate Roots / Entities)
+
+hide circle
+skinparam class {
+  BackgroundColor White
+  BorderColor Black
+}
+
+' Aggregate Roots and Entities
+
+entity "Tutor <<AggregateRoot>>" as Tutor {
+  * id : UUID
+  --
+  name : string
+  email : string?
+  phone : string?
+  created_at : datetime
+  updated_at : datetime
+}
+
+entity "Pet <<Entity>>" as Pet {
+  * id : UUID
+  --
+  tutor_id : UUID
+  name : string
+  species : string?
+  breed : string?
+  birth_date : date?
+  notes : string?
+  created_at : datetime
+  updated_at : datetime
+}
+
+entity "Appointment <<AggregateRoot>>" as Appointment {
+  * id : UUID
+  --
+  pet_id : UUID
+  service_type : ServiceType
+  status : AppointmentStatus
+  start_at : datetime
+  end_at : datetime
+  notes : string?
+  created_at : datetime
+  updated_at : datetime
+}
+
+' Enum-like value objects
+
+entity "ServiceType (enum)" as ServiceType {
+  --
+  CRECHE
+  HOTEL
+}
+
+entity "AppointmentStatus (enum)" as AppointmentStatus {
+  --
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELED
+}
+
+' Relationships (logical model)
+
+Tutor ||--o{ Pet : "1:N\nTutor owns pets"
+Pet   ||--o{ Appointment : "1:N\nPet has appointments"
+
+Appointment }o--|| Pet : "FK pet_id -> Pet.id"
+Pet }o--|| Tutor : "FK tutor_id -> Tutor.id"
+
+' Status / type as value-like references
+Appointment }-- ServiceType : "service_type"
+Appointment }-- AppointmentStatus : "status"
+
+' DDD note
+note "DDD roles:\n- Tutor: Aggregate Root\n- Appointment: Aggregate Root\n- Pet: Entity inside Tutor aggregate\n- ServiceType & AppointmentStatus: enum-like value objects" as DDD
+DDD .. Tutor
+DDD .. Pet
+DDD .. Appointment
+
+@enduml

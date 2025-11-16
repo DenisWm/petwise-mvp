@@ -1,0 +1,136 @@
+@startuml
+title UC06 - Edit/Delete Records (Tutors and Pets)\nInfrastructure + Application + Domain
+
+actor User as U  <<Attendant>>
+
+participant "Web UI" as UI
+
+participant "TutorController\n(infrastructure)" as CTutor
+participant "PetController\n(infrastructure)" as CPet
+
+participant "EditTutorUseCase\n(application)" as UC_EDIT_TUTOR
+participant "EditPetUseCase\n(application)" as UC_EDIT_PET
+participant "DeleteTutorUseCase\n(application)" as UC_DELETE_TUTOR
+participant "DeletePetUseCase\n(application)" as UC_DELETE_PET
+
+participant "TutorGateway\n(port)" as G_TUTOR
+participant "PetGateway\n(port)" as G_PET
+participant "AppointmentGateway\n(port)" as G_APP
+
+participant "JpaTutorRepository\n(adapter)" as A_TUTOR
+participant "JpaPetRepository\n(adapter)" as A_PET
+participant "JpaAppointmentRepository\n(adapter)" as A_APP
+
+database "SQLite DB" as DB
+
+== Edit Tutor (Happy Path) ==
+
+U -> UI : Open tutor details
+UI -> CTutor : GET /api/v1/tutors/{id}
+CTutor -> G_TUTOR : findById(id)
+G_TUTOR -> A_TUTOR : findById
+A_TUTOR -> DB : SELECT * FROM tutor WHERE id = ?
+DB --> A_TUTOR : Tutor row
+A_TUTOR --> G_TUTOR : Tutor
+G_TUTOR --> CTutor : TutorResponse
+CTutor --> UI : 200 OK\nTutor JSON
+
+U -> UI : Edit name/email/phone\nand submit
+UI -> CTutor : PUT /api/v1/tutors/{id}\nTutorUpdateRequest
+CTutor -> UC_EDIT_TUTOR : execute(command)
+
+UC_EDIT_TUTOR -> G_TUTOR : findById(id)
+G_TUTOR -> A_TUTOR : SELECT ...
+A_TUTOR -> DB : row
+DB --> A_TUTOR : Tutor row
+A_TUTOR --> G_TUTOR : Tutor
+G_TUTOR --> UC_EDIT_TUTOR : Tutor aggregate
+
+UC_EDIT_TUTOR -> UC_EDIT_TUTOR : validate data\napply updates
+UC_EDIT_TUTOR -> G_TUTOR : updateTutor(aggregate)
+G_TUTOR -> A_TUTOR : save(tutor)
+A_TUTOR -> DB : UPDATE tutor SET ... WHERE id = ?
+DB --> A_TUTOR : updated row
+A_TUTOR --> G_TUTOR : updated Tutor
+G_TUTOR --> UC_EDIT_TUTOR : updated Tutor
+
+UC_EDIT_TUTOR --> CTutor : TutorResponse
+CTutor --> UI : 200 OK\nTutor JSON
+
+== Delete Tutor - Conflict (Has Pets) ==
+
+U -> UI : Request to delete tutor
+UI -> CTutor : DELETE /api/v1/tutors/{id}
+CTutor -> UC_DELETE_TUTOR : execute(command)
+
+UC_DELETE_TUTOR -> G_TUTOR : findById(id)
+G_TUTOR -> A_TUTOR : SELECT ...
+A_TUTOR -> DB : Tutor row
+DB --> A_TUTOR : row
+A_TUTOR --> G_TUTOR : Tutor
+G_TUTOR --> UC_DELETE_TUTOR : Tutor aggregate
+
+UC_DELETE_TUTOR -> G_PET : existsByTutorId(id)
+G_PET -> A_PET : SELECT 1 FROM pet WHERE tutor_id = ? LIMIT 1
+A_PET -> DB : query
+DB --> A_PET : row exists
+A_PET --> G_PET : true
+G_PET --> UC_DELETE_TUTOR : true
+
+UC_DELETE_TUTOR --> CTutor : throws DomainException(TUTOR_HAS_PETS)
+CTutor -> "ApiExceptionHandler" as H : handle(DomainException)
+H --> UI : 409 Conflict\napplication/problem+json
+
+== Delete Pet - Conflict (Active Appointments) ==
+
+U -> UI : Request to delete pet
+UI -> CPet : DELETE /api/v1/pets/{id}
+CPet -> UC_DELETE_PET : execute(command)
+
+UC_DELETE_PET -> G_PET : findById(id)
+G_PET -> A_PET : SELECT ...
+A_PET -> DB : Pet row
+DB --> A_PET : row
+A_PET --> G_PET : Pet
+G_PET --> UC_DELETE_PET : Pet aggregate
+
+UC_DELETE_PET -> G_APP : existsActiveByPetId(id)
+G_APP -> A_APP : SELECT 1 FROM appointment\nWHERE pet_id = ? AND status = 'ACTIVE' LIMIT 1
+A_APP -> DB : query
+DB --> A_APP : row exists
+A_APP --> G_APP : true
+G_APP --> UC_DELETE_PET : true
+
+UC_DELETE_PET --> CPet : throws DomainException(PET_HAS_ACTIVE_APPOINTMENTS)
+CPet -> H : handle(DomainException)
+H --> UI : 409 Conflict\napplication/problem+json
+
+== Delete Pet - Happy Path ==
+
+U -> UI : Delete pet with no active appointments
+UI -> CPet : DELETE /api/v1/pets/{id}
+CPet -> UC_DELETE_PET : execute(command)
+
+UC_DELETE_PET -> G_PET : findById(id)
+G_PET -> A_PET : SELECT ...
+A_PET -> DB : Pet row
+DB --> A_PET : row
+A_PET --> G_PET : Pet
+G_PET --> UC_DELETE_PET : Pet aggregate
+
+UC_DELETE_PET -> G_APP : existsActiveByPetId(id)
+G_APP -> A_APP : SELECT 1 FROM appointment WHERE pet_id = ? AND status = 'ACTIVE' LIMIT 1
+A_APP -> DB : no rows
+DB --> A_APP : none
+A_APP --> G_APP : false
+G_APP --> UC_DELETE_PET : false
+
+UC_DELETE_PET -> G_PET : deletePet(id)
+G_PET -> A_PET : DELETE FROM pet WHERE id = ?
+A_PET -> DB : delete
+DB --> A_PET : success
+
+UC_DELETE_PET --> CPet : (void)
+CPet --> UI : 204 No Content
+
+@enduml

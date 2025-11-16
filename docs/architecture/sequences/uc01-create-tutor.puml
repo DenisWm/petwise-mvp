@@ -1,0 +1,40 @@
+@startuml
+title UC01 - Create Tutor (PetWise MVP)\nInfrastructure + Application + Domain
+
+actor User as U
+participant "Web UI" as UI
+participant "TutorController\n(infrastructure)" as C
+participant "CreateTutorUseCase\n(application)" as UC
+participant "TutorGateway\n(port)" as G
+participant "JpaTutorRepository\n(adapter)" as A
+database "SQLite DB" as DB
+
+== Create Tutor Happy Path ==
+
+U -> UI : Fill tutor form\n(name, email, phone)
+UI -> C : POST /api/v1/tutors\nTutorCreateRequest
+C -> UC : execute(command)
+
+UC -> UC : validateName()\nvalidateEmail()\nvalidatePhone()
+UC -> G : createTutor(aggregate)
+
+G -> A : createTutor(aggregate)
+A -> DB : INSERT INTO tutor(...)
+DB --> A : new row with id
+A --> G : persisted Tutor
+G --> UC : persisted Tutor
+
+UC --> C : TutorResponse DTO
+C --> UI : 201 Created\nTutor JSON (id, name, email, phone)
+
+== Validation Error ==
+
+U -> UI : Submit invalid data
+UI -> C : POST /api/v1/tutors
+C -> UC : execute(command)
+UC -> UC : detect validation errors
+UC --> C : throws DomainException / Notification
+C -> "ApiExceptionHandler" as H : handle(DomainException)
+H --> UI : 400 Bad Request\napplication/problem+json
+
+@enduml

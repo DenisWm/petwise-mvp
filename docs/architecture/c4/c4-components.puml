@@ -1,0 +1,76 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(api, "PetWise Web/API") {
+
+  ' Controllers (Infrastructure)
+  Component(tutorController, "TutorController", "REST Controller", "Tutor endpoints")
+  Component(petController, "PetController", "REST Controller", "Pet endpoints")
+  Component(appointmentController, "AppointmentController", "REST Controller", "Scheduling endpoints")
+
+  ' Application layer: Use Cases
+  Component(createTutorUC, "CreateTutorUseCase", "Use Case", "Handles tutor creation workflow")
+  Component(editTutorUC, "EditTutorUseCase", "Use Case", "Updates tutor data")
+  Component(deleteTutorUC, "DeleteTutorUseCase", "Use Case", "Deletes tutors when allowed")
+
+  Component(createPetUC, "CreatePetUseCase", "Use Case", "Registers a new pet for a tutor")
+  Component(editPetUC, "EditPetUseCase", "Use Case", "Updates pet data")
+  Component(deletePetUC, "DeletePetUseCase", "Use Case", "Deletes pets when allowed")
+
+  Component(createAppointmentUC, "CreateAppointmentUseCase", "Use Case", "Creates appointments with date and conflict checks")
+  Component(changeStatusUC, "ChangeAppointmentStatusUseCase", "Use Case", "Changes appointment status following lifecycle rules")
+  Component(viewAgendaUC, "ViewDailyAgendaUseCase", "Use Case", "Lists appointments for a given day")
+
+  ' Domain ports (Gateways) – defined in the domain module
+  Component(tutorGateway, "TutorGateway", "Port (Domain)", "Abstraction for tutor persistence")
+  Component(petGateway, "PetGateway", "Port (Domain)", "Abstraction for pet persistence")
+  Component(appointmentGateway, "AppointmentGateway", "Port (Domain)", "Abstraction for appointment persistence")
+
+  ' Domain helper
+  Component(appointmentValidator, "AppointmentValidator", "Domain", "Validates date ranges, overlaps and status transitions")
+
+  ' Error handling
+  Component(problemHandler, "ApiExceptionHandler", "ControllerAdvice", "Maps DomainException to RFC7807 responses")
+}
+
+ContainerDb(db, "Database", "Relational DB (SQLite in MVP)", "Stores tutors, pets and appointments")
+
+' Controllers -> UseCases
+Rel(tutorController, createTutorUC, "Calls")
+Rel(tutorController, editTutorUC, "Calls")
+Rel(tutorController, deleteTutorUC, "Calls")
+
+Rel(petController, createPetUC, "Calls")
+Rel(petController, editPetUC, "Calls")
+Rel(petController, deletePetUC, "Calls")
+
+Rel(appointmentController, createAppointmentUC, "Calls")
+Rel(appointmentController, changeStatusUC, "Calls")
+Rel(appointmentController, viewAgendaUC, "Calls")
+
+' UseCases -> Gateways
+Rel(createTutorUC, tutorGateway, "Uses")
+Rel(editTutorUC, tutorGateway, "Uses")
+Rel(deleteTutorUC, tutorGateway, "Uses")
+
+Rel(createPetUC, petGateway, "Uses")
+Rel(editPetUC, petGateway, "Uses")
+Rel(deletePetUC, petGateway, "Uses")
+
+Rel(createAppointmentUC, appointmentGateway, "Uses")
+Rel(changeStatusUC, appointmentGateway, "Uses")
+Rel(viewAgendaUC, appointmentGateway, "Uses")
+
+' UseCases -> Domain validator
+Rel(createAppointmentUC, appointmentValidator, "Validates range and conflicts")
+Rel(changeStatusUC, appointmentValidator, "Validates status transitions")
+
+' Gateways -> DB (conceptual)
+Rel(tutorGateway, db, "Reads/Writes")
+Rel(petGateway, db, "Reads/Writes")
+Rel(appointmentGateway, db, "Reads/Writes")
+
+SHOW_LEGEND()
+@enduml

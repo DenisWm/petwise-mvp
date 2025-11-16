@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+' Persons (users)
+Person(attendant, "Attendant", "Registers tutors and pets, manages appointments and daily agenda.")
+Person(manager, "Manager", "Monitors daily agenda and operational status.")
+
+' System boundary
+System_Boundary(petwise, "PetWise System") {
+
+  Container(webui, "PetWise Web UI", "Web Application", "UI used by attendants and managers to manage tutors, pets and appointments.")
+
+  Container(api, "PetWise API", "Spring Boot Application", "Exposes REST endpoints.\nInternally composed by:\n- infrastructure module (controllers, adapters)\n- application module (UseCases)\n- domain module (aggregates, value objects, domain events).")
+
+  ContainerDb(db, "PetWise Database", "SQLite (MVP)", "Stores tutors, pets and appointments data.")
+}
+
+' Relationships
+Rel(attendant, webui, "Uses", "HTTPS")
+Rel(manager, webui, "Uses", "HTTPS")
+
+Rel(webui, api, "Calls REST APIs", "JSON/HTTPS")
+
+Rel(api, db, "Reads/Writes", "JDBC/JPA")
+
+SHOW_LEGEND()
+@enduml

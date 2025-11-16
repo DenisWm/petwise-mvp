@@ -1,0 +1,691 @@
+openapi: 3.0.3
+info:
+  title: PetWise API
+  version: 0.1.0
+  description: >
+    PetWise MVP API for managing tutors, pets and appointments
+    (daycare/hotel scheduling).
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development
+
+tags:
+  - name: Tutors
+  - name: Pets
+  - name: Appointments
+  - name: Health
+
+paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Health check
+      responses:
+        '200':
+          description: API is up
+
+  /tutors:
+    post:
+      tags: [Tutors]
+      summary: Create a new tutor
+      operationId: createTutor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TutorCreateRequest'
+      responses:
+        '201':
+          description: Tutor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorResponse'
+        '400':
+          description: Validation error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    get:
+      tags: [Tutors]
+      summary: List tutors (simple MVP version)
+      operationId: listTutors
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+          required: false
+        - in: query
+          name: size
+          schema:
+            type: integer
+            minimum: 1
+          required: false
+      responses:
+        '200':
+          description: List of tutors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorPageResponse'
+
+  /tutors/{id}:
+    get:
+      tags: [Tutors]
+      summary: Get a tutor by ID
+      operationId: getTutorById
+      parameters:
+        - $ref: '#/components/parameters/TutorIdPathParam'
+      responses:
+        '200':
+          description: Tutor found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorResponse'
+        '404':
+          description: Tutor not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    put:
+      tags: [Tutors]
+      summary: Update a tutor
+      operationId: updateTutor
+      parameters:
+        - $ref: '#/components/parameters/TutorIdPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TutorUpdateRequest'
+      responses:
+        '200':
+          description: Tutor updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorResponse'
+        '400':
+          description: Validation error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Tutor not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    delete:
+      tags: [Tutors]
+      summary: Delete a tutor
+      operationId: deleteTutor
+      parameters:
+        - $ref: '#/components/parameters/TutorIdPathParam'
+      responses:
+        '204':
+          description: Tutor deleted
+        '404':
+          description: Tutor not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '409':
+          description: Tutor has pets and cannot be deleted
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /pets:
+    post:
+      tags: [Pets]
+      summary: Create a new pet
+      operationId: createPet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetCreateRequest'
+      responses:
+        '201':
+          description: Pet created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        '400':
+          description: Validation error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Tutor not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    get:
+      tags: [Pets]
+      summary: List pets
+      operationId: listPets
+      parameters:
+        - in: query
+          name: tutorId
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: List of pets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetPageResponse'
+
+  /pets/{id}:
+    get:
+      tags: [Pets]
+      summary: Get a pet by ID
+      operationId: getPetById
+      parameters:
+        - $ref: '#/components/parameters/PetIdPathParam'
+      responses:
+        '200':
+          description: Pet found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        '404':
+          description: Pet not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    put:
+      tags: [Pets]
+      summary: Update a pet
+      operationId: updatePet
+      parameters:
+        - $ref: '#/components/parameters/PetIdPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetUpdateRequest'
+      responses:
+        '200':
+          description: Pet updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        '400':
+          description: Validation error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Pet not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    delete:
+      tags: [Pets]
+      summary: Delete a pet
+      operationId: deletePet
+      parameters:
+        - $ref: '#/components/parameters/PetIdPathParam'
+      responses:
+        '204':
+          description: Pet deleted
+        '404':
+          description: Pet not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '409':
+          description: Pet has active appointments
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /appointments:
+    post:
+      tags: [Appointments]
+      summary: Create a new appointment
+      operationId: createAppointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppointmentCreateRequest'
+      responses:
+        '201':
+          description: Appointment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentResponse'
+        '400':
+          description: Validation error (date range, type, etc.)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Pet not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '409':
+          description: Overlapping appointment for the same pet
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    get:
+      tags: [Appointments]
+      summary: View daily agenda
+      operationId: listAppointments
+      parameters:
+        - in: query
+          name: date
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Date for agenda (YYYY-MM-DD)
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [PENDING, ACTIVE, COMPLETED, CANCELED]
+          required: false
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [CRECHE, HOTEL]
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+          required: false
+        - in: query
+          name: size
+          schema:
+            type: integer
+            minimum: 1
+          required: false
+      responses:
+        '200':
+          description: Paginated list of appointments matching filters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentPageResponse'
+        '400':
+          description: Invalid date or query parameters
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /appointments/{id}:
+    get:
+      tags: [Appointments]
+      summary: Get appointment by ID
+      operationId: getAppointmentById
+      parameters:
+        - $ref: '#/components/parameters/AppointmentIdPathParam'
+      responses:
+        '200':
+          description: Appointment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentResponse'
+        '404':
+          description: Appointment not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /appointments/{id}/status:
+    patch:
+      tags: [Appointments]
+      summary: Change appointment status
+      operationId: changeAppointmentStatus
+      parameters:
+        - $ref: '#/components/parameters/AppointmentIdPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeStatusRequest'
+      responses:
+        '200':
+          description: Status changed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentResponse'
+        '400':
+          description: Validation error (invalid status payload)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Appointment not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '409':
+          description: Invalid status transition
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+components:
+  parameters:
+    TutorIdPathParam:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      description: Tutor identifier
+    PetIdPathParam:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      description: Pet identifier
+    AppointmentIdPathParam:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      description: Appointment identifier
+
+  schemas:
+    TutorCreateRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+
+    TutorUpdateRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+
+    TutorResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    TutorPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TutorResponse'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+
+    PetCreateRequest:
+      type: object
+      required: [tutorId, name]
+      properties:
+        tutorId:
+          type: string
+        name:
+          type: string
+        species:
+          type: string
+          nullable: true
+        breed:
+          type: string
+          nullable: true
+        birthDate:
+          type: string
+          format: date
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    PetUpdateRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+          nullable: true
+        breed:
+          type: string
+          nullable: true
+        birthDate:
+          type: string
+          format: date
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    PetResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        tutorId:
+          type: string
+        name:
+          type: string
+        species:
+          type: string
+          nullable: true
+        breed:
+          type: string
+          nullable: true
+        birthDate:
+          type: string
+          format: date
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PetPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PetResponse'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+
+    AppointmentCreateRequest:
+      type: object
+      required: [petId, serviceType, startAt, endAt]
+      properties:
+        petId:
+          type: string
+        serviceType:
+          type: string
+          enum: [CRECHE, HOTEL]
+        startAt:
+          type: string
+          format: date-time
+        endAt:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          nullable: true
+
+    AppointmentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        petId:
+          type: string
+        serviceType:
+          type: string
+          enum: [CRECHE, HOTEL]
+        status:
+          type: string
+          enum: [PENDING, ACTIVE, COMPLETED, CANCELED]
+        startAt:
+          type: string
+          format: date-time
+        endAt:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    AppointmentPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppointmentResponse'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+
+    ChangeStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [PENDING, ACTIVE, COMPLETED, CANCELED]
+
+    ProblemDetails:
+      type: object
+      description: RFC 7807 Problem Details
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        code:
+          type: string
+          description: Application-specific error code (e.g. OVERLAPPING_APPOINTMENT)
+        errors:
+          type: array
+          description: Optional list of field validation errors
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string

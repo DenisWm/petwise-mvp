@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+
+actor "Attendant" as A
+actor "Manager" as M
+
+rectangle "PetWise MVP" {
+
+  usecase "UC-01 Register Tutor" as UC01
+  usecase "UC-02 Register Pet" as UC02
+  usecase "UC-03 Create Appointment" as UC03
+  usecase "UC-04 Change Appointment Status" as UC04
+  usecase "UC-05 View Daily Agenda" as UC05
+  usecase "UC-06 Edit/Delete Records" as UC06
+}
+
+A --> UC01
+A --> UC02
+A --> UC03
+A --> UC04
+A --> UC05
+A --> UC06
+
+M --> UC05
+
+@enduml

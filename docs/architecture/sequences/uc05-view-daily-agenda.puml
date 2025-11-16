@@ -1,0 +1,53 @@
+@startuml
+title UC05 - View Daily Agenda (PetWise MVP)\nInfrastructure + Application + Domain
+
+actor User as U  <<Attendant/Manager>>
+participant "Web UI" as UI
+participant "AppointmentController\n(infrastructure)" as C
+participant "ViewDailyAgendaUseCase\n(application)" as UC
+participant "AppointmentGateway\n(port)" as GApp
+participant "JpaAppointmentRepository\n(adapter)" as AApp
+database "SQLite DB" as DB
+
+== Happy Path: View Agenda ==
+
+U -> UI : Open agenda screen
+UI -> UI : Set default date = today\noptional filters: status, type
+
+U -> UI : Select date/filters\nand click \"Search\"
+UI -> C : GET /api/v1/appointments\n?date=YYYY-MM-DD&status=&type=&page=&size=
+C -> UC : execute(query)
+
+UC -> GApp : findByDateAndFilters(query)
+GApp -> AApp : findByDateAndFilters(query)
+AApp -> DB : SELECT * FROM appointment\nWHERE date(start_at) = ?\nAND type/status filters...
+DB --> AApp : result set (0..n rows)
+AApp --> GApp : list<Appointment>
+GApp --> UC : list<Appointment>
+
+UC --> C : Page<AppointmentSummaryResponse>
+C --> UI : 200 OK\nJSON list
+
+UI -> UI : Render agenda table/list
+
+== Alternative: No Appointments ==
+
+... same call path ...
+
+DB --> AApp : empty result set
+AApp --> GApp : empty list
+GApp --> UC : empty list
+UC --> C : empty page
+C --> UI : 200 OK with empty list
+UI -> UI : Show \"No appointments for this day\"
+
+== Alternative: Invalid Date ==
+
+U -> UI : Enter invalid date format
+UI -> C : GET /api/v1/appointments?date=invalid
+C -> UC : execute(query)
+UC --> C : throws DomainException(Validation)
+C -> "ApiExceptionHandler" as H : handle(DomainException)
+H --> UI : 400 Bad Request\napplication/problem+json
+
+@enduml
