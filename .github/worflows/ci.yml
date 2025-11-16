@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Gradle test
+        run: ./gradlew --no-daemon test
+
+      - name: Render diagrams (PlantUML via Make)
+        run: |
+          make diagrams
+
+      - name: Upload diagrams artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: petwise-diagrams
+          path: |
+            docs/**/*.png
+          if-no-files-found: warn
