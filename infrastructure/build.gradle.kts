@@ -1,20 +1,16 @@
 plugins {
-    id("java")
-}
-
-group = "com.sample.spring.infrastructure"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
+    alias(libs.plugins.spring.boot.app.convention)
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
+    implementation(project(":application"))
+    implementation(project(":domain"))
 
-tasks.test {
-    useJUnitPlatform()
+    implementation(libs.bundles.spring.boot.starter)
+    implementation(libs.spring.boot.starter.web)
+    { exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat") }
+    implementation(libs.spring.boot.starter.undertow)
+    runtimeOnly(libs.postgresql)
+
+    testImplementation(libs.spring.boot.starter.test)
 }

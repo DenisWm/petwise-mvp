@@ -1,0 +1,12 @@
+postgres:
+  username: postres
+  password: postgres
+  schema: petwise
+  url: localhost:5432
+
+server:
+  port: 8080
+  undertow:
+    threads:
+      worker: 10
+      io: 2

@@ -1,5 +1,4 @@
 # Makefile - PetWise diagrams
-# Minimal and smart: auto-discovers all .puml under docs/ and renders .png side-by-side.
 
 # Default: show help (so "make" alone is friendly)
 .DEFAULT_GOAL := help
@@ -7,15 +6,12 @@
 # Docker-based PlantUML runner
 PLANTUML := docker run --rm -v $(PWD):/workspace -w /workspace plantuml/plantuml
 
-# All .puml under docs/
 PUML_FILES := $(shell find docs -name '*.puml')
 PNG_FILES  := $(PUML_FILES:.puml=.png)
 
-# Render all diagrams
 .PHONY: diagrams all
 diagrams all: $(PNG_FILES)
 
-# Generic rule: how to render a single .puml -> .png (side-by-side)
 %.png: %.puml
 	@echo "📐 Rendering $< -> $@"
 	@$(PLANTUML) -tpng $<
