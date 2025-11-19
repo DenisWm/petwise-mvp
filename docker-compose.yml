@@ -10,3 +10,19 @@ services:
       POSTGRES_DB: petwise
     ports:
       - 5432:5432
+    networks:
+      - petwise_network
+  app:
+    container_name: petwise-springboot-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - petwise_network
+networks:
+  petwise_network:

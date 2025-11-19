@@ -1,8 +1,8 @@
 postgres:
-  username: postres
+  username: postgres
   password: postgres
   schema: petwise
-  url: localhost:5432
+  url: host.docker.internal:5432
 
 server:
   port: 8080

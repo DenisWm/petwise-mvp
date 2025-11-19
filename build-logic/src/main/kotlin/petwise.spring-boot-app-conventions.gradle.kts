@@ -6,12 +6,12 @@ plugins {
     id("petwise.jacoco-conventions")
 }
 
+tasks.bootJar {
+    archiveFileName.set("petwise-application.jar")
+}
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
 }
