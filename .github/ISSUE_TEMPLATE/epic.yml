@@ -1,0 +1,117 @@
+name: 📦 Epic
+description: Create an epic to track a larger feature or initiative
+title: "[Epic]: "
+labels: ["epic", "P1-high"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to create an epic issue that groups related features.
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      description: Which implementation phase?
+      options:
+        - "Phase 0: Foundation"
+        - "Phase 1: Domain & Core"
+        - "Phase 2: Tutor Management"
+        - "Phase 3: Pet Management"
+        - "Phase 4: Appointment Management"
+        - "Phase 5: Queries & Reports"
+        - "Phase 6: Polish & Documentation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Epic Description
+      description: High-level description of this epic
+      placeholder: |
+        What is the overall goal of this epic?
+        What business value does it provide?
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is included and excluded?
+      placeholder: |
+        **In Scope:**
+        - Feature A
+        - Feature B
+        
+        **Out of Scope:**
+        - Feature X
+        - Feature Y
+
+  - type: textarea
+    id: sub-issues
+    attributes:
+      label: Sub-Issues
+      description: List of issues that belong to this epic
+      placeholder: |
+        - [ ] #8 Tutor Domain Model
+        - [ ] #9 Tutor Gateway Interface
+        - [ ] #10 Create Tutor Use Case
+        - [ ] #11 Tutor JPA Entity
+        - [ ] #12 Create Tutor REST Endpoint
+        - [ ] #13 List Tutor Endpoints
+        - [ ] #14 Update/Delete Tutor Endpoints
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Epic Acceptance Criteria
+      description: How do we know the epic is complete?
+      placeholder: |
+        - [ ] All sub-issues completed
+        - [ ] Integration tests pass
+        - [ ] Documentation updated
+        - [ ] Demo successful
+    validations:
+      required: true
+
+  - type: input
+    id: total-story-points
+    attributes:
+      label: Total Story Points
+      description: Sum of all sub-issue story points
+      placeholder: "25"
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: What other epics or issues must be completed first?
+      placeholder: |
+        - Depends on Epic #1 (Foundation)
+
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: What will be delivered at the end of this epic?
+      placeholder: |
+        - Complete CRUD for Tutors
+        - REST API endpoints
+        - OpenAPI documentation
+        - Integration tests
+
+  - type: textarea
+    id: reference
+    attributes:
+      label: Reference
+      description: Links to documentation
+      placeholder: |
+        - docs/IMPLEMENTATION_ROADMAP.md
+        - docs/use-cases/
+        - docs/architecture/
+

@@ -1,0 +1,77 @@
+/* Custom styles for PetWise documentation */
+
+/* Code blocks */
+pre, code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* Tables */
+table {
+  margin: 1.5rem 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  border: 1px solid #e1e4e8;
+  padding: 0.75rem;
+}
+
+table th {
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Feature sections */
+.feature p {
+  margin: 1rem 0;
+  color: #c9d1d9;
+}
+
+.feature a {
+  color: #58a6ff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.feature a:hover {
+  text-decoration: underline;
+}
+
+/* Navigation improvements */
+.site-nav .page-link {
+  margin-left: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Feature heading */
+.feature h3 {
+  color: #0366d6;
+  margin-top: 0;
+}
+
+/* Feature card styling */
+.feature {
+  transition: box-shadow 0.2s;
+  border-radius: 6px;
+  border: 1px solid #e1e4e8;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: grid;
+}
+
+.feature:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Feature grid on homepage */
+/* Custom styles for PetWise Documentation */

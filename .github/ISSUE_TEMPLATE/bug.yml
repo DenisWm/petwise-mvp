@@ -1,0 +1,118 @@
+name: 🐛 Bug Report
+      description: Add any other context about the problem here
+      label: Additional Context
+    attributes:
+    id: additional
+  - type: textarea
+
+      description: If applicable, add screenshots to help explain the problem
+      label: Screenshots
+    attributes:
+    id: screenshots
+  - type: textarea
+
+      required: true
+    validations:
+        - Branch/Commit: [e.g., main, abc123]
+        - Database: [e.g., SQLite, PostgreSQL 15]
+        - Gradle Version: [e.g., 8.14]
+        - Java Version: [e.g., 21.0.1]
+        - OS: [e.g., Windows 11, Ubuntu 22.04, macOS 14]
+      value: |
+      description: What environment are you using?
+      label: Environment
+    attributes:
+    id: environment
+  - type: textarea
+
+        Paste logs here...
+      placeholder: |
+      render: shell
+      description: Paste any relevant logs or error messages
+      label: Logs / Error Messages
+    attributes:
+    id: logs
+  - type: textarea
+
+      required: true
+    validations:
+      placeholder: Describe the actual behavior
+      description: What actually happened?
+      label: Actual Behavior
+    attributes:
+    id: actual
+  - type: textarea
+
+      required: true
+    validations:
+      placeholder: Describe the expected behavior
+      description: What did you expect to happen?
+      label: Expected Behavior
+    attributes:
+    id: expected
+  - type: textarea
+
+      required: true
+    validations:
+        4. See error
+        3. Execute command '...'
+        2. Click on '...'
+        1. Go to '...'
+      placeholder: |
+      description: How can we reproduce this bug?
+      label: Steps to Reproduce
+    attributes:
+    id: steps
+  - type: textarea
+
+      required: true
+    validations:
+      placeholder: Describe what went wrong
+      description: A clear description of what the bug is
+      label: Bug Description
+    attributes:
+    id: description
+  - type: textarea
+
+      required: true
+    validations:
+      default: 2
+        - Low (Minor issue or cosmetic)
+        - Medium (Feature partially broken)
+        - High (Major feature broken)
+        - Critical (Application crashes or data loss)
+      options:
+      description: How severe is this bug?
+      label: Severity
+    attributes:
+    id: severity
+  - type: dropdown
+
+      required: true
+    validations:
+        - Other
+        - CI/CD
+        - Documentation
+        - Database/JPA
+        - REST API
+        - Infrastructure Layer
+        - Application Layer
+        - Domain Layer
+        - Build System
+      options:
+      description: Which component is affected?
+      label: Component
+    attributes:
+    id: component
+  - type: dropdown
+
+        Thanks for taking the time to report a bug! Please fill out the information below.
+      value: |
+    attributes:
+  - type: markdown
+body:
+assignees: []
+labels: ["bug", "P2-medium"]
+title: "[Bug]: "
+description: Report a bug or unexpected behavior
+

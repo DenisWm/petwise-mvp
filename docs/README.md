@@ -6,25 +6,52 @@ The documentation is organized to help contributors and maintainers understand w
 
 ---
 
+## 🚀 Quick Start
+
+**New to PetWise?** Start here:
+
+1. **[Getting Started Guide](GETTING_STARTED.md)** – Set up, build, and run the project
+2. **[Architecture Deep Dive](ARCHITECTURE_DEEP_DIVE.md)** – Understand the design patterns and technical decisions
+3. **[Project README](../README.md)** – Overview, objectives, and technology stack
+
+---
+
 ## 📘 How to Navigate This Documentation
 
-If you are new to the project, start with:
+### For Developers New to the Project
 
-1. **Use Cases**  
-   Understand system behavior and user interactions.
+1. **[Getting Started](GETTING_STARTED.md)**  
+   Installation, running locally, first API calls
 
-2. **Architecture**  
-   Explore the system structure (C4 diagrams), domain model, and technical decisions (ADRs).
+2. **[Use Cases](use-cases/)**  
+   Understand system behavior and user interactions (start with UC-01)
 
-3. **API**  
-   Review how external clients interact with the system through REST endpoints defined in the OpenAPI specification.
+3. **[Architecture](architecture/)**  
+   Explore C4 diagrams, domain model (ERD, glossary), and ADRs
 
-If you are modifying or extending the system, you may frequently refer to:
+4. **[Architecture Deep Dive](ARCHITECTURE_DEEP_DIVE.md)**  
+   Deep technical exploration of Clean Architecture, DDD, and design patterns
 
-- Domain rules
-- Sequence diagrams
-- Business invariants
-- Architectural Decision Records (ADRs)
+### For API Consumers
+
+1. **[API Quick Reference](API_REFERENCE.md)** – Quick guide to all endpoints with examples
+2. **[API Guidelines](api/guidelines.md)** – REST conventions, error handling, pagination
+3. **[OpenAPI Specification](api/openapi.yaml)** – Complete API reference
+
+### For Contributors
+
+1. **[Contributing Guide](CONTRIBUTING.md)** – How to contribute code, tests, and documentation
+2. **[Build System Guide](BUILD_SYSTEM.md)** – Understanding Gradle, convention plugins, and build configuration
+3. **[Implementation Roadmap](IMPLEMENTATION_ROADMAP.md)** – 34 issues broken down into actionable tasks
+4. **[GitHub Project Setup](GITHUB_PROJECT_SETUP.md)** – Configure GitHub Projects, labels, and workflows
+
+### For Architects and Maintainers
+
+Frequently referenced materials:
+- **[ADRs](architecture/decisions/)** – Architectural decision records
+- **[Domain Rules](architecture/domain/business-rules.md)** – Business invariants and constraints
+- **[ERD](architecture/domain/erd.puml)** – Entity-Relationship Diagram (canonical schema)
+- **[Sequence Diagrams](architecture/sequences/)** – Runtime interactions for each use case
 
 ---
 

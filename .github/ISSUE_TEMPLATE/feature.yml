@@ -1,0 +1,147 @@
+name: 🚀 Feature Implementation
+description: Implement a new feature or use case
+title: "[Feature]: "
+labels: ["P2-medium"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to create a feature implementation issue from the roadmap.
+
+  - type: dropdown
+    id: epic
+    attributes:
+      label: Epic
+      description: Which epic does this feature belong to?
+      options:
+        - Foundation
+        - Domain Foundation
+        - Tutor Management
+        - Pet Management
+        - Appointment Management
+        - Queries & Reports
+        - Polish
+    validations:
+      required: true
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      description: Which implementation phase?
+      options:
+        - "Phase 0: Foundation"
+        - "Phase 1: Domain & Core"
+        - "Phase 2: Tutor Management"
+        - "Phase 3: Pet Management"
+        - "Phase 4: Appointment Management"
+        - "Phase 5: Queries & Reports"
+        - "Phase 6: Polish & Documentation"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - P0-Critical (Blocks other work)
+        - P1-High (MVP Core)
+        - P2-Medium (Nice to have)
+        - P3-Low (Future enhancement)
+      default: 1
+    validations:
+      required: true
+
+  - type: input
+    id: story-points
+    attributes:
+      label: Story Points
+      description: Estimated effort (1-8, Fibonacci)
+      placeholder: "3"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to be implemented?
+      placeholder: |
+        Clear description of the feature and its purpose.
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Checklist of implementation tasks
+      placeholder: |
+        - [ ] Task 1
+        - [ ] Task 2
+        - [ ] Task 3
+      value: |
+        - [ ] Implement domain logic (if applicable)
+        - [ ] Implement use case (if applicable)
+        - [ ] Implement REST endpoint (if applicable)
+        - [ ] Add unit tests
+        - [ ] Add integration tests
+        - [ ] Update OpenAPI spec
+        - [ ] Update documentation
+        - [ ] Code formatted (./gradlew spotlessApply)
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How do we know this is done?
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+      value: |
+        - [ ] All tests pass
+        - [ ] Code coverage ≥ 80%
+        - [ ] Code is properly formatted
+        - [ ] Documentation is updated
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: What must be completed first?
+      placeholder: |
+        - Blocked by #4 (Domain Base Classes)
+        - Depends on #8 (Tutor Domain Model)
+
+  - type: textarea
+    id: blocks
+    attributes:
+      label: Blocks
+      description: What is waiting on this?
+      placeholder: |
+        - Blocks #13 (List Tutor Endpoints)
+
+  - type: textarea
+    id: reference
+    attributes:
+      label: Reference
+      description: Links to documentation or related resources
+      placeholder: |
+        - docs/use-cases/uc-01-create-tutor.md
+        - docs/architecture/sequences/uc01-create-tutor.puml
+        - docs/architecture/decisions/adr-0003-domain-modeling-ddd-basics.md
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Any other context or information
+

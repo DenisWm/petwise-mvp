@@ -1,0 +1,96 @@
+name: 📚 Documentation
+description: Improve or update documentation
+title: "[Docs]: "
+labels: ["documentation", "P2-medium"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for documentation improvements or updates.
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation?
+      options:
+        - Architecture (C4, ERD, Glossary)
+        - Use Cases
+        - ADR (Architectural Decision Record)
+        - API (OpenAPI, Guidelines)
+        - Build System
+        - Getting Started
+        - Contributing Guide
+        - README
+        - Code Comments/Javadoc
+        - Diagrams (PlantUML)
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: change-type
+    attributes:
+      label: Change Type
+      description: What kind of change is this?
+      options:
+        - New Documentation
+        - Update Existing
+        - Fix Error/Typo
+        - Improve Clarity
+        - Add Examples
+        - Restructure
+      default: 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What documentation needs to be added or changed?
+      placeholder: Describe the documentation change
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this documentation change needed?
+      placeholder: |
+        - Current documentation is unclear
+        - Missing important information
+        - New feature needs documentation
+        - Found errors or inconsistencies
+
+  - type: textarea
+    id: files
+    attributes:
+      label: Files to Update
+      description: Which files need to be changed?
+      placeholder: |
+        - docs/architecture/README.md
+        - docs/use-cases/uc-01-create-tutor.md
+        - README.md
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Checklist of what needs to be done
+      value: |
+        - [ ] Update documentation files
+        - [ ] Update diagrams (if applicable)
+        - [ ] Regenerate PNGs (make diagrams)
+        - [ ] Update table of contents
+        - [ ] Check for broken links
+        - [ ] Proofread
+
+  - type: textarea
+    id: reference
+    attributes:
+      label: Reference
+      description: Links to related issues, PRs, or discussions
+

@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/deniswm/petwise-mvp/discussions
+    about: Ask questions or discuss ideas
+  - name: 📖 Documentation
+    url: https://github.com/deniswm/petwise-mvp/tree/master/docs
+    about: Read the project documentation
+

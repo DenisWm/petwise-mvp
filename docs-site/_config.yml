@@ -1,0 +1,105 @@
+# Site settings
+title: PetWise
+description: Clean Architecture & DDD Reference Implementation
+baseurl: "/petwise"
+url: "https://deniswm.github.io"
+
+# Theme (use 'theme' for local, 'remote_theme' for GitHub Pages)
+theme: just-the-docs
+
+# Color scheme (options: nil, light, dark)
+color_scheme: dark
+
+# Logo and aux links
+logo: "/assets/images/logo.png"
+aux_links:
+  "GitHub Repository":
+    - "https://github.com/deniswm/petwise-mvp"
+  "Report Issue":
+    - "https://github.com/deniswm/petwise-mvp/issues"
+
+aux_links_new_tab: true
+
+# Footer content
+footer_content: "Copyright &copy; 2025 PetWise. Built for learning and reference."
+
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
+
+# Footer last modified
+last_edit_timestamp: true
+last_edit_time_format: "%b %e %Y at %I:%M %p"
+
+gh_edit_link: true
+gh_edit_link_text: "Edit this page on GitHub"
+gh_edit_repository: "https://github.com/deniswm/petwise-mvp"
+gh_edit_branch: "main"
+gh_edit_view_mode: "edit"
+gh_edit_source: docs-site
+
+# Enable search
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  tokenizer_separator: /[\s/]+/
+  rel_url: true
+  button: true
+
+# Mermaid diagrams support
+mermaid:
+  version: "9.1.6"
+
+# Heading anchors
+heading_anchors: true
+
+# Callouts
+callouts_level: quiet
+callouts:
+  highlight:
+    color: yellow
+  important:
+    title: Important
+    color: blue
+  new:
+    title: New
+    color: green
+  note:
+    title: Note
+    color: purple
+  warning:
+    title: Warning
+    color: red
+
+# Navigation structure
+nav_sort: case_sensitive
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+# Markdown
+markdown: kramdown
+kramdown:
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/
+  - README.md
+  - MIGRATION.md
+  - docker-compose.yml
+  - start.sh
+  - start.bat
+  - assets/css/
+
