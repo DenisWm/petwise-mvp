@@ -40,3 +40,6 @@ bin/
 
 ### Docs ###
 docs/**/*.png
+!docs/assets/images/favicon.png
+!docs/assets/images/logo.png
+
