@@ -34,9 +34,9 @@ last_edit_time_format: "%b %e %Y at %I:%M %p"
 gh_edit_link: true
 gh_edit_link_text: "Edit this page on GitHub"
 gh_edit_repository: "https://github.com/deniswm/petwise-mvp"
-gh_edit_branch: "main"
+gh_edit_branch: "master"
 gh_edit_view_mode: "edit"
-gh_edit_source: docs-site
+gh_edit_source: docs
 
 # Enable search
 search_enabled: true
@@ -90,6 +90,8 @@ kramdown:
     block:
       line_numbers: false
 
+favicon: "/assets/images/favicon.png"
+
 # Exclude from processing
 exclude:
   - Gemfile
@@ -97,9 +99,12 @@ exclude:
   - node_modules
   - vendor/
   - README.md
-  - MIGRATION.md
   - docker-compose.yml
   - start.sh
-  - start.bat
   - assets/css/
-
+  - architecture/c4/
+  - architecture/domain/
+  - architecture/sequences/
+  - architecture/README.md
+  - architecture/readme.md
+  - diagrams/

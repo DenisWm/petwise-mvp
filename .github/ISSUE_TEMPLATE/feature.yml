@@ -1,4 +1,4 @@
-name: 🚀 Feature Implementation
+name: Feature Implementation
 description: Implement a new feature or use case
 title: "[Feature]: "
 labels: ["P2-medium"]
@@ -59,10 +59,8 @@ body:
     id: story-points
     attributes:
       label: Story Points
-      description: Estimated effort (1-8, Fibonacci)
+      description: Estimated effort (optional; prefer reserving estimates for planning tools)
       placeholder: "3"
-    validations:
-      required: true
 
   - type: textarea
     id: description
@@ -106,7 +104,6 @@ body:
         - [ ] Criterion 3
       value: |
         - [ ] All tests pass
-        - [ ] Code coverage ≥ 80%
         - [ ] Code is properly formatted
         - [ ] Documentation is updated
     validations:
@@ -144,4 +141,3 @@ body:
     attributes:
       label: Additional Notes
       description: Any other context or information
-

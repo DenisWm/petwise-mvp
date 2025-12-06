@@ -32,6 +32,10 @@ The architecture is documented using the **C4 model** for visualizing software a
 - PetWise system
 - External systems (future integrations)
 
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/c4/c4-context.png" alt="C4 Context" />
+</div>
+
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/c4/c4-context.puml)
 
 ---
@@ -44,6 +48,10 @@ The architecture is documented using the **C4 model** for visualizing software a
 - **Web Browser** - User interface (future)
 - **REST API** - Spring Boot application
 - **Database** - SQLite (MVP) / PostgreSQL (production)
+
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/c4/c4-container.png" alt="C4 Container" />
+</div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/c4/c4-container.puml)
 
@@ -63,6 +71,10 @@ The architecture is documented using the **C4 model** for visualizing software a
 - Port-adapter architecture
 - Vertical slices per feature
 
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/c4/c4-components.png" alt="C4 Components" />
+</div>
+
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/c4/c4-components.puml)
 
 ---
@@ -81,6 +93,10 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 5. Gateway → JPA Repository
 6. Response flows back
 
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc01-create-tutor.png" alt="UC-01 Sequence Diagram" />
+</div>
+
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc01-create-tutor.puml)
 
 ---
@@ -95,6 +111,10 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 5. Use Case persists via PetGateway
 6. Response flows back
 
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc02-create-pet.png" alt="UC-02 Sequence Diagram" />
+</div>
+
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc02-create-pet.puml)
 
 ---
@@ -108,6 +128,10 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 4. Use Case creates Appointment entity
 5. Use Case persists via AppointmentGateway
 6. Response flows back
+
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc03-create-appointment.png" alt="UC-03 Sequence Diagram" />
+</div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc03-create-appointment.puml)
 
@@ -124,7 +148,9 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 6. Use Case persists updated appointment
 7. Response flows back
 
-**Key Point:** Status transition logic is in the domain entity, not the use case.
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc04-change-appointment-status.png" alt="UC-04 Sequence Diagram" />
+</div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc04-change-appointment-status.puml)
 
@@ -139,6 +165,10 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 4. Use Case optionally enriches with pet/tutor data
 5. Response flows back
 
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc05-view-daily-agenda.png" alt="UC-05 Sequence Diagram" />
+</div>
+
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc05-view-daily-agenda.puml)
 
 ---
@@ -148,6 +178,10 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 **Flow:**
 - **Update:** Fetch → Modify → Validate → Persist
 - **Delete:** Validate no dependencies → Delete
+
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc06-edit-delete-records.png" alt="UC-06 Sequence Diagram" />
+</div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc06-edit-delete-records.puml)
 
@@ -159,6 +193,10 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 - Entities: Tutor, Pet, Appointment
 - Relationships: Tutor → Pet → Appointment
 - Attributes and types
+
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/domain/erd.png" alt="Domain ERD" />
+</div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/domain/erd.puml)
 
@@ -209,4 +247,3 @@ All diagram source files are in the repository:
 - [Architecture Overview](overview) - Start here for high-level view
 - [Domain Model](domain) - Detailed entity documentation
 - [Use Cases](../use-cases) - Functional requirements
-

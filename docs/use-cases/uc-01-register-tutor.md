@@ -82,7 +82,9 @@ Allow an attendant to register a new tutor so that pets can be associated with t
 - **API Reference:** [Create Tutor](../api-reference#create-tutor)
 - **Sequence Diagram:** See repository `/docs/architecture/sequences/uc01-create-tutor.puml`
 
----
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc01-create-tutor.png" alt="UC-01 Sequence Diagram" />
+</div>
 
 ## Business Rules
 
@@ -91,4 +93,3 @@ Allow an attendant to register a new tutor so that pets can be associated with t
 
 {: .note }
 > See [Business Rules](../architecture/domain/business-rules) for complete domain constraints.
-

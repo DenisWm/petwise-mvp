@@ -158,7 +158,9 @@ Allow an attendant to update or remove tutor and pet records, while respecting d
   - `DELETE /api/v1/pets/{id}` - Delete pet
 - **API Reference:** [Update/Delete endpoints](../api-reference)
 
----
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc06-edit-delete-records.png" alt="UC-06 Sequence Diagram" />
+</div>
 
 ## Business Rules
 
@@ -168,4 +170,3 @@ Allow an attendant to update or remove tutor and pet records, while respecting d
 
 {: .warning }
 > **Important:** Deletion is restricted to maintain referential integrity and prevent orphaned records.
-

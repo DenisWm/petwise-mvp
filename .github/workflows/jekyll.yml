@@ -21,20 +21,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Generate and publish diagrams
+        # run from repo root so Makefile can find PUML sources and publish into docs/assets/diagrams
+        run: |
+          echo "📐 Generating diagrams and publishing into docs/assets/diagrams..."
+          # First generate PNGs next to their .puml sources, then copy published assets
+          make diagrams
+          make publish
+        shell: bash
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
           bundler-cache: true
           cache-version: 0
-          working-directory: ./docs-site
+          working-directory: ./docs
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
 
       - name: Build with Jekyll
-        working-directory: ./docs-site
+        working-directory: ./docs
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
@@ -42,7 +51,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./docs-site/_site
+          path: ./docs/_site
 
   deploy:
     environment:
@@ -54,4 +63,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

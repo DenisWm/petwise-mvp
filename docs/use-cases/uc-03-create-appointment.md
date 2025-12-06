@@ -106,7 +106,9 @@ Allow an attendant to create a daycare (creche) or hotel appointment for a pet.
 - **API Reference:** [Create Appointment](../api-reference#create-appointment)
 - **Sequence Diagram:** See repository `/docs/architecture/sequences/uc03-create-appointment.puml`
 
----
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc03-create-appointment.png" alt="UC-03 Sequence Diagram" />
+</div>
 
 ## Business Rules
 
@@ -116,4 +118,3 @@ Allow an attendant to create a daycare (creche) or hotel appointment for a pet.
 
 {: .warning }
 > **Important:** The system prevents double-booking by checking for overlapping appointments in PENDING or ACTIVE status.
-

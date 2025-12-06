@@ -109,7 +109,9 @@ PENDING → CANCELED
 - **API Reference:** [Change Appointment Status](../api-reference#change-appointment-status)
 - **Sequence Diagram:** See repository `/docs/architecture/sequences/uc04-change-appointment-status.puml`
 
----
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc04-change-appointment-status.png" alt="UC-04 Sequence Diagram" />
+</div>
 
 ## Business Rules
 
@@ -118,4 +120,3 @@ PENDING → CANCELED
 
 {: .note }
 > See [ADR-0002: Appointment Status Model](../architecture/decisions/adr-0002) for the rationale behind forward-only transitions.
-

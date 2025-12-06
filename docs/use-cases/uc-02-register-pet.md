@@ -93,7 +93,9 @@ Allow an attendant to register a new pet and associate it with an existing tutor
 - **API Reference:** [Create Pet](../api-reference#create-pet)
 - **Sequence Diagram:** See repository `/docs/architecture/sequences/uc02-create-pet.puml`
 
----
+<div style="text-align: center;">
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc02-create-pet.png" alt="UC-02 Sequence Diagram" />
+</div>
 
 ## Business Rules
 
@@ -104,4 +106,3 @@ Allow an attendant to register a new pet and associate it with an existing tutor
 
 {: .note }
 > See [Business Rules](../architecture/domain/business-rules) for complete domain constraints.
-
