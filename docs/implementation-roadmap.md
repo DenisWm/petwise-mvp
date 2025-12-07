@@ -7,134 +7,218 @@ nav_order: 8
 # Implementation Roadmap
 {: .no_toc }
 
-Actionable GitHub issues organized into implementation phases to coordinate work via the project board.
+34 actionable GitHub issues broken down into 6 implementation phases.
 {: .fs-6 .fw-300 }
 
-## Project phases
+{: .important }
+> This roadmap is designed for **distributed development** with GitHub Projects and Issues.
 
-Each phase groups related work by functional area. Phases are a planning aid; schedule and scope are maintained in the issue tracker.
+## Table of contents
+{: .no_toc .text-delta }
 
-### Phase 0 — Foundation
-Focus: Project structure, build system, CI/CD
+1. TOC
+   {:toc}
 
-- Issue #1: Project setup and build configuration
-- Issue #2: CI/CD pipeline with GitHub Actions
-- Issue #3: Docker & Docker Compose setup
+---
 
-### Phase 1 — Domain & Core
-Focus: Domain model, aggregates, validation
+## Project Phases
 
-- Issue #4: Domain DDD base classes
-- Issue #5: Domain validation framework
-- Issue #6: Domain utilities
-- Issue #7: Application use case base classes
+### Phase 0: Foundation (1-2 weeks)
+**Focus:** Project structure, build system, CI/CD
 
-### Phase 2 — Tutor Management
-Focus: Tutor aggregate and related APIs
+- **Issue #1:** Project Setup and Build Configuration
+- **Issue #2:** CI/CD Pipeline with GitHub Actions
+- **Issue #3:** Docker & Docker Compose Setup
 
-- Issue #8: Tutor domain model
-- Issue #9: Tutor gateway interface
-- Issue #10: Create Tutor use case
-- Issue #11: Tutor JPA entity and repository
-- Issue #12: Create Tutor REST endpoint
-- Issue #13: List and Get Tutor endpoints
-- Issue #14: Update and Delete Tutor endpoints
+### Phase 1: Domain & Core (2 weeks)
+**Focus:** Domain model, aggregates, entities, validation
 
-### Phase 3 — Pet Management
-Focus: Pet entity and related APIs
+- **Issue #4:** Domain DDD Base Classes
+- **Issue #5:** Domain Validation Framework
+- **Issue #6:** Domain Utilities
+- **Issue #7:** Application Use Case Base Classes
 
-- Issue #15: Pet domain model
-- Issue #16: Pet gateway interface
-- Issue #17: Create Pet use case and endpoint
-- Issue #18: List and Get Pet endpoints
-- Issue #19: Update and Delete Pet endpoints
+### Phase 2: Tutor Management (1-2 weeks)
+**Focus:** Complete CRUD for Tutor aggregate
 
-### Phase 4 — Appointment Management
-Focus: Appointment aggregate and lifecycle
+- **Issue #8:** Tutor Domain Model
+- **Issue #9:** Tutor Gateway Interface
+- **Issue #10:** Create Tutor Use Case
+- **Issue #11:** Tutor JPA Entity and Repository
+- **Issue #12:** Create Tutor REST Endpoint
+- **Issue #13:** List and Get Tutor Endpoints
+- **Issue #14:** Update and Delete Tutor Endpoints
 
-- Issue #20: Appointment domain model
-- Issue #21: Appointment gateway interface
-- Issue #22: Create Appointment use case and endpoint
-- Issue #23: Change Appointment status use case and endpoint
-- Issue #24: Get and List Appointment endpoints
+### Phase 3: Pet Management (1-2 weeks)
+**Focus:** Pet entity within Tutor aggregate
 
-### Phase 5 — Queries & Reports
-Focus: Read models, daily agenda, search
+- **Issue #15:** Pet Domain Model
+- **Issue #16:** Pet Gateway Interface
+- **Issue #17:** Create Pet Use Case and Endpoint
+- **Issue #18:** List and Get Pet Endpoints
+- **Issue #19:** Update and Delete Pet Endpoints
 
-- Issue #25: View Daily Agenda use case and endpoint
-- Issue #26: Search and filter enhancements
+### Phase 4: Appointment Management (2-3 weeks)
+**Focus:** Complex aggregate with lifecycle
 
-### Phase 6 — Polish & Documentation
-Focus: Production readiness, testing, documentation
+- **Issue #20:** Appointment Domain Model
+- **Issue #21:** Appointment Gateway Interface
+- **Issue #22:** Create Appointment Use Case and Endpoint
+- **Issue #23:** Change Appointment Status Use Case and Endpoint
+- **Issue #24:** Get and List Appointment Endpoints
 
-- Issue #27: Global exception handler
-- Issue #28: API documentation with Swagger UI
-- Issue #29: Database migration with Flyway
-- Issue #30: Health checks and actuator endpoints
-- Issue #31: Complete OpenAPI specification
-- Issue #32: End-to-end integration tests
-- Issue #33: Performance testing and optimizations
-- Issue #34: Final documentation review
+### Phase 5: Queries & Reports (1 week)
+**Focus:** Daily agenda and search
 
-## Implementation strategy
+- **Issue #25:** View Daily Agenda Use Case and Endpoint
+- **Issue #26:** Search and Filter Enhancements
 
-Work is organized as vertical slices: each issue should, where applicable, deliver an end-to-end feature across layers (Controller → Use Case → Domain → Gateway → Repository). This approach aims to produce incremental, testable functionality and expose integration issues early.
+### Phase 6: Polish & Documentation (2-3 weeks)
+**Focus:** Production readiness
 
-## Checklist for issues
+- **Issue #27:** Global Exception Handler
+- **Issue #28:** API Documentation with Swagger UI
+- **Issue #29:** Database Migration with Flyway
+- **Issue #30:** Health Check and Actuator Endpoints
+- **Issue #31:** Complete OpenAPI Specification
+- **Issue #32:** End-to-End Integration Tests
+- **Issue #33:** Performance Testing and Optimization
+- **Issue #34:** Final Documentation Review
 
-Suggested items to include in each issue description and PR:
+---
 
-- Domain logic implemented and covered by unit tests
-- Use case implemented with tests
-- REST endpoint implemented and wired to the use case (when applicable)
-- Integration or end-to-end test(s) validating the feature
-- OpenAPI/API docs updated (where relevant)
-- Sequence diagram or architecture note updated if the design changed
-- Code formatted and linted
-- CI passes for the change
+## Implementation Strategy
 
-## Prioritization
+### Vertical Slices
 
-Timing and detailed planning are managed per-issue in the project board. Use labels to record priority and other metadata.
+Each issue implements a complete feature through all layers:
 
-Priority labels (recommended):
-- P0-critical — Blocking other work
-- P1-high — MVP core
-- P2-medium — Important but not urgent
-- P3-low — Enhancements and future work
+```
+REST Controller → Use Case → Domain Logic → Gateway → JPA Repository
+```
 
-## Example: Create Tutor use case
+**Benefits:**
+- ✅ Delivers working functionality
+- ✅ Can be tested end-to-end
+- ✅ Independent development
+- ✅ Early integration
 
-Issue: #10 — Create Tutor use case
+### Definition of Done
 
-Description (brief): Implement the Create Tutor use case and associated API surface.
+Each issue must meet:
 
-Tasks (examples):
-- Create `CreateTutorInput` and `CreateTutorOutput` DTOs
-- Implement `CreateTutorUseCase` and domain interactions
-- Persist via gateway/repository and expose a REST endpoint
-- Add unit tests and an integration test
-- Update API docs and sequence diagram where applicable
+- [ ] Domain logic implemented with tests
+- [ ] Use case implemented with tests
+- [ ] REST endpoint implemented
+- [ ] Integration test passes
+- [ ] OpenAPI spec updated
+- [ ] Sequence diagram updated (if applicable)
+- [ ] Code formatted (Spotless)
+- [ ] Coverage ≥ 80%
 
-Acceptance criteria (example):
-- Input validation enforced
-- Domain invariants respected
-- Persisted tutor retrievable via the API
-- Tests validate the main scenarios
+---
 
-References:
-- UC-01: Create Tutor — `use-cases/uc-01`
-- Sequence diagram: `docs/architecture/sequences/uc01-create-tutor.puml`
+## Timeline & Estimation
 
-## Next steps for contributors
+### With 2-3 Developers: 9-13 weeks
 
-- Review the project board and select a `Ready` item
-- Create a descriptive branch, implement changes, and include tests and documentation updates
-- Open a PR linking the issue, include testing instructions, and request review
-- After merge, confirm issue state on the project board
+| Phase | Duration | Issues | Story Points |
+|:------|:---------|:-------|:-------------|
+| **Phase 0: Foundation** | 1-2 weeks | 3 | ~8 |
+| **Phase 1: Domain Core** | 2 weeks | 4 | ~12 |
+| **Phase 2: Tutor** | 1-2 weeks | 7 | ~20 |
+| **Phase 3: Pet** | 1-2 weeks | 5 | ~15 |
+| **Phase 4: Appointment** | 2-3 weeks | 5 | ~18 |
+| **Phase 5: Queries** | 1 week | 2 | ~6 |
+| **Phase 6: Polish** | 2-3 weeks | 8 | ~21 |
+| **TOTAL** | **9-13 weeks** | **34** | **~100** |
 
-## Further reading
+### Velocity Assumptions
+- Average 5-8 story points per developer per week
+- Some issues can be parallelized
+- Includes time for code review and testing
 
-- [GitHub Project](github-project) — Board guidance, labels, and automations
-- [Contributing](contributing) — Development expectations and environment setup
-- [Use Cases](use-cases) — Functional specifications and sequence diagrams
+---
+
+## Priority Labels
+
+P0-Critical
+{: .label .label-red }
+Blocking other work
+
+P1-High
+{: .label .label-yellow }
+MVP Core
+
+P2-Medium
+{: .label .label-blue }
+Nice to have
+
+P3-Low
+{: .label .label-green }
+Future enhancement
+
+### Suggested Priorities
+
+**P0 (Critical):**
+- #1, #4, #5, #7 (Foundation for everything else)
+
+**P1 (High - MVP Core):**
+- #8-#14 (Tutor management)
+- #15-#19 (Pet management)
+- #20-#24 (Appointment management)
+- #25 (Daily agenda)
+
+**P2 (Medium - Polish):**
+- #27, #28, #29, #30 (Infrastructure improvements)
+- #31, #32 (Testing & docs)
+
+**P3 (Low - Enhancements):**
+- #26 (Search)
+- #33 (Performance)
+
+---
+
+## Example Issue: #10 - Create Tutor Use Case
+
+**Labels:** `P1-high`, `application`, `tutor`, `use-case`  
+**Epic:** Tutor Management  
+**Story Points:** 3
+
+**Description:**
+Implement UC-01: Create Tutor use case.
+
+**Tasks:**
+- [ ] Create `CreateTutorInput` DTO
+- [ ] Create `CreateTutorOutput` DTO
+- [ ] Create `CreateTutorUseCase extends UseCase<IN, OUT>`
+- [ ] Implement execute() method
+- [ ] Add unit tests with mocked gateway
+
+**Acceptance Criteria:**
+- [ ] Use case validates input
+- [ ] Calls domain factory method
+- [ ] Saves via gateway
+- [ ] Returns created tutor ID
+- [ ] Unit tests with 100% coverage
+
+**Reference:**
+- [UC-01: Create Tutor](use-cases/uc-01)
+- [Sequence Diagram](https://github.com/deniswm/petwise/blob/main/docs/architecture/sequences/uc01-create-tutor.puml)
+
+---
+
+## Next Steps
+
+1. **GitHub Project** - See [GitHub Project Setup](github-project)
+2. **Create Issues** - Use issue templates
+3. **Start Development** - Pick issues from Phase 0
+
+---
+
+## Further Reading
+
+- [GitHub Project Setup](github-project-setup) - Configure labels, milestones, workflows
+- [Contributing Guide](contributing) - Development guidelines
+- [Use Cases](use-cases/) - Detailed use case documentation
+

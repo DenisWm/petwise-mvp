@@ -21,7 +21,7 @@ A: From the project root run:
 make diagrams
 ```
 
-This will render `.puml` files and copy the generated PNGs to `docs-site/assets/diagrams/`.
+This will render `.puml` files and copy the generated PNGs to `docs/assets/diagrams/`.
 
 Q: Where can I find developer setup instructions?
 
