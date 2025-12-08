@@ -14,7 +14,7 @@ An in-depth exploration of PetWise's architecture, design patterns, and technica
 {: .no_toc .text-delta }
 
 1. TOC
-   {:toc}
+{:toc}
 
 ---
 

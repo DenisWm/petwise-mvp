@@ -15,7 +15,7 @@ This guide will help you set up, run, and understand the PetWise project.
 {: .no_toc .text-delta }
 
 1. TOC
-   {:toc}
+{:toc}
 
 ---
 

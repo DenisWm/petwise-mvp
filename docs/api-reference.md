@@ -17,7 +17,7 @@ Quick reference for PetWise REST API endpoints.
 {: .no_toc .text-delta }
 
 1. TOC
-   {:toc}
+{:toc}
 
 ---
 

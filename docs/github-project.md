@@ -143,4 +143,4 @@ gh pr create --title "feat: add CreateTutorUseCase (#10)" --body "Closes #10"
 
 - [Implementation Roadmap](implementation-roadmap)
 - [Contributing](contributing)
-- [GitHub Projects documentation] (https://docs.github.com/en/issues/planning-and-tracking-with-projects)
+- [GitHub Projects documentation](https://docs.github.com/en/issues/planning-and-tracking-with-projects)

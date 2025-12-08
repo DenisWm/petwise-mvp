@@ -14,7 +14,7 @@ Thank you for your interest in contributing to PetWise!
 {: .no_toc .text-delta }
 
 1. TOC
-   {:toc}
+{:toc}
 
 ---
 

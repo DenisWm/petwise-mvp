@@ -14,7 +14,7 @@ PetWise's Gradle build system, convention plugins, and how to maintain and exten
 {: .no_toc .text-delta }
 
 1. TOC
-   {:toc}
+{:toc}
 
 ---
 
