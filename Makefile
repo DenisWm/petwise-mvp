@@ -9,6 +9,8 @@ PLANTUML := docker run --rm -v $(PWD):/workspace -w /workspace plantuml/plantuml
 PUML_FILES := $(shell find docs -name '*.puml')
 PNG_FILES  := $(PUML_FILES:.puml=.png)
 
+# Destination directory for published diagrams (preserves subfolders under docs/)
+PUBLISH_DIR := docs/assets/diagrams
 
 .PHONY: diagrams all
 diagrams all: $(PNG_FILES)
@@ -17,6 +19,22 @@ diagrams all: $(PNG_FILES)
 	@echo "📐 Rendering $< -> $@"
 	@$(PLANTUML) -tpng $<
 
+# Publish generated PNGs into $(PUBLISH_DIR), keeping the same subfolder layout
+.PHONY: publish
+publish: $(PNG_FILES)
+	@echo "📤 Publishing generated diagrams to $(PUBLISH_DIR)"
+	@for p in $(PUML_FILES); do \
+		src=$${p%.puml}.png; \
+		rel=$${p#docs/}; \
+		dest=$(PUBLISH_DIR)/$${rel%.puml}.png; \
+		mkdir -p "$$(dirname "$$dest")"; \
+		if [ -f "$$src" ]; then \
+			echo " -> $$src -> $$dest"; \
+			cp "$$src" "$$dest"; \
+		else \
+			echo "Warning: $$src not found. Run 'make diagrams' first."; \
+		fi; \
+	done
 
 # Remove all generated PNGs
 .PHONY: clean
@@ -25,6 +43,11 @@ clean:
 	# Find PNG files and exclude protected paths. Using -prune with -delete is problematic
 	# because -delete implies -depth; instead use ! -path to explicitly exclude.
 	@find docs -type f -name '*.png' ! -path 'docs/_site/*' ! -path 'docs/assets/diagrams/*' ! -path 'docs/assets/images/*' -print -delete
+
+.PHONY: clean-dry-run
+clean-dry-run:
+	@echo "🧹 Dry-run: PNGs that would be removed (excluding published assets and images):"
+	@find docs -type f -name '*.png' ! -path 'docs/_site/*' ! -path 'docs/assets/diagrams/*' ! -path 'docs/assets/images/*' -print
 
 # Help (default)
 .PHONY: help
