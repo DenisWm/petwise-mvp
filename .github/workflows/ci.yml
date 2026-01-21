@@ -23,8 +23,8 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Gradle install
-        run: ./gradlew --no-daemon install
+      - name: Gradle build
+        run: ./gradlew --no-daemon build
 
       - name: Upload JaCoCo report
         uses: actions/upload-artifact@v4
