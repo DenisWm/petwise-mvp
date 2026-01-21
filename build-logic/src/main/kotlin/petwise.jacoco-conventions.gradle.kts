@@ -39,6 +39,6 @@ tasks.named("clean") {
     dependsOn("cleanJacocoReports")
 }
 
-tasks.named("test") {
+tasks.named("check") {
     dependsOn("jacocoTestReport")
 }
