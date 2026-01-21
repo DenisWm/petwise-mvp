@@ -26,6 +26,9 @@ jobs:
       - name: Gradle test
         run: ./gradlew --no-daemon test
 
+      - name: Gradle test
+        run: ./gradlew --no-daemon test
+
       - name: Upload JaCoCo report
         uses: actions/upload-artifact@v4
         with:
