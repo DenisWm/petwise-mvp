@@ -93,7 +93,7 @@ Allow an attendant or manager to see the list of appointments for a given day, o
 - **Sequence Diagram:** See repository `/docs/architecture/sequences/uc05-view-daily-agenda.puml`
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc05-view-daily-agenda.png" alt="UC-05 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/architecture/sequences/uc05-view-daily-agenda.png" alt="UC-05 Sequence Diagram" />
 </div>
 
 ## Query Parameters

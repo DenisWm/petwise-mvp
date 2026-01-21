@@ -3,6 +3,7 @@ spring-boot = "3.5.7"
 spotless = "8.0.0"
 spring-dependency-management = "1.1.7"
 junit = "5.10.2"
+postgresql = "42.7.8"
 
 [libraries]
 # Spring Boot Starters
@@ -12,7 +13,7 @@ spring-boot-starter-validation = { module = "org.springframework.boot:spring-boo
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 
-postgresql = { module = "org.postgresql:postgresql" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql"}
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 
 # Plugins

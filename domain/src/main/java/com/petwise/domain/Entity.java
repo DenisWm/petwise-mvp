@@ -10,51 +10,51 @@ import java.util.Objects;
 
 public abstract class Entity<ID extends Identifier> {
 
-  protected final ID id;
-  private final List<DomainEvent> domainEvents;
+    protected final ID id;
+    private final List<DomainEvent> domainEvents;
 
-  protected Entity(final ID id, final List<DomainEvent> domainEvents) {
-    this.domainEvents =
-        new ArrayList<>(domainEvents == null ? Collections.emptyList() : domainEvents);
-    Objects.requireNonNull(id, "'id' should not be null");
-    this.id = id;
-  }
-
-  public abstract void validate(ValidationHandler handler);
-
-  public ID getId() {
-    return id;
-  }
-
-  public List<DomainEvent> getDomainEvents() {
-    return Collections.unmodifiableList(domainEvents);
-  }
-
-  public void publishDomainEvents(final DomainEventPublisher publisher) {
-    if (publisher == null) {
-      return;
+    protected Entity(final ID id, final List<DomainEvent> domainEvents) {
+        this.domainEvents =
+                new ArrayList<>(domainEvents == null ? Collections.emptyList() : domainEvents);
+        Objects.requireNonNull(id, "'id' should not be null");
+        this.id = id;
     }
-    getDomainEvents().forEach(publisher::publish);
 
-    this.domainEvents.clear();
-  }
+    public abstract void validate(ValidationHandler handler);
 
-  public void registerEvent(final DomainEvent event) {
-    if (event != null) {
-      this.domainEvents.add(event);
+    public ID getId() {
+        return id;
     }
-  }
 
-  @Override
-  public boolean equals(final Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    final Entity<?> entity = (Entity<?>) o;
-    return Objects.equals(getId(), entity.getId());
-  }
+    public List<DomainEvent> getDomainEvents() {
+        return Collections.unmodifiableList(domainEvents);
+    }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(getId());
-  }
+    public void publishDomainEvents(final DomainEventPublisher publisher) {
+        if (publisher == null) {
+            return;
+        }
+        getDomainEvents().forEach(publisher::publish);
+
+        this.domainEvents.clear();
+    }
+
+    public void registerEvent(final DomainEvent event) {
+        if (event != null) {
+            this.domainEvents.add(event);
+        }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Entity<?> entity = (Entity<?>) o;
+        return Objects.equals(getId(), entity.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }

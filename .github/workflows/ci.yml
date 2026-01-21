@@ -26,6 +26,15 @@ jobs:
       - name: Gradle test
         run: ./gradlew --no-daemon test
 
+      - name: Upload JaCoCo report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: |
+            **/build/reports/jacoco/**/*.html
+            **/build/reports/jacoco/**/*.xml
+          if-no-files-found: warn
+
       - name: Render diagrams (PlantUML via Make)
         run: |
           make diagrams

@@ -107,7 +107,7 @@ Allow an attendant to create a daycare (creche) or hotel appointment for a pet.
 - **Sequence Diagram:** See repository `/docs/architecture/sequences/uc03-create-appointment.puml`
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc03-create-appointment.png" alt="UC-03 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/architecture/sequences/uc03-create-appointment.png" alt="UC-03 Sequence Diagram" />
 </div>
 
 ## Business Rules

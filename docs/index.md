@@ -70,7 +70,7 @@ Want to contribute or learn by implementing?
 
 - [**Contributing Guide**](contributing) - How to contribute
 - [**Implementation Roadmap**](implementation-roadmap) - 34 issues ready to implement
-- [**GitHub Project Setup**](github-project-setup) - Team workflow
+- [**GitHub Project**](github-project) - Team workflow
 
 </div>
 

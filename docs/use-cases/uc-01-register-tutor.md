@@ -83,7 +83,7 @@ Allow an attendant to register a new tutor so that pets can be associated with t
 - **Sequence Diagram:** See repository `/docs/architecture/sequences/uc01-create-tutor.puml`
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc01-create-tutor.png" alt="UC-01 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/architecture/sequences/uc01-create-tutor.png" alt="UC-01 Sequence Diagram" />
 </div>
 
 ## Business Rules

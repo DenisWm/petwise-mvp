@@ -38,8 +38,4 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-### Docs ###
-docs/**/*.png
-!docs/assets/images/favicon.png
-!docs/assets/images/logo.png
 

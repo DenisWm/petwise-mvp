@@ -90,7 +90,7 @@ kramdown:
     block:
       line_numbers: false
 
-favicon: "/assets/images/favicon.png"
+favicon_ico: "/assets/images/favicon.ico"
 
 # Exclude from processing
 exclude:
@@ -102,9 +102,8 @@ exclude:
   - docker-compose.yml
   - start.sh
   - assets/css/
-  - architecture/c4/
+#  - architecture/c4/
   - architecture/domain/
-  - architecture/sequences/
   - architecture/README.md
   - architecture/readme.md
   - diagrams/

@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public final class IDUtils {
 
-  private IDUtils() {}
+    private IDUtils() {}
 
-  public static String uuid() {
-    return UUID.randomUUID().toString().toLowerCase().replace("-", "");
-  }
+    public static String uuid() {
+        return UUID.randomUUID().toString().toLowerCase().replace("-", "");
+    }
 }

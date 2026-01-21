@@ -110,7 +110,7 @@ PENDING → CANCELED
 - **Sequence Diagram:** See repository `/docs/architecture/sequences/uc04-change-appointment-status.puml`
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc04-change-appointment-status.png" alt="UC-04 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/architecture/sequences/uc04-change-appointment-status.png" alt="UC-04 Sequence Diagram" />
 </div>
 
 ## Business Rules

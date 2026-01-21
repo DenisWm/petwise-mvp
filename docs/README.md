@@ -57,10 +57,8 @@ docs/
 Diagram sources are PlantUML (`.puml`) files under `docs/`. Use the repository Makefile to render and publish PNGs:
 
 ```bash
-make publish
+make diagrams
 ```
-
-This copies generated PNGs to `docs/assets/diagrams/`, preserving the source folder structure.
 
 ## Adding content
 

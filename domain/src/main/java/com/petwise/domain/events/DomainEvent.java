@@ -5,5 +5,5 @@ import java.time.Instant;
 
 public interface DomainEvent extends Serializable {
 
-  Instant occurredOn();
+    Instant occurredOn();
 }

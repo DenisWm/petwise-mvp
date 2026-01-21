@@ -159,7 +159,7 @@ Allow an attendant to update or remove tutor and pet records, while respecting d
 - **API Reference:** [Update/Delete endpoints](../api-reference)
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc06-edit-delete-records.png" alt="UC-06 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/architecture/sequences/uc06-edit-delete-records.png" alt="UC-06 Sequence Diagram" />
 </div>
 
 ## Business Rules
