@@ -28,3 +28,4 @@ spring-boot-starter-test = ["spring-boot-starter-test"]
 [plugins]
 spring-boot-app-convention = { id = "petwise.spring-boot-app-conventions" }
 java-library-convention = { id = "petwise.java-library-conventions" }
+jacoco-aggregation-convention = { id = "petwise.jacoco-aggregation-conventions" }

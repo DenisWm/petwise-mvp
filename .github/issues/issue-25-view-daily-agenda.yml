@@ -1,0 +1,92 @@
+name: Feature Implementation
+description: Implement a new feature or use case
+title: "[Feature]: View Daily Agenda Use Case and Endpoint"
+labels: ["P1-High"]
+assignees: []
+body:
+  - type: dropdown
+    id: epic
+    attributes:
+      label: Epic
+      description: Which epic does this feature belong to?
+      options:
+        - Foundation
+        - Domain Foundation
+        - Tutor Management
+        - Pet Management
+        - Appointment Management
+        - Queries & Reports
+        - Polish
+      default: 5
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      description: Which implementation phase?
+      options:
+        - "Phase 0: Foundation"
+        - "Phase 1: Domain & Core"
+        - "Phase 2: Tutor Management"
+        - "Phase 3: Pet Management"
+        - "Phase 4: Appointment Management"
+        - "Phase 5: Queries & Reports"
+        - "Phase 6: Polish & Documentation"
+      default: 5
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - P0-Critical (Blocks other work)
+        - P1-High (MVP Core)
+        - P2-Medium (Nice to have)
+        - P3-Low (Future enhancement)
+      default: 1
+    validations:
+      required: true
+  - type: input
+    id: story-points
+    attributes:
+      label: Story Points
+      description: Estimated effort (optional; prefer reserving estimates for planning tools)
+      placeholder: "8"
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to be implemented?
+      placeholder: |
+        Clear description of the feature and its purpose.
+      value: |
+        Implement a use case and REST endpoint to view the daily agenda, which lists all appointments for a given day.
+    validations:
+      required: true
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Checklist of implementation tasks
+      placeholder: |
+        - [ ] Task 1
+        - [ ] Task 2
+        - [ ] Task 3
+      value: |
+        - [ ] Create the `ViewDailyAgenda` use case.
+        - [ ] Implement the `GET` endpoint for the daily agenda.
+        - [ ] Add integration tests for the use case and endpoint.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How do we know this is done?
+      placeholder: |
+        - [ ] The daily agenda can be retrieved for a given day.
+        - [ ] The endpoint is tested and returns the correct response.
+

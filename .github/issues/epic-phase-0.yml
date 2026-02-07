@@ -1,0 +1,88 @@
+name: 📦 Epic
+description: Create an epic to track a larger feature or initiative
+title: "[Epic]: Phase 0 Foundation"
+labels: ["epic", "P1-high"]
+assignees: []
+body:
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      description: Which implementation phase?
+      options:
+        - "Phase 0: Foundation"
+        - "Phase 1: Domain & Core"
+        - "Phase 2: Tutor Management"
+        - "Phase 3: Pet Management"
+        - "Phase 4: Appointment Management"
+        - "Phase 5: Queries & Reports"
+        - "Phase 6: Polish & Documentation"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Epic Description
+      description: High-level description of this epic
+      placeholder: |
+        What is the overall goal of this epic?
+        What business value does it provide?
+      value: |
+        This epic covers the foundational setup of the project, including the build system, CI/CD pipeline, and containerization.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is included and excluded?
+      placeholder: |
+        **In Scope:**
+        - Feature A
+        - Feature B
+        
+        **Out of Scope:**
+        - Feature X
+        - Feature Y
+      value: |
+        **In Scope:**
+        - Project Setup and Build Configuration
+        - CI/CD Pipeline with GitHub Actions
+        - Docker & Docker Compose Setup
+  - type: textarea
+    id: sub-issues
+    attributes:
+      label: Sub-Issues
+      description: List of issues that belong to this epic
+      placeholder: |
+        - [ ] #8 Tutor Domain Model
+        - [ ] #9 Tutor Gateway Interface
+        - [ ] #10 Create Tutor Use Case
+        - [ ] #11 Tutor JPA Entity
+        - [ ] #12 Create Tutor REST Endpoint
+        - [ ] #13 List Tutor Endpoints
+        - [ ] #14 Update/Delete Tutor Endpoints
+      value: |
+        - [ ] #1 Project Setup and Build Configuration
+        - [ ] #2 CI/CD Pipeline with GitHub Actions
+        - [ ] #3 Docker & Docker Compose Setup
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Epic Acceptance Criteria
+      description: How do we know the epic is complete?
+      placeholder: |
+        - [ ] All sub-issues completed
+        - [ ] Integration tests pass
+        - [ ] Documentation updated
+        - [ ] Demo successful
+      value: |
+        - [ ] All sub-issues are completed.
+        - [ ] The project can be built, tested, and packaged successfully.
+        - [ ] The CI/CD pipeline is functional.
+        - [ ] The application can be run using Docker Compose.
+    validations:
+      required: true
+

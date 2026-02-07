@@ -1,0 +1,92 @@
+name: Feature Implementation
+description: Implement a new feature or use case
+title: "[Feature]: API Documentation with Swagger UI"
+labels: ["P1-High"]
+assignees: []
+body:
+  - type: dropdown
+    id: epic
+    attributes:
+      label: Epic
+      description: Which epic does this feature belong to?
+      options:
+        - Foundation
+        - Domain Foundation
+        - Tutor Management
+        - Pet Management
+        - Appointment Management
+        - Queries & Reports
+        - Polish
+      default: 6
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      description: Which implementation phase?
+      options:
+        - "Phase 0: Foundation"
+        - "Phase 1: Domain & Core"
+        - "Phase 2: Tutor Management"
+        - "Phase 3: Pet Management"
+        - "Phase 4: Appointment Management"
+        - "Phase 5: Queries & Reports"
+        - "Phase 6: Polish & Documentation"
+      default: 6
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - P0-Critical (Blocks other work)
+        - P1-High (MVP Core)
+        - P2-Medium (Nice to have)
+        - P3-Low (Future enhancement)
+      default: 1
+    validations:
+      required: true
+  - type: input
+    id: story-points
+    attributes:
+      label: Story Points
+      description: Estimated effort (optional; prefer reserving estimates for planning tools)
+      placeholder: "5"
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to be implemented?
+      placeholder: |
+        Clear description of the feature and its purpose.
+      value: |
+        Integrate Swagger UI to provide interactive API documentation.
+    validations:
+      required: true
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Checklist of implementation tasks
+      placeholder: |
+        - [ ] Task 1
+        - [ ] Task 2
+        - [ ] Task 3
+      value: |
+        - [ ] Add the `springdoc-openapi-ui` dependency.
+        - [ ] Configure Swagger UI properties.
+        - [ ] Annotate controllers and models to generate comprehensive documentation.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How do we know this is done?
+      placeholder: |
+        - [ ] The Swagger UI is accessible and displays the API documentation.
+        - [ ] The documentation is accurate and complete.
+

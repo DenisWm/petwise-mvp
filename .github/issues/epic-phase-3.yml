@@ -1,0 +1,89 @@
+name: 📦 Epic
+description: Create an epic to track a larger feature or initiative
+title: "[Epic]: Phase 3 Pet Management"
+labels: ["epic", "P1-high"]
+assignees: []
+body:
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      description: Which implementation phase?
+      options:
+        - "Phase 0: Foundation"
+        - "Phase 1: Domain & Core"
+        - "Phase 2: Tutor Management"
+        - "Phase 3: Pet Management"
+        - "Phase 4: Appointment Management"
+        - "Phase 5: Queries & Reports"
+        - "Phase 6: Polish & Documentation"
+      default: 3
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Epic Description
+      description: High-level description of this epic
+      placeholder: |
+        What is the overall goal of this epic?
+        What business value does it provide?
+      value: |
+        This epic covers the implementation of the Pet entity within the Tutor aggregate, including its domain model, persistence, and REST endpoints for CRUD operations.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is included and excluded?
+      placeholder: |
+        **In Scope:**
+        - Feature A
+        - Feature B
+        
+        **Out of Scope:**
+        - Feature X
+        - Feature Y
+      value: |
+        **In Scope:**
+        - Pet domain model.
+        - Gateway interface for pet persistence.
+        - Use case for creating a pet.
+        - REST endpoints for all CRUD operations on pets.
+  - type: textarea
+    id: sub-issues
+    attributes:
+      label: Sub-Issues
+      description: List of issues that belong to this epic
+      placeholder: |
+        - [ ] #15 Pet Domain Model
+        - [ ] #16 Pet Gateway Interface
+        - [ ] #17 Create Pet Use Case and Endpoint
+        - [ ] #18 List and Get Pet Endpoints
+        - [ ] #19 Update and Delete Pet Endpoints
+      value: |
+        - [ ] #15 Pet Domain Model
+        - [ ] #16 Pet Gateway Interface
+        - [ ] #17 Create Pet Use Case and Endpoint
+        - [ ] #18 List and Get Pet Endpoints
+        - [ ] #19 Update and Delete Pet Endpoints
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Epic Acceptance Criteria
+      description: How do we know the epic is complete?
+      placeholder: |
+        - [ ] All sub-issues completed
+        - [ ] Integration tests pass
+        - [ ] Documentation updated
+        - [ ] Demo successful
+      value: |
+        - [ ] All sub-issues are completed.
+        - [ ] Pets can be created, read, updated, and deleted through the REST API.
+        - [ ] The implementation is fully tested.
+    validations:
+      required: true
+
