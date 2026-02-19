@@ -140,4 +140,3 @@ class TutorValidatorTest extends UnitTest {
         assertThat(notification.getErrors()).isEmpty();
     }
 }
-

@@ -25,9 +25,7 @@ public class CreateTutorRequestTest {
         assertThat(jsonContent)
                 .extractingJsonPathStringValue("$.email")
                 .isEqualTo("john@example.com");
-        assertThat(jsonContent)
-                .extractingJsonPathStringValue("$.phone")
-                .isEqualTo("+1234567890");
+        assertThat(jsonContent).extractingJsonPathStringValue("$.phone").isEqualTo("+1234567890");
     }
 
     @Test
@@ -62,9 +60,7 @@ public class CreateTutorRequestTest {
         // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("John Doe");
         assertThat(jsonContent).doesNotHaveJsonPath("$.email"); // null should not be rendered
-        assertThat(jsonContent)
-                .extractingJsonPathStringValue("$.phone")
-                .isEqualTo("+1234567890");
+        assertThat(jsonContent).extractingJsonPathStringValue("$.phone").isEqualTo("+1234567890");
     }
 
     @Test
@@ -144,4 +140,3 @@ public class CreateTutorRequestTest {
         assertThat(request.phone()).isNull();
     }
 }
-

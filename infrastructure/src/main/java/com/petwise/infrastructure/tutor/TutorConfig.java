@@ -12,8 +12,6 @@ import com.petwise.application.tutor.update.DefaultUpdateTutorUseCase;
 import com.petwise.application.tutor.update.UpdateTutorUseCase;
 import com.petwise.domain.tutor.TutorGateway;
 import com.petwise.infrastructure.tutor.api.TutorController;
-import com.petwise.infrastructure.tutor.persistence.TutorPostgresGateway;
-import com.petwise.infrastructure.tutor.persistence.TutorRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

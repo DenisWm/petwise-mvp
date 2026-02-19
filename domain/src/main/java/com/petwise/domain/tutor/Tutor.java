@@ -133,5 +133,4 @@ public class Tutor extends AggregateRoot<TutorID> {
     public Instant getUpdatedAt() {
         return updatedAt;
     }
-
 }

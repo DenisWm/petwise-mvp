@@ -15,8 +15,7 @@ public class UpdateTutorRequestTest {
     @Test
     void testSerialize() throws Exception {
         // given
-        final var request =
-                new UpdateTutorRequest("Jane Smith", "jane@example.com", "+9876543210");
+        final var request = new UpdateTutorRequest("Jane Smith", "jane@example.com", "+9876543210");
 
         // when
         final var jsonContent = this.json.write(request);
@@ -26,9 +25,7 @@ public class UpdateTutorRequestTest {
         assertThat(jsonContent)
                 .extractingJsonPathStringValue("$.email")
                 .isEqualTo("jane@example.com");
-        assertThat(jsonContent)
-                .extractingJsonPathStringValue("$.phone")
-                .isEqualTo("+9876543210");
+        assertThat(jsonContent).extractingJsonPathStringValue("$.phone").isEqualTo("+9876543210");
     }
 
     @Test
@@ -63,9 +60,7 @@ public class UpdateTutorRequestTest {
         // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("Jane Smith");
         assertThat(jsonContent).doesNotHaveJsonPath("$.email"); // null should not be rendered
-        assertThat(jsonContent)
-                .extractingJsonPathStringValue("$.phone")
-                .isEqualTo("+9876543210");
+        assertThat(jsonContent).extractingJsonPathStringValue("$.phone").isEqualTo("+9876543210");
     }
 
     @Test
@@ -138,4 +133,3 @@ public class UpdateTutorRequestTest {
         assertThat(jsonContent).doesNotHaveJsonPath("$.phone");
     }
 }
-

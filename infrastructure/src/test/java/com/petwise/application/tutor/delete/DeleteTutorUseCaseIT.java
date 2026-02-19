@@ -3,9 +3,9 @@ package com.petwise.application.tutor.delete;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.petwise.IntegrationTest;
 import com.petwise.domain.exceptions.NotFoundException;
 import com.petwise.domain.tutor.Tutor;
-import com.petwise.IntegrationTest;
 import com.petwise.infrastructure.tutor.persistence.TutorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 @IntegrationTest
 public class DeleteTutorUseCaseIT {
 
-    @Autowired
-    private DeleteTutorUseCase useCase;
+    @Autowired private DeleteTutorUseCase useCase;
 
-    @Autowired
-    private TutorRepository tutorRepository;
+    @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidId_whenCallsDeleteTutor_thenShouldDeleteTutor() {
         // given
         final var tutor = Tutor.newTutor("John Doe", "john@example.com", "+1234567890");
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
 
@@ -66,9 +65,12 @@ public class DeleteTutorUseCaseIT {
         final var tutor2 = Tutor.newTutor("Tutor 2", "tutor2@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Tutor 3", "tutor3@example.com", "+3333333333");
 
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         assertThat(tutorRepository.count()).isEqualTo(3);
 
@@ -86,7 +88,8 @@ public class DeleteTutorUseCaseIT {
     void givenValidId_whenCallsDeleteTutorTwice_thenShouldThrowNotFoundExceptionOnSecondCall() {
         // given
         final var tutor = Tutor.newTutor("Test User", "test@example.com", "+1234567890");
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
 
@@ -99,4 +102,3 @@ public class DeleteTutorUseCaseIT {
                 .hasMessageContaining("Tutor with ID " + tutorId + " was not found");
     }
 }
-

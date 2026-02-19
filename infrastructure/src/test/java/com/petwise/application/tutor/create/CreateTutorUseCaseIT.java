@@ -3,9 +3,9 @@ package com.petwise.application.tutor.create;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.petwise.IntegrationTest;
 import com.petwise.domain.exceptions.DomainException;
 import com.petwise.domain.exceptions.NotificationException;
-import com.petwise.IntegrationTest;
 import com.petwise.infrastructure.tutor.persistence.TutorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @IntegrationTest
 public class CreateTutorUseCaseIT {
 
-    @Autowired
-    private CreateTutorUseCase useCase;
+    @Autowired private CreateTutorUseCase useCase;
 
-    @Autowired
-    private TutorRepository tutorRepository;
+    @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidCommand_whenCallsCreateTutor_thenShouldReturnTutorId() {
@@ -165,7 +163,8 @@ public class CreateTutorUseCaseIT {
     }
 
     @Test
-    void givenInvalidCommandWithNullName_whenCallsCreateTutor_thenShouldThrowNotificationException() {
+    void
+            givenInvalidCommandWithNullName_whenCallsCreateTutor_thenShouldThrowNotificationException() {
         // given
         final String expectedName = null;
         final var expectedEmail = "test@example.com";
@@ -183,7 +182,8 @@ public class CreateTutorUseCaseIT {
     }
 
     @Test
-    void givenInvalidCommandWithEmptyName_whenCallsCreateTutor_thenShouldThrowNotificationException() {
+    void
+            givenInvalidCommandWithEmptyName_whenCallsCreateTutor_thenShouldThrowNotificationException() {
         // given
         final var expectedName = "";
         final var expectedEmail = "test@example.com";
@@ -201,7 +201,8 @@ public class CreateTutorUseCaseIT {
     }
 
     @Test
-    void givenInvalidCommandWithBlankName_whenCallsCreateTutor_thenShouldThrowNotificationException() {
+    void
+            givenInvalidCommandWithBlankName_whenCallsCreateTutor_thenShouldThrowNotificationException() {
         // given
         final var expectedName = "   ";
         final var expectedEmail = "test@example.com";
@@ -217,7 +218,6 @@ public class CreateTutorUseCaseIT {
         // Verify nothing was persisted
         assertThat(tutorRepository.count()).isZero();
     }
-
 
     @Test
     void givenInvalidCommandWithInvalidEmail_whenCallsCreateTutor_thenShouldThrowDomainException() {
@@ -238,7 +238,8 @@ public class CreateTutorUseCaseIT {
     }
 
     @Test
-    void givenInvalidCommandWithInvalidPhoneFormat_whenCallsCreateTutor_thenShouldThrowDomainException() {
+    void
+            givenInvalidCommandWithInvalidPhoneFormat_whenCallsCreateTutor_thenShouldThrowDomainException() {
         // given
         final var expectedName = "Invalid Phone User";
         final var expectedEmail = "test@example.com";
@@ -283,9 +284,12 @@ public class CreateTutorUseCaseIT {
     @Test
     void givenMultipleValidCommands_whenCallsCreateTutor_thenShouldCreateMultipleTutors() {
         // given
-        final var command1 = CreateTutorCommand.with("First User", "first@example.com", "+1111111111");
-        final var command2 = CreateTutorCommand.with("Second User", "second@example.com", "+2222222222");
-        final var command3 = CreateTutorCommand.with("Third User", "third@example.com", "+3333333333");
+        final var command1 =
+                CreateTutorCommand.with("First User", "first@example.com", "+1111111111");
+        final var command2 =
+                CreateTutorCommand.with("Second User", "second@example.com", "+2222222222");
+        final var command3 =
+                CreateTutorCommand.with("Third User", "third@example.com", "+3333333333");
 
         // when
         final var output1 = useCase.execute(command1);

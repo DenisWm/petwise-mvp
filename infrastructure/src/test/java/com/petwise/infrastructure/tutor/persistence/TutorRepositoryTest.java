@@ -3,18 +3,16 @@ package com.petwise.infrastructure.tutor.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.petwise.PostgresGatewayTest;
+import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import java.time.Instant;
-
 @PostgresGatewayTest
 class TutorRepositoryTest {
 
-    @Autowired
-    private TutorRepository tutorRepository;
+    @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidTutor_whenSave_thenShouldPersist() {
@@ -72,9 +70,12 @@ class TutorRepositoryTest {
     @Test
     void givenMultipleTutors_whenFindAll_thenShouldReturnAllTutors() {
         // given
-        final var entity1 = createTutorEntity("tutor-1", "Alice Brown", "alice@example.com", "+1111111111");
-        final var entity2 = createTutorEntity("tutor-2", "Bob Green", "bob@example.com", "+2222222222");
-        final var entity3 = createTutorEntity("tutor-3", "Charlie White", "charlie@example.com", "+3333333333");
+        final var entity1 =
+                createTutorEntity("tutor-1", "Alice Brown", "alice@example.com", "+1111111111");
+        final var entity2 =
+                createTutorEntity("tutor-2", "Bob Green", "bob@example.com", "+2222222222");
+        final var entity3 =
+                createTutorEntity("tutor-3", "Charlie White", "charlie@example.com", "+3333333333");
 
         tutorRepository.save(entity1);
         tutorRepository.save(entity2);
@@ -85,14 +86,16 @@ class TutorRepositoryTest {
 
         // then
         assertThat(result).hasSize(3);
-        assertThat(result).extracting(TutorJpaEntity::getName)
+        assertThat(result)
+                .extracting(TutorJpaEntity::getName)
                 .containsExactlyInAnyOrder("Alice Brown", "Bob Green", "Charlie White");
     }
 
     @Test
     void givenExistingTutor_whenDelete_thenShouldRemoveTutor() {
         // given
-        final var entity = createTutorEntity("tutor-delete", "Delete Me", "delete@example.com", "+9999999999");
+        final var entity =
+                createTutorEntity("tutor-delete", "Delete Me", "delete@example.com", "+9999999999");
         tutorRepository.save(entity);
 
         // when
@@ -106,9 +109,12 @@ class TutorRepositoryTest {
     @Test
     void givenTutorsWithMatchingName_whenFindBySearchTerms_thenShouldReturnMatchingTutors() {
         // given
-        final var entity1 = createTutorEntity("tutor-1", "Maria Silva", "maria@example.com", "+1111111111");
-        final var entity2 = createTutorEntity("tutor-2", "João Silva", "joao@example.com", "+2222222222");
-        final var entity3 = createTutorEntity("tutor-3", "Pedro Santos", "pedro@example.com", "+3333333333");
+        final var entity1 =
+                createTutorEntity("tutor-1", "Maria Silva", "maria@example.com", "+1111111111");
+        final var entity2 =
+                createTutorEntity("tutor-2", "João Silva", "joao@example.com", "+2222222222");
+        final var entity3 =
+                createTutorEntity("tutor-3", "Pedro Santos", "pedro@example.com", "+3333333333");
 
         tutorRepository.save(entity1);
         tutorRepository.save(entity2);
@@ -121,7 +127,8 @@ class TutorRepositoryTest {
 
         // then
         assertThat(result.getContent()).hasSize(2);
-        assertThat(result.getContent()).extracting(TutorJpaEntity::getName)
+        assertThat(result.getContent())
+                .extracting(TutorJpaEntity::getName)
                 .containsExactlyInAnyOrder("Maria Silva", "João Silva");
         assertThat(result.getTotalElements()).isEqualTo(2);
     }
@@ -129,9 +136,12 @@ class TutorRepositoryTest {
     @Test
     void givenTutorsWithMatchingEmail_whenFindBySearchTerms_thenShouldReturnMatchingTutors() {
         // given
-        final var entity1 = createTutorEntity("tutor-1", "User One", "test@gmail.com", "+1111111111");
-        final var entity2 = createTutorEntity("tutor-2", "User Two", "test@yahoo.com", "+2222222222");
-        final var entity3 = createTutorEntity("tutor-3", "User Three", "user@example.com", "+3333333333");
+        final var entity1 =
+                createTutorEntity("tutor-1", "User One", "test@gmail.com", "+1111111111");
+        final var entity2 =
+                createTutorEntity("tutor-2", "User Two", "test@yahoo.com", "+2222222222");
+        final var entity3 =
+                createTutorEntity("tutor-3", "User Three", "user@example.com", "+3333333333");
 
         tutorRepository.save(entity1);
         tutorRepository.save(entity2);
@@ -144,7 +154,8 @@ class TutorRepositoryTest {
 
         // then
         assertThat(result.getContent()).hasSize(2);
-        assertThat(result.getContent()).extracting(TutorJpaEntity::getEmail)
+        assertThat(result.getContent())
+                .extracting(TutorJpaEntity::getEmail)
                 .containsExactlyInAnyOrder("test@gmail.com", "test@yahoo.com");
     }
 
@@ -152,11 +163,12 @@ class TutorRepositoryTest {
     void givenTutors_whenFindBySearchTermsWithPagination_thenShouldRespectPagination() {
         // given
         for (int i = 0; i < 15; i++) {
-            final var entity = createTutorEntity(
-                    "tutor-" + i,
-                    "Tutor " + i,
-                    "tutor" + i + "@example.com",
-                    "+555000" + String.format("%04d", i));
+            final var entity =
+                    createTutorEntity(
+                            "tutor-" + i,
+                            "Tutor " + i,
+                            "tutor" + i + "@example.com",
+                            "+555000" + String.format("%04d", i));
             tutorRepository.save(entity);
         }
 
@@ -175,9 +187,14 @@ class TutorRepositoryTest {
     @Test
     void givenTutors_whenFindBySearchTermsCaseInsensitive_thenShouldMatchRegardlessOfCase() {
         // given
-        final var entity1 = createTutorEntity("tutor-1", "UPPERCASE NAME", "uppercase@example.com", "+1111111111");
-        final var entity2 = createTutorEntity("tutor-2", "lowercase name", "lowercase@example.com", "+2222222222");
-        final var entity3 = createTutorEntity("tutor-3", "MiXeD CaSe NaMe", "mixed@example.com", "+3333333333");
+        final var entity1 =
+                createTutorEntity(
+                        "tutor-1", "UPPERCASE NAME", "uppercase@example.com", "+1111111111");
+        final var entity2 =
+                createTutorEntity(
+                        "tutor-2", "lowercase name", "lowercase@example.com", "+2222222222");
+        final var entity3 =
+                createTutorEntity("tutor-3", "MiXeD CaSe NaMe", "mixed@example.com", "+3333333333");
 
         tutorRepository.save(entity1);
         tutorRepository.save(entity2);
@@ -190,15 +207,18 @@ class TutorRepositoryTest {
 
         // then
         assertThat(result.getContent()).hasSize(3);
-        assertThat(result.getContent()).extracting(TutorJpaEntity::getName)
+        assertThat(result.getContent())
+                .extracting(TutorJpaEntity::getName)
                 .containsExactlyInAnyOrder("UPPERCASE NAME", "lowercase name", "MiXeD CaSe NaMe");
     }
 
     @Test
     void givenTutors_whenFindBySearchTermsWithEmptyString_thenShouldNotMatch() {
         // given
-        final var entity1 = createTutorEntity("tutor-1", "John Doe", "john@example.com", "+1111111111");
-        final var entity2 = createTutorEntity("tutor-2", "Jane Doe", "jane@example.com", "+2222222222");
+        final var entity1 =
+                createTutorEntity("tutor-1", "John Doe", "john@example.com", "+1111111111");
+        final var entity2 =
+                createTutorEntity("tutor-2", "Jane Doe", "jane@example.com", "+2222222222");
 
         tutorRepository.save(entity1);
         tutorRepository.save(entity2);
@@ -216,8 +236,10 @@ class TutorRepositoryTest {
     @Test
     void givenTutors_whenFindBySearchTermsWithNoMatch_thenShouldReturnEmpty() {
         // given
-        final var entity1 = createTutorEntity("tutor-1", "John Doe", "john@example.com", "+1111111111");
-        final var entity2 = createTutorEntity("tutor-2", "Jane Doe", "jane@example.com", "+2222222222");
+        final var entity1 =
+                createTutorEntity("tutor-1", "John Doe", "john@example.com", "+1111111111");
+        final var entity2 =
+                createTutorEntity("tutor-2", "Jane Doe", "jane@example.com", "+2222222222");
 
         tutorRepository.save(entity1);
         tutorRepository.save(entity2);
@@ -277,7 +299,9 @@ class TutorRepositoryTest {
     @Test
     void givenExistingTutor_whenUpdate_thenShouldUpdateFields() {
         // given
-        final var entity = createTutorEntity("tutor-update", "Original Name", "original@example.com", "+1111111111");
+        final var entity =
+                createTutorEntity(
+                        "tutor-update", "Original Name", "original@example.com", "+1111111111");
         tutorRepository.save(entity);
 
         // when
@@ -298,8 +322,10 @@ class TutorRepositoryTest {
     @Test
     void givenTutors_whenFindBySearchTermsWithSorting_thenShouldReturnSortedResults() {
         // given
-        final var entity1 = createTutorEntity("tutor-1", "Charlie", "charlie@example.com", "+1111111111");
-        final var entity2 = createTutorEntity("tutor-2", "Alice", "alice@example.com", "+2222222222");
+        final var entity1 =
+                createTutorEntity("tutor-1", "Charlie", "charlie@example.com", "+1111111111");
+        final var entity2 =
+                createTutorEntity("tutor-2", "Alice", "alice@example.com", "+2222222222");
         final var entity3 = createTutorEntity("tutor-3", "Bob", "bob@example.com", "+3333333333");
 
         tutorRepository.save(entity1);
@@ -314,9 +340,11 @@ class TutorRepositoryTest {
         final var resultDesc = tutorRepository.findBySearchTerms("", pageableDesc);
 
         // then
-        assertThat(resultAsc.getContent()).extracting(TutorJpaEntity::getName)
+        assertThat(resultAsc.getContent())
+                .extracting(TutorJpaEntity::getName)
                 .containsExactly("Alice", "Bob", "Charlie");
-        assertThat(resultDesc.getContent()).extracting(TutorJpaEntity::getName)
+        assertThat(resultDesc.getContent())
+                .extracting(TutorJpaEntity::getName)
                 .containsExactly("Charlie", "Bob", "Alice");
     }
 

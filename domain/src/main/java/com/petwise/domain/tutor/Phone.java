@@ -20,8 +20,8 @@ public class Phone extends ValueObject {
     }
 
     /**
-     * Creates a new Phone instance with validation. Phone is optional - null and blank values are allowed.
-     * Empty or blank strings are treated as null.
+     * Creates a new Phone instance with validation. Phone is optional - null and blank values are
+     * allowed. Empty or blank strings are treated as null.
      *
      * @param phone the phone string to validate (can be null or blank)
      * @return a new Phone instance, or null if phone is null or blank
@@ -37,7 +37,6 @@ public class Phone extends ValueObject {
 
     private static void validate(final String phone) {
         final String trimmedPhone = phone.trim();
-
 
         if (!PHONE_PATTERN.matcher(trimmedPhone).matches()) {
             throw DomainException.with(new Error("'phone' is not a valid phone number"));

@@ -3,9 +3,9 @@ package com.petwise.application.tutor.retrieve.list;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.petwise.IntegrationTest;
 import com.petwise.domain.pagination.SearchQuery;
 import com.petwise.domain.tutor.Tutor;
-import com.petwise.IntegrationTest;
 import com.petwise.infrastructure.tutor.persistence.TutorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @IntegrationTest
 public class ListTutorsUseCaseIT {
 
-    @Autowired
-    private ListTutorsUseCase useCase;
+    @Autowired private ListTutorsUseCase useCase;
 
-    @Autowired
-    private TutorRepository tutorRepository;
+    @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidQuery_whenCallsListTutors_thenShouldReturnPaginatedTutors() {
@@ -26,9 +24,12 @@ public class ListTutorsUseCaseIT {
         final var tutor2 = Tutor.newTutor("Bob Green", "bob@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Charlie White", "charlie@example.com", "+3333333333");
 
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "", "name", "asc");
 
@@ -41,7 +42,8 @@ public class ListTutorsUseCaseIT {
         assertThat(result.perPage()).isEqualTo(10);
         assertThat(result.total()).isEqualTo(3);
         assertThat(result.items()).hasSize(3);
-        assertThat(result.items()).extracting(ListTutorsOutput::name)
+        assertThat(result.items())
+                .extracting(ListTutorsOutput::name)
                 .containsExactly("Alice Brown", "Bob Green", "Charlie White");
     }
 
@@ -49,11 +51,13 @@ public class ListTutorsUseCaseIT {
     void givenValidQueryWithPagination_whenCallsListTutors_thenShouldReturnCorrectPage() {
         // given
         for (int i = 0; i < 15; i++) {
-            final var tutor = Tutor.newTutor(
-                    "Tutor " + i,
-                    "tutor" + i + "@example.com",
-                    "+555000" + String.format("%04d", i));
-            tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
+            final var tutor =
+                    Tutor.newTutor(
+                            "Tutor " + i,
+                            "tutor" + i + "@example.com",
+                            "+555000" + String.format("%04d", i));
+            tutorRepository.save(
+                    com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
         }
 
         final var query = new SearchQuery(1, 5, "", "name", "asc");
@@ -76,9 +80,12 @@ public class ListTutorsUseCaseIT {
         final var tutor2 = Tutor.newTutor("João Silva", "joao@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Pedro Santos", "pedro@example.com", "+3333333333");
 
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "Silva", "name", "asc");
 
@@ -89,7 +96,8 @@ public class ListTutorsUseCaseIT {
         assertThat(result).isNotNull();
         assertThat(result.total()).isEqualTo(2);
         assertThat(result.items()).hasSize(2);
-        assertThat(result.items()).extracting(ListTutorsOutput::name)
+        assertThat(result.items())
+                .extracting(ListTutorsOutput::name)
                 .containsExactlyInAnyOrder("Maria Silva", "João Silva");
     }
 
@@ -100,9 +108,12 @@ public class ListTutorsUseCaseIT {
         final var tutor2 = Tutor.newTutor("User Two", "test@yahoo.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("User Three", "user@example.com", "+3333333333");
 
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "test@", "name", "asc");
 
@@ -113,7 +124,8 @@ public class ListTutorsUseCaseIT {
         assertThat(result).isNotNull();
         assertThat(result.total()).isEqualTo(2);
         assertThat(result.items()).hasSize(2);
-        assertThat(result.items()).extracting(ListTutorsOutput::email)
+        assertThat(result.items())
+                .extracting(ListTutorsOutput::email)
                 .containsExactlyInAnyOrder("test@gmail.com", "test@yahoo.com");
     }
 
@@ -124,9 +136,12 @@ public class ListTutorsUseCaseIT {
         final var tutor2 = Tutor.newTutor("Alice", "alice@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Bob", "bob@example.com", "+3333333333");
 
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "", "name", "asc");
 
@@ -134,7 +149,8 @@ public class ListTutorsUseCaseIT {
         final var result = useCase.execute(query);
 
         // then
-        assertThat(result.items()).extracting(ListTutorsOutput::name)
+        assertThat(result.items())
+                .extracting(ListTutorsOutput::name)
                 .containsExactly("Alice", "Bob", "Charlie");
     }
 
@@ -145,9 +161,12 @@ public class ListTutorsUseCaseIT {
         final var tutor2 = Tutor.newTutor("Alice", "alice@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Bob", "bob@example.com", "+3333333333");
 
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "", "name", "desc");
 
@@ -155,7 +174,8 @@ public class ListTutorsUseCaseIT {
         final var result = useCase.execute(query);
 
         // then
-        assertThat(result.items()).extracting(ListTutorsOutput::name)
+        assertThat(result.items())
+                .extracting(ListTutorsOutput::name)
                 .containsExactly("Charlie", "Bob", "Alice");
     }
 
@@ -179,7 +199,8 @@ public class ListTutorsUseCaseIT {
     void givenValidQueryWithNoMatch_whenCallsListTutors_thenShouldReturnEmptyPagination() {
         // given
         final var tutor = Tutor.newTutor("John Doe", "john@example.com", "+1234567890");
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var query = new SearchQuery(0, 10, "NonExistingTerm", "name", "asc");
 
@@ -206,8 +227,10 @@ public class ListTutorsUseCaseIT {
         final var tutor1 = Tutor.newTutor("Tutor 1", "tutor1@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("Tutor 2", "tutor2@example.com", "+2222222222");
 
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
 
         final var query = new SearchQuery(0, 10, null, "name", "asc");
 
@@ -221,15 +244,19 @@ public class ListTutorsUseCaseIT {
     }
 
     @Test
-    void givenValidQueryWithCaseInsensitiveSearch_whenCallsListTutors_thenShouldReturnMatchingTutors() {
+    void
+            givenValidQueryWithCaseInsensitiveSearch_whenCallsListTutors_thenShouldReturnMatchingTutors() {
         // given
         final var tutor1 = Tutor.newTutor("UPPERCASE NAME", "uppercase@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("lowercase name", "lowercase@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("MiXeD CaSe NaMe", "mixed@example.com", "+3333333333");
 
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "name", "name", "asc");
 
@@ -250,7 +277,8 @@ public class ListTutorsUseCaseIT {
         final var expectedPhone = "+1234567890";
 
         final var tutor = Tutor.newTutor(expectedName, expectedEmail, expectedPhone);
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var query = new SearchQuery(0, 10, "", "name", "asc");
 
@@ -268,4 +296,3 @@ public class ListTutorsUseCaseIT {
         assertThat(output.updatedAt()).isNotNull();
     }
 }
-

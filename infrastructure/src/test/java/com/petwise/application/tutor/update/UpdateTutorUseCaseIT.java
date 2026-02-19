@@ -3,11 +3,11 @@ package com.petwise.application.tutor.update;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.petwise.domain.exceptions.NotFoundException;
+import com.petwise.IntegrationTest;
 import com.petwise.domain.exceptions.DomainException;
+import com.petwise.domain.exceptions.NotFoundException;
 import com.petwise.domain.exceptions.NotificationException;
 import com.petwise.domain.tutor.Tutor;
-import com.petwise.IntegrationTest;
 import com.petwise.infrastructure.tutor.persistence.TutorJpaEntity;
 import com.petwise.infrastructure.tutor.persistence.TutorRepository;
 import org.junit.jupiter.api.Test;
@@ -16,11 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @IntegrationTest
 public class UpdateTutorUseCaseIT {
 
-    @Autowired
-    private UpdateTutorUseCase useCase;
+    @Autowired private UpdateTutorUseCase useCase;
 
-    @Autowired
-    private TutorRepository tutorRepository;
+    @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidCommand_whenCallsUpdateTutor_thenShouldUpdateTutor() {
@@ -32,8 +30,9 @@ public class UpdateTutorUseCaseIT {
         final var expectedEmail = "john.updated@example.com";
         final var expectedPhone = "+9999999999";
 
-        final var command = UpdateTutorCommand.with(
-                tutor.getId().getValue(), expectedName, expectedEmail, expectedPhone);
+        final var command =
+                UpdateTutorCommand.with(
+                        tutor.getId().getValue(), expectedName, expectedEmail, expectedPhone);
 
         // when
         final var output = useCase.execute(command);
@@ -48,7 +47,8 @@ public class UpdateTutorUseCaseIT {
         assertThat(updatedTutor.get().getName()).isEqualTo(expectedName);
         assertThat(updatedTutor.get().getEmail()).isEqualTo(expectedEmail);
         assertThat(updatedTutor.get().getPhone()).isEqualTo(expectedPhone);
-        assertThat(updatedTutor.get().getUpdatedAt()).isAfterOrEqualTo(updatedTutor.get().getCreatedAt());
+        assertThat(updatedTutor.get().getUpdatedAt())
+                .isAfterOrEqualTo(updatedTutor.get().getCreatedAt());
     }
 
     @Test
@@ -61,8 +61,9 @@ public class UpdateTutorUseCaseIT {
         final String expectedEmail = null;
         final var expectedPhone = "+2222222222";
 
-        final var command = UpdateTutorCommand.with(
-                tutor.getId().getValue(), expectedName, expectedEmail, expectedPhone);
+        final var command =
+                UpdateTutorCommand.with(
+                        tutor.getId().getValue(), expectedName, expectedEmail, expectedPhone);
 
         // when
         final var output = useCase.execute(command);
@@ -85,8 +86,9 @@ public class UpdateTutorUseCaseIT {
         final var expectedEmail = "bob.updated@example.com";
         final String expectedPhone = null;
 
-        final var command = UpdateTutorCommand.with(
-                tutor.getId().getValue(), expectedName, expectedEmail, expectedPhone);
+        final var command =
+                UpdateTutorCommand.with(
+                        tutor.getId().getValue(), expectedName, expectedEmail, expectedPhone);
 
         // when
         final var output = useCase.execute(command);
@@ -103,8 +105,9 @@ public class UpdateTutorUseCaseIT {
     void givenNonExistingId_whenCallsUpdateTutor_thenShouldThrowNotFoundException() {
         // given
         final var nonExistingId = "non-existing-id";
-        final var command = UpdateTutorCommand.with(
-                nonExistingId, "Test Name", "test@example.com", "+1234567890");
+        final var command =
+                UpdateTutorCommand.with(
+                        nonExistingId, "Test Name", "test@example.com", "+1234567890");
 
         // when & then
         assertThatThrownBy(() -> useCase.execute(command))
@@ -119,8 +122,9 @@ public class UpdateTutorUseCaseIT {
         tutorRepository.save(TutorJpaEntity.from(tutor));
 
         final String invalidName = null;
-        final var command = UpdateTutorCommand.with(
-                tutor.getId().getValue(), invalidName, "test@example.com", "+1234567890");
+        final var command =
+                UpdateTutorCommand.with(
+                        tutor.getId().getValue(), invalidName, "test@example.com", "+1234567890");
 
         // when & then
         assertThatThrownBy(() -> useCase.execute(command))
@@ -135,8 +139,9 @@ public class UpdateTutorUseCaseIT {
         tutorRepository.save(TutorJpaEntity.from(tutor));
 
         final var invalidName = "";
-        final var command = UpdateTutorCommand.with(
-                tutor.getId().getValue(), invalidName, "test@example.com", "+1234567890");
+        final var command =
+                UpdateTutorCommand.with(
+                        tutor.getId().getValue(), invalidName, "test@example.com", "+1234567890");
 
         // when & then
         assertThatThrownBy(() -> useCase.execute(command))
@@ -151,8 +156,9 @@ public class UpdateTutorUseCaseIT {
         tutorRepository.save(TutorJpaEntity.from(tutor));
 
         final var invalidEmail = "invalid-email";
-        final var command = UpdateTutorCommand.with(
-                tutor.getId().getValue(), "Test User", invalidEmail, "+1234567890");
+        final var command =
+                UpdateTutorCommand.with(
+                        tutor.getId().getValue(), "Test User", invalidEmail, "+1234567890");
 
         // when & then
         assertThatThrownBy(() -> useCase.execute(command))
@@ -167,8 +173,9 @@ public class UpdateTutorUseCaseIT {
         tutorRepository.save(TutorJpaEntity.from(tutor));
 
         final var invalidPhone = "123";
-        final var command = UpdateTutorCommand.with(
-                tutor.getId().getValue(), "Test User", "test@example.com", invalidPhone);
+        final var command =
+                UpdateTutorCommand.with(
+                        tutor.getId().getValue(), "Test User", "test@example.com", invalidPhone);
 
         // when & then
         assertThatThrownBy(() -> useCase.execute(command))
@@ -198,8 +205,12 @@ public class UpdateTutorUseCaseIT {
             Thread.currentThread().interrupt();
         }
 
-        final var command = UpdateTutorCommand.with(
-                tutor.getId().getValue(), "Updated Name", "updated@example.com", "+9999999999");
+        final var command =
+                UpdateTutorCommand.with(
+                        tutor.getId().getValue(),
+                        "Updated Name",
+                        "updated@example.com",
+                        "+9999999999");
 
         // when
         useCase.execute(command);
@@ -210,4 +221,3 @@ public class UpdateTutorUseCaseIT {
         assertThat(updatedTutor.get().getUpdatedAt()).isAfterOrEqualTo(originalUpdatedAt);
     }
 }
-

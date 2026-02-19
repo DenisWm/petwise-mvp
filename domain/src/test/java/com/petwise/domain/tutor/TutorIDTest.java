@@ -38,8 +38,7 @@ class TutorIDTest extends UnitTest {
     @Test
     void givenNullId_whenCallsFrom_thenShouldThrowException() {
         // when & then
-        assertThatThrownBy(() -> TutorID.from(null))
-                .isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> TutorID.from(null)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -91,4 +90,3 @@ class TutorIDTest extends UnitTest {
         assertThat(actualValue).isEqualTo(expectedValue);
     }
 }
-

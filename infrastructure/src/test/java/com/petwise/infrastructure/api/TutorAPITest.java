@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.petwise.ControllerTest;
 import com.petwise.application.tutor.create.CreateTutorOutput;
 import com.petwise.application.tutor.create.CreateTutorUseCase;
 import com.petwise.application.tutor.delete.DeleteTutorUseCase;
@@ -19,7 +20,6 @@ import com.petwise.application.tutor.retrieve.list.ListTutorsUseCase;
 import com.petwise.application.tutor.update.UpdateTutorOutput;
 import com.petwise.application.tutor.update.UpdateTutorUseCase;
 import com.petwise.domain.pagination.Pagination;
-import com.petwise.ControllerTest;
 import com.petwise.infrastructure.tutor.api.TutorController;
 import com.petwise.infrastructure.tutor.models.CreateTutorRequest;
 import com.petwise.infrastructure.tutor.models.UpdateTutorRequest;

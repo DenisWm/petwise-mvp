@@ -72,4 +72,3 @@ public class TutorIdResponseTest {
         assertThat(response.id()).isEqualTo("tutor-abc123-def456-ghi789");
     }
 }
-

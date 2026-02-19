@@ -3,9 +3,9 @@ package com.petwise.application.tutor.retrieve.getbyid;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.petwise.IntegrationTest;
 import com.petwise.domain.exceptions.NotFoundException;
 import com.petwise.domain.tutor.Tutor;
-import com.petwise.IntegrationTest;
 import com.petwise.infrastructure.tutor.persistence.TutorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @IntegrationTest
 public class GetTutorByIdUseCaseIT {
 
-    @Autowired
-    private GetTutorByIdUseCase useCase;
+    @Autowired private GetTutorByIdUseCase useCase;
 
-    @Autowired
-    private TutorRepository tutorRepository;
+    @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidId_whenCallsGetTutorById_thenShouldReturnTutor() {
@@ -27,7 +25,8 @@ public class GetTutorByIdUseCaseIT {
         final var expectedPhone = "+1234567890";
 
         final var tutor = Tutor.newTutor(expectedName, expectedEmail, expectedPhone);
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
 
@@ -52,7 +51,8 @@ public class GetTutorByIdUseCaseIT {
         final var expectedPhone = "+9876543210";
 
         final var tutor = Tutor.newTutor(expectedName, expectedEmail, expectedPhone);
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
 
@@ -75,7 +75,8 @@ public class GetTutorByIdUseCaseIT {
         final String expectedPhone = null;
 
         final var tutor = Tutor.newTutor(expectedName, expectedEmail, expectedPhone);
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
 
@@ -116,9 +117,12 @@ public class GetTutorByIdUseCaseIT {
         final var tutor2 = Tutor.newTutor("Tutor 2", "tutor2@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Tutor 3", "tutor3@example.com", "+3333333333");
 
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor1));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         // when
         final var output = useCase.execute(tutor2.getId().getValue());
@@ -135,7 +139,8 @@ public class GetTutorByIdUseCaseIT {
     void givenValidId_whenCallsGetTutorByIdMultipleTimes_thenShouldAlwaysReturnSameTutor() {
         // given
         final var tutor = Tutor.newTutor("Test User", "test@example.com", "+1234567890");
-        tutorRepository.save(com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
+        tutorRepository.save(
+                com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
 
@@ -154,4 +159,3 @@ public class GetTutorByIdUseCaseIT {
         assertThat(output1.email()).isEqualTo(output2.email()).isEqualTo(output3.email());
     }
 }
-

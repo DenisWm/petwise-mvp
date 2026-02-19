@@ -22,8 +22,8 @@ public class Email extends ValueObject {
     }
 
     /**
-     * Creates a new Email instance with validation. Email is optional - null and blank values are allowed.
-     * Empty or blank strings are treated as null.
+     * Creates a new Email instance with validation. Email is optional - null and blank values are
+     * allowed. Empty or blank strings are treated as null.
      *
      * @param email the email string to validate (can be null or blank)
      * @return a new Email instance, or null if email is null or blank
@@ -39,7 +39,6 @@ public class Email extends ValueObject {
 
     private static void validate(final String email) {
         final String trimmedEmail = email.trim();
-
 
         if (!EMAIL_PATTERN.matcher(trimmedEmail).matches()) {
             throw DomainException.with(new Error("'email' is not a valid email address"));

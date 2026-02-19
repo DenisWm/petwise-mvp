@@ -156,13 +156,14 @@ class TutorTest extends UnitTest {
         final var expectedUpdatedAt = java.time.Instant.now();
 
         // when
-        final var actualTutor = Tutor.with(
-                expectedId,
-                expectedName,
-                expectedEmail,
-                expectedPhone,
-                expectedCreatedAt,
-                expectedUpdatedAt);
+        final var actualTutor =
+                Tutor.with(
+                        expectedId,
+                        expectedName,
+                        expectedEmail,
+                        expectedPhone,
+                        expectedCreatedAt,
+                        expectedUpdatedAt);
 
         // then
         assertThat(actualTutor).isNotNull();
@@ -174,15 +175,16 @@ class TutorTest extends UnitTest {
         assertThat(actualTutor.getUpdatedAt()).isEqualTo(expectedUpdatedAt);
     }
 
-
     @Test
     void givenTwoTutorsWithSameId_whenCompare_thenShouldBeEqual() {
         // given
         final var id = TutorID.unique();
-        final var tutor1 = Tutor.with(id, "John", null, null,
-                java.time.Instant.now(), java.time.Instant.now());
-        final var tutor2 = Tutor.with(id, "Jane", null, null,
-                java.time.Instant.now(), java.time.Instant.now());
+        final var tutor1 =
+                Tutor.with(
+                        id, "John", null, null, java.time.Instant.now(), java.time.Instant.now());
+        final var tutor2 =
+                Tutor.with(
+                        id, "Jane", null, null, java.time.Instant.now(), java.time.Instant.now());
 
         // when & then
         assertThat(tutor1).isEqualTo(tutor2);

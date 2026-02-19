@@ -2,22 +2,19 @@ package com.petwise.infrastructure.tutor.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.petwise.PostgresGatewayTest;
 import com.petwise.domain.pagination.SearchQuery;
 import com.petwise.domain.tutor.Tutor;
 import com.petwise.domain.tutor.TutorID;
-import com.petwise.PostgresGatewayTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PostgresGatewayTest
 class TutorPostgresGatewayTest {
 
-    @Autowired
-    private TutorRepository tutorRepository;
+    @Autowired private TutorRepository tutorRepository;
 
-    @Autowired
-    private TutorPostgresGateway tutorGateway;
-
+    @Autowired private TutorPostgresGateway tutorGateway;
 
     @Test
     void givenValidTutor_whenSave_thenShouldPersistAndReturn() {
@@ -78,7 +75,8 @@ class TutorPostgresGatewayTest {
 
         // then
         assertThat(result).hasSize(3);
-        assertThat(result).extracting(Tutor::getName)
+        assertThat(result)
+                .extracting(Tutor::getName)
                 .containsExactlyInAnyOrder("Alice Brown", "Bob Green", "Charlie White");
     }
 
@@ -114,7 +112,8 @@ class TutorPostgresGatewayTest {
 
         // then
         assertThat(result.items()).hasSize(2);
-        assertThat(result.items()).extracting(Tutor::getName)
+        assertThat(result.items())
+                .extracting(Tutor::getName)
                 .containsExactlyInAnyOrder("Maria Silva", "João Silva");
         assertThat(result.total()).isEqualTo(2);
     }
@@ -137,7 +136,8 @@ class TutorPostgresGatewayTest {
 
         // then
         assertThat(result.items()).hasSize(2);
-        assertThat(result.items()).extracting(t -> t.getEmail().getValue())
+        assertThat(result.items())
+                .extracting(t -> t.getEmail().getValue())
                 .containsExactlyInAnyOrder("test@gmail.com", "test@yahoo.com");
     }
 
@@ -145,10 +145,11 @@ class TutorPostgresGatewayTest {
     void givenTutors_whenSearchWithPagination_thenShouldRespectPagination() {
         // given
         for (int i = 0; i < 15; i++) {
-            final var tutor = Tutor.newTutor(
-                    "Tutor " + i,
-                    "tutor" + i + "@example.com",
-                    "+555000" + String.format("%04d", i));
+            final var tutor =
+                    Tutor.newTutor(
+                            "Tutor " + i,
+                            "tutor" + i + "@example.com",
+                            "+555000" + String.format("%04d", i));
             tutorGateway.save(tutor);
         }
 
@@ -182,7 +183,8 @@ class TutorPostgresGatewayTest {
 
         // then
         assertThat(result.items()).hasSize(3);
-        assertThat(result.items()).extracting(Tutor::getName)
+        assertThat(result.items())
+                .extracting(Tutor::getName)
                 .containsExactlyInAnyOrder("UPPERCASE NAME", "lowercase name", "MiXeD CaSe NaMe");
     }
 
@@ -304,7 +306,8 @@ class TutorPostgresGatewayTest {
         final var result = tutorGateway.findAll(query);
 
         // then
-        assertThat(result.items()).extracting(Tutor::getName)
+        assertThat(result.items())
+                .extracting(Tutor::getName)
                 .containsExactly("Alice", "Bob", "Charlie");
     }
 
@@ -325,8 +328,8 @@ class TutorPostgresGatewayTest {
         final var result = tutorGateway.findAll(query);
 
         // then
-        assertThat(result.items()).extracting(Tutor::getName)
+        assertThat(result.items())
+                .extracting(Tutor::getName)
                 .containsExactly("Charlie", "Bob", "Alice");
     }
 }
-
