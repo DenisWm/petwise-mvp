@@ -29,14 +29,14 @@ val testCodeCoverageReport by tasks.registering(JacocoReport::class) {
 // Configure source and class directories after subprojects are evaluated
 gradle.projectsEvaluated {
     val srcDirs = mutableListOf<File>()
-    val classDirs = mutableListOf<File>()
+    val classDirs = mutableListOf<FileCollection>()
 
     subprojects.forEach { subproject ->
         subproject.plugins.withId("java") {
             val sourceSets = subproject.extensions.getByType(SourceSetContainer::class.java)
             sourceSets.getByName("main").let { main ->
                 srcDirs.addAll(main.allSource.srcDirs)
-                classDirs.add(main.output.classesDirs.singleFile)
+                classDirs.add(main.output.classesDirs)
             }
         }
     }

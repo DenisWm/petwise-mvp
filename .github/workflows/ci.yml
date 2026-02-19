@@ -9,10 +9,16 @@ on:
 jobs:
   build-and-docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -26,15 +32,32 @@ jobs:
       - name: Gradle build
         run: ./gradlew --no-daemon check
 
+      - name: Debug - List JaCoCo reports
+        if: always()
+        run: |
+          echo "Searching for JaCoCo XML reports..."
+          find . -name "*.xml" -path "*/jacoco/*" -type f || echo "No JaCoCo XML reports found"
+          echo ""
+          echo "Checking aggregated report location..."
+          ls -la build/reports/jacoco/test/ 2>/dev/null || echo "Aggregated report directory not found"
+
       - name: Add coverage to PR
         if: github.event_name == 'pull_request'
         uses: madrapps/jacoco-report@v1.7.1
         with:
           paths: |
             ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{ secrets.TOKEN_ACCOUNT }}
+            ${{ github.workspace }}/domain/build/reports/jacoco/test/jacocoTestReport.xml
+            ${{ github.workspace }}/application/build/reports/jacoco/test/jacocoTestReport.xml
+            ${{ github.workspace }}/infrastructure/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 40
           min-coverage-changed-files: 60
+          title: 'JaCoCo Coverage Report'
+          update-comment: true
+          pass-emoji: ':green_circle:'
+          fail-emoji: ':red_circle:'
+          skip-if-no-changes: false
 
       - name: Upload JaCoCo report
         uses: actions/upload-artifact@v4
