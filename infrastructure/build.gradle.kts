@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.spring.boot.app.convention)
+    alias(libs.plugins.flyway)
 }
+
 
 dependencies {
     implementation(project(":application"))
@@ -19,4 +21,5 @@ dependencies {
 
     testImplementation(libs.spring.boot.starter.test)
     testRuntimeOnly(libs.h2)
+
 }
