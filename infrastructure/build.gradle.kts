@@ -12,8 +12,8 @@ dependencies {
     { exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat") }
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
     implementation(libs.jackson.module.afterburner)
-//    implementation(libs.flyway.core)
-//    implementation(libs.flyway.database.postgresql)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.database.postgresql)
 
     runtimeOnly(libs.postgresql)
 
