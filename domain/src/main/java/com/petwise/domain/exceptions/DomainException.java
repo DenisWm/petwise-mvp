@@ -8,10 +8,11 @@ import java.util.List;
  *
  * <p>Carries a list of {@link Error}s that describe every constraint that was broken. Use the
  * static factory methods to create instances:
+ *
  * <ul>
- *   <li>{@link #with(Error)} – single violation</li>
- *   <li>{@link #with(List)} – multiple violations collected by a
- *       {@link com.petwise.domain.validation.ValidationHandler}</li>
+ *   <li>{@link #with(Error)} – single violation
+ *   <li>{@link #with(List)} – multiple violations collected by a {@link
+ *       com.petwise.domain.validation.ValidationHandler}
  * </ul>
  *
  * <p>Extends {@link NoStacktraceRuntimeException} so that no stack trace is filled in, keeping the

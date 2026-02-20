@@ -30,7 +30,7 @@ public abstract class AggregateRoot<ID extends Identifier<?>> extends Entity<ID>
     /**
      * Constructs an aggregate root with a generated identifier and a list of pre-existing events.
      *
-     * @param id           the aggregate's identity; must not be {@code null}
+     * @param id the aggregate's identity; must not be {@code null}
      * @param domainEvents initial domain events; may be {@code null} (treated as empty)
      */
     public AggregateRoot(final ID id, final List<DomainEvent> domainEvents) {
