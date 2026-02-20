@@ -10,8 +10,8 @@ import java.util.Objects;
  * Default implementation of {@link CreateTutorUseCase}.
  *
  * <p>Validates the {@link CreateTutorCommand} against domain invariants via a {@link Notification}
- * handler and persists the new {@link Tutor} through the {@link TutorGateway}.
- * Throws {@link NotificationException} if any constraint is violated.
+ * handler and persists the new {@link Tutor} through the {@link TutorGateway}. Throws {@link
+ * NotificationException} if any constraint is violated.
  */
 public class DefaultCreateTutorUseCase extends CreateTutorUseCase {
 

@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * PostgreSQL implementation of {@link TutorGateway} backed by Spring Data JPA.
  *
- * <p>All write operations are executed inside a transaction. Read operations use
- * {@code readOnly = true} transactions for performance.
+ * <p>All write operations are executed inside a transaction. Read operations use {@code readOnly =
+ * true} transactions for performance.
  */
 @Service
 public class TutorPostgresGateway implements TutorGateway {

@@ -11,9 +11,9 @@ import org.springframework.test.context.ActiveProfiles;
 /**
  * Composite annotation for Jackson serialisation / deserialisation integration tests.
  *
- * <p>Loads only the JSON slice of the Spring context and includes {@link JsonConfig} to ensure
- * the application's custom {@code ObjectMapper} settings (snake_case, date format, etc.) are
- * active during the test.
+ * <p>Loads only the JSON slice of the Spring context and includes {@link JsonConfig} to ensure the
+ * application's custom {@code ObjectMapper} settings (snake_case, date format, etc.) are active
+ * during the test.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

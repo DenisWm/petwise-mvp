@@ -6,10 +6,11 @@ import java.util.List;
  * Contract for accumulating validation errors during domain object validation.
  *
  * <p>Rather than throwing an exception at the first broken invariant, implementations collect all
- * {@link Error}s so that callers can report every violation in a single response. Use
- * {@link com.petwise.domain.validation.handler.Notification} as the standard implementation.
+ * {@link Error}s so that callers can report every violation in a single response. Use {@link
+ * com.petwise.domain.validation.handler.Notification} as the standard implementation.
  *
  * <p>Typical usage inside a {@link Validator}:
+ *
  * <pre>{@code
  * handler.append(new Error("'name' should not be null"));
  * }</pre>
@@ -27,16 +28,18 @@ public interface ValidationHandler {
     /**
      * Appends all errors from another {@link ValidationHandler} into this one.
      *
-     * @param aValidationHandler the source handler whose errors will be merged; must not be {@code null}
+     * @param aValidationHandler the source handler whose errors will be merged; must not be {@code
+     *     null}
      * @return this handler (for fluent chaining)
      */
     ValidationHandler append(ValidationHandler aValidationHandler);
 
     /**
-     * Executes the given {@link Validation}, catching any {@link com.petwise.domain.exceptions.DomainException}
-     * and appending its errors to this handler instead of propagating the exception.
+     * Executes the given {@link Validation}, catching any {@link
+     * com.petwise.domain.exceptions.DomainException} and appending its errors to this handler
+     * instead of propagating the exception.
      *
-     * @param <T>         the return type of the validation block
+     * @param <T> the return type of the validation block
      * @param aValidation the validation logic to execute
      * @return the result of the validation, or {@code null} if an exception was caught
      */

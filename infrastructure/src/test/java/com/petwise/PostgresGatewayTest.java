@@ -9,8 +9,8 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Composite annotation for integration tests that exercise a {@code *PostgresGateway} class
- * against a real (Testcontainers-managed) PostgreSQL instance.
+ * Composite annotation for integration tests that exercise a {@code *PostgresGateway} class against
+ * a real (Testcontainers-managed) PostgreSQL instance.
  *
  * <p>Loads only the JPA slice of the Spring context and includes every bean whose name matches
  * {@code .*PostgresGateway.*}, keeping startup time low. The {@link PostgresCleanUpExtension}

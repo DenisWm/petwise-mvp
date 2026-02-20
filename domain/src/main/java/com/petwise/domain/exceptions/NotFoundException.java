@@ -11,6 +11,7 @@ import java.util.List;
  *
  * <p>Use the static factory {@link #with(Class, Identifier)} to create a well-formatted instance.
  * The resulting exception message follows the pattern:
+ *
  * <pre>{@code <AggregateName> with ID <id> was not found}</pre>
  */
 public class NotFoundException extends DomainException {
@@ -23,7 +24,7 @@ public class NotFoundException extends DomainException {
      * Creates a {@code NotFoundException} for the given aggregate class and identifier.
      *
      * @param aggregate the aggregate root class that was not found
-     * @param id        the identifier that was searched for
+     * @param id the identifier that was searched for
      * @return a {@code NotFoundException} with a descriptive message
      */
     public static NotFoundException with(

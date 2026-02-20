@@ -107,7 +107,7 @@ public class GetTutorByIdUseCaseIT {
         // when & then
         assertThatThrownBy(() -> useCase.execute(null))
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining( "Tutor ID cannot be null");
+                .hasMessageContaining("Tutor ID cannot be null");
     }
 
     @Test

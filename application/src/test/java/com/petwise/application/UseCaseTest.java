@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * {@code @Mock} and return them from {@link #getMocks()}.
  *
  * <p>Example:
+ *
  * <pre>{@code
  * class CreateTutorUseCaseTest extends UseCaseTest {
  *     {@literal @}Mock TutorGateway tutorGateway;

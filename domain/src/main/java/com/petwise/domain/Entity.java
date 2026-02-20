@@ -12,8 +12,8 @@ import java.util.Objects;
  * Base class for all domain entities.
  *
  * <p>An entity is an object with a distinct identity that runs through time and different
- * representations. Equality is determined by {@link #getId()} rather than by field values.
- * Entities can accumulate {@link DomainEvent}s that are dispatched once the transaction commits.
+ * representations. Equality is determined by {@link #getId()} rather than by field values. Entities
+ * can accumulate {@link DomainEvent}s that are dispatched once the transaction commits.
  *
  * @param <ID> the strongly-typed identifier for this entity
  */
@@ -28,7 +28,7 @@ public abstract class Entity<ID extends Identifier> {
      * <p>A defensive copy of {@code domainEvents} is always made, so the caller's list is never
      * mutated by this entity.
      *
-     * @param id           the entity's identity; must not be {@code null}
+     * @param id the entity's identity; must not be {@code null}
      * @param domainEvents initial domain events; may be {@code null} (treated as empty)
      * @throws NullPointerException if {@code id} is {@code null}
      */

@@ -17,9 +17,9 @@ public final class CollectionUtils {
      * Transforms each element of {@code set} using {@code mapper} and collects the results into a
      * new {@link Set}.
      *
-     * @param <IN>   the source element type
-     * @param <OUT>  the target element type
-     * @param list   the input set; if {@code null}, {@code null} is returned
+     * @param <IN> the source element type
+     * @param <OUT> the target element type
+     * @param list the input set; if {@code null}, {@code null} is returned
      * @param mapper the transformation function; must not be {@code null}
      * @return a new {@code Set} of mapped elements, or {@code null} if {@code set} is {@code null}
      */
@@ -31,13 +31,13 @@ public final class CollectionUtils {
     }
 
     /**
-     * Returns {@code null} if {@code values} is {@code null} or empty; otherwise returns
-     * {@code values} unchanged.
+     * Returns {@code null} if {@code values} is {@code null} or empty; otherwise returns {@code
+     * values} unchanged.
      *
      * <p>Useful for normalising optional collection-type fields to {@code null} so that
      * serialisation layers can omit them cleanly.
      *
-     * @param <T>    the element type
+     * @param <T> the element type
      * @param values the set to inspect
      * @return {@code values} if non-empty, {@code null} otherwise
      */

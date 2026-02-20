@@ -33,9 +33,7 @@ public class EntityTest extends UnitTest {
         assertNotNull(anEntity.getDomainEvents());
         assertTrue(anEntity.getDomainEvents().isEmpty());
         assertNotSame(anEntity.getDomainEvents(), events);
-        assertThrows(
-                RuntimeException.class,
-                () -> anEntity.getDomainEvents().add(Instant::now));
+        assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
     }
 
     @Test
@@ -47,9 +45,7 @@ public class EntityTest extends UnitTest {
 
         assertNotNull(anEntity.getDomainEvents());
         assertEquals(1, anEntity.getDomainEvents().size());
-        assertThrows(
-                RuntimeException.class,
-                () -> anEntity.getDomainEvents().add(Instant::now));
+        assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
     }
 
     @Test
@@ -70,9 +66,7 @@ public class EntityTest extends UnitTest {
         assertNotNull(anEntity.getDomainEvents());
         assertEquals(expectedRemainingEvents, anEntity.getDomainEvents().size());
         assertEquals(expectedPublishedEvents, publishedCount.get());
-        assertThrows(
-                RuntimeException.class,
-                () -> anEntity.getDomainEvents().add(Instant::now));
+        assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
     }
 
     // -------------------------------------------------------------------------

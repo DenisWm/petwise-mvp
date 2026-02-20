@@ -14,8 +14,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * <p>Used by {@link PostgresGatewayTest} and {@link IntegrationTest} to guarantee that every test
  * starts against a clean database, regardless of what previous tests may have persisted.
  *
- * <p>Add new repositories to the list inside {@code beforeEach} as new
- * aggregates are introduced to the project.
+ * <p>Add new repositories to the list inside {@code beforeEach} as new aggregates are introduced to
+ * the project.
  */
 class PostgresCleanUpExtension implements BeforeEachCallback {
 

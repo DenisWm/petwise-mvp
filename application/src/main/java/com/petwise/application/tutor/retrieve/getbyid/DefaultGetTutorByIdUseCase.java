@@ -9,8 +9,8 @@ import java.util.Objects;
 /**
  * Default implementation of {@link GetTutorByIdUseCase}.
  *
- * <p>Looks up the {@link Tutor} by its string ID and maps it to a {@link TutorOutput} DTO.
- * Throws {@link NotFoundException} when no tutor with the given ID exists.
+ * <p>Looks up the {@link Tutor} by its string ID and maps it to a {@link TutorOutput} DTO. Throws
+ * {@link NotFoundException} when no tutor with the given ID exists.
  */
 public class DefaultGetTutorByIdUseCase extends GetTutorByIdUseCase {
 

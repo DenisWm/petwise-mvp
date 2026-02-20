@@ -11,15 +11,16 @@ import java.util.List;
  * the validation flow.
  *
  * <p>Use the static factory methods to create instances:
+ *
  * <ul>
- *   <li>{@link #create()} – empty notification</li>
- *   <li>{@link #create(Error)} – notification seeded with one error</li>
- *   <li>{@link #create(Throwable)} – notification seeded from an exception message</li>
+ *   <li>{@link #create()} – empty notification
+ *   <li>{@link #create(Error)} – notification seeded with one error
+ *   <li>{@link #create(Throwable)} – notification seeded from an exception message
  * </ul>
  *
- * <p>The {@link #validate(Validation)} method executes a block of logic and silently
- * absorbs any {@link DomainException} (appending its errors) or any other {@link Throwable}
- * (appending its message), keeping the caller's flow uninterrupted.
+ * <p>The {@link #validate(Validation)} method executes a block of logic and silently absorbs any
+ * {@link DomainException} (appending its errors) or any other {@link Throwable} (appending its
+ * message), keeping the caller's flow uninterrupted.
  */
 public class Notification implements ValidationHandler {
 

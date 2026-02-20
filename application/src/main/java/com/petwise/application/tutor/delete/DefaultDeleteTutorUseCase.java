@@ -9,9 +9,9 @@ import java.util.Objects;
 /**
  * Default implementation of {@link DeleteTutorUseCase}.
  *
- * <p>Verifies the {@link Tutor} exists before deletion, throwing {@link NotFoundException}
- * if it cannot be found. This guarantees the caller receives a meaningful error rather than a
- * silent no-op.
+ * <p>Verifies the {@link Tutor} exists before deletion, throwing {@link NotFoundException} if it
+ * cannot be found. This guarantees the caller receives a meaningful error rather than a silent
+ * no-op.
  */
 public class DefaultDeleteTutorUseCase extends DeleteTutorUseCase {
 

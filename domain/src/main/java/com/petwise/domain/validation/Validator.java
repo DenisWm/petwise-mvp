@@ -6,10 +6,11 @@ import java.util.Objects;
  * Abstract base class for domain validators.
  *
  * <p>Concrete validators encapsulate all invariant-checking logic for a given entity or value
- * object. They append {@link Error}s to the injected {@link ValidationHandler} rather than
- * throwing exceptions, which allows every broken rule to be reported at once.
+ * object. They append {@link Error}s to the injected {@link ValidationHandler} rather than throwing
+ * exceptions, which allows every broken rule to be reported at once.
  *
  * <p>Example:
+ *
  * <pre>{@code
  * public class TutorValidator extends Validator {
  *     public TutorValidator(Tutor tutor, ValidationHandler handler) {
@@ -40,8 +41,8 @@ public abstract class Validator {
     }
 
     /**
-     * Executes all validation checks and appends any violated constraints to the
-     * {@link ValidationHandler}.
+     * Executes all validation checks and appends any violated constraints to the {@link
+     * ValidationHandler}.
      */
     public abstract void validate();
 

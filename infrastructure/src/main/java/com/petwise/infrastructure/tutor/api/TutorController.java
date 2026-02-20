@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST controller that implements the {@link TutorAPI} contract.
  *
- * <p>Delegates every HTTP operation to the appropriate use case and converts the result via
- * {@link com.petwise.infrastructure.tutor.presenters.TutorApiPresenter}. All Spring MVC and
- * OpenAPI annotations are declared on the interface to keep this class focused on orchestration.
+ * <p>Delegates every HTTP operation to the appropriate use case and converts the result via {@link
+ * com.petwise.infrastructure.tutor.presenters.TutorApiPresenter}. All Spring MVC and OpenAPI
+ * annotations are declared on the interface to keep this class focused on orchestration.
  */
 @RestController
 public class TutorController implements TutorAPI {
