@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.spring.boot.app.convention)
-    alias(libs.plugins.flyway)
 }
 
 
