@@ -8,6 +8,15 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+/**
+ * JUnit 5 extension that truncates all repository data before each test method.
+ *
+ * <p>Used by {@link PostgresGatewayTest} and {@link IntegrationTest} to guarantee that every test
+ * starts against a clean database, regardless of what previous tests may have persisted.
+ *
+ * <p>Add new repositories to the list inside {@code beforeEach} as new
+ * aggregates are introduced to the project.
+ */
 class PostgresCleanUpExtension implements BeforeEachCallback {
 
     @Override
@@ -17,6 +26,7 @@ class PostgresCleanUpExtension implements BeforeEachCallback {
         cleanUp(List.of(appContext.getBean(TutorRepository.class)));
     }
 
+    @SuppressWarnings("rawtypes")
     private void cleanUp(final Collection<CrudRepository> repositories) {
         repositories.forEach(CrudRepository::deleteAll);
     }

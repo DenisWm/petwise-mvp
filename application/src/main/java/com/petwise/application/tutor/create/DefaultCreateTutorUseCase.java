@@ -6,7 +6,13 @@ import com.petwise.domain.tutor.TutorGateway;
 import com.petwise.domain.validation.handler.Notification;
 import java.util.Objects;
 
-/** Default implementation of CreateTutorUseCase. Implements UC-01: Register Tutor. */
+/**
+ * Default implementation of {@link CreateTutorUseCase}.
+ *
+ * <p>Validates the {@link CreateTutorCommand} against domain invariants via a {@link Notification}
+ * handler and persists the new {@link Tutor} through the {@link TutorGateway}.
+ * Throws {@link NotificationException} if any constraint is violated.
+ */
 public class DefaultCreateTutorUseCase extends CreateTutorUseCase {
 
     private final TutorGateway tutorGateway;
@@ -19,22 +25,15 @@ public class DefaultCreateTutorUseCase extends CreateTutorUseCase {
     public CreateTutorOutput execute(final CreateTutorCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");
 
-        // 1. Create domain aggregate (value objects validate themselves)
         final var tutor = Tutor.newTutor(command.name(), command.email(), command.phone());
 
-        // 2. Validate aggregate-level business rules
         final var notification = Notification.create();
         tutor.validate(notification);
 
-        // 3. Check for validation errors
         if (notification.hasErrors()) {
             throw new NotificationException("Could not create Aggregate Tutor", notification);
         }
 
-        // 4. Persist via gateway
-        final var createdTutor = this.tutorGateway.save(tutor);
-
-        // 5. Return output DTO
-        return CreateTutorOutput.from(createdTutor);
+        return CreateTutorOutput.from(this.tutorGateway.save(tutor));
     }
 }

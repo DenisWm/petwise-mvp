@@ -9,8 +9,11 @@ import com.petwise.domain.validation.handler.Notification;
 import java.util.Objects;
 
 /**
- * Default implementation of UpdateTutorUseCase. Implements UC-06: Edit/Delete Records (Update
- * Tutor).
+ * Default implementation of {@link UpdateTutorUseCase}.
+ *
+ * <p>Fetches the existing {@link Tutor} by ID (throwing {@link NotFoundException} if absent),
+ * applies the new values from the {@link UpdateTutorCommand}, validates domain invariants, and
+ * persists the result via the {@link TutorGateway}.
  */
 public class DefaultUpdateTutorUseCase extends UpdateTutorUseCase {
 
@@ -24,30 +27,22 @@ public class DefaultUpdateTutorUseCase extends UpdateTutorUseCase {
     public UpdateTutorOutput execute(final UpdateTutorCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");
 
-        // 1. Retrieve the existing tutor
         final var tutorId = TutorID.from(command.id());
         final var tutor =
                 this.tutorGateway
                         .findById(tutorId)
                         .orElseThrow(() -> NotFoundException.with(Tutor.class, tutorId));
 
-        // 2. Update the tutor with new values
         tutor.update(command.name(), command.email(), command.phone());
 
-        // 3. Validate aggregate-level business rules
         final var notification = Notification.create();
         tutor.validate(notification);
 
-        // 4. Check for validation errors
         if (notification.hasErrors()) {
             throw new NotificationException(
                     "Could not update Aggregate Tutor %s".formatted(command.id()), notification);
         }
 
-        // 5. Persist via gateway
-        final var updatedTutor = this.tutorGateway.save(tutor);
-
-        // 6. Return output DTO
-        return UpdateTutorOutput.from(updatedTutor);
+        return UpdateTutorOutput.from(this.tutorGateway.save(tutor));
     }
 }

@@ -7,8 +7,11 @@ import com.petwise.domain.tutor.TutorID;
 import java.util.Objects;
 
 /**
- * Default implementation of DeleteTutorUseCase. Implements UC-06: Edit/Delete Records (Delete
- * Tutor).
+ * Default implementation of {@link DeleteTutorUseCase}.
+ *
+ * <p>Verifies the {@link Tutor} exists before deletion, throwing {@link NotFoundException}
+ * if it cannot be found. This guarantees the caller receives a meaningful error rather than a
+ * silent no-op.
  */
 public class DefaultDeleteTutorUseCase extends DeleteTutorUseCase {
 
@@ -22,15 +25,12 @@ public class DefaultDeleteTutorUseCase extends DeleteTutorUseCase {
     public void execute(final String anId) {
         Objects.requireNonNull(anId, "Tutor ID cannot be null");
 
-        // 1. Parse the tutor ID
         final var tutorId = TutorID.from(anId);
 
-        // 2. Verify the tutor exists before deleting
         this.tutorGateway
                 .findById(tutorId)
                 .orElseThrow(() -> NotFoundException.with(Tutor.class, tutorId));
 
-        // 3. Delete the tutor
         this.tutorGateway.deleteById(tutorId);
     }
 }

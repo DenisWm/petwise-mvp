@@ -4,7 +4,13 @@ import com.petwise.domain.tutor.Tutor;
 import jakarta.persistence.*;
 import java.time.Instant;
 
-/** JPA Entity for Tutor. */
+/**
+ * JPA entity that maps the {@code tutors} database table to the {@link Tutor} aggregate.
+ *
+ * <p>This class is an infrastructure concern and must never leak into the domain or application
+ * layers. Use {@link #from(Tutor)} to convert a domain aggregate into a persistable entity and
+ * {@link #toAggregate()} to reconstruct the domain object after a query.
+ */
 @Entity
 @Table(name = "tutors")
 public class TutorJpaEntity {
@@ -28,9 +34,8 @@ public class TutorJpaEntity {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    public TutorJpaEntity() {
-        // JPA requires default constructor
-    }
+    /** Required by JPA. Do not use directly — prefer {@link #from(Tutor)}. */
+    public TutorJpaEntity() {}
 
     private TutorJpaEntity(
             final String id,

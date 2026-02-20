@@ -6,7 +6,12 @@ import com.petwise.domain.tutor.TutorGateway;
 import com.petwise.domain.tutor.TutorID;
 import java.util.Objects;
 
-/** Default implementation of GetTutorByIdUseCase. Retrieves a tutor by its ID. */
+/**
+ * Default implementation of {@link GetTutorByIdUseCase}.
+ *
+ * <p>Looks up the {@link Tutor} by its string ID and maps it to a {@link TutorOutput} DTO.
+ * Throws {@link NotFoundException} when no tutor with the given ID exists.
+ */
 public class DefaultGetTutorByIdUseCase extends GetTutorByIdUseCase {
 
     private final TutorGateway tutorGateway;
@@ -17,16 +22,14 @@ public class DefaultGetTutorByIdUseCase extends GetTutorByIdUseCase {
 
     @Override
     public TutorOutput execute(final String anId) {
-        Objects.requireNonNull(anId, "Command cannot be null");
+        Objects.requireNonNull(anId, "Tutor ID cannot be null");
 
-        // 1. Retrieve the tutor by ID
         final var tutorId = TutorID.from(anId);
         final var tutor =
                 this.tutorGateway
                         .findById(tutorId)
                         .orElseThrow(() -> NotFoundException.with(Tutor.class, tutorId));
 
-        // 2. Return output DTO
         return TutorOutput.from(tutor);
     }
 }

@@ -6,7 +6,10 @@ import com.petwise.domain.tutor.TutorGateway;
 import java.util.Objects;
 
 /**
- * Default implementation of ListTutorsUseCase. Retrieves tutors with pagination and search support.
+ * Default implementation of {@link ListTutorsUseCase}.
+ *
+ * <p>Delegates pagination and optional full-text search to the {@link TutorGateway} and maps each
+ * result to a {@link ListTutorsOutput} DTO.
  */
 public class DefaultListTutorsUseCase extends ListTutorsUseCase {
 
@@ -20,10 +23,6 @@ public class DefaultListTutorsUseCase extends ListTutorsUseCase {
     public Pagination<ListTutorsOutput> execute(final SearchQuery query) {
         Objects.requireNonNull(query, "SearchQuery cannot be null");
 
-        // 1. Retrieve paginated tutors from gateway
-        final var pagination = this.tutorGateway.findAll(query);
-
-        // 2. Map Tutor entities to ListTutorsOutput DTOs
-        return pagination.map(ListTutorsOutput::from);
+        return this.tutorGateway.findAll(query).map(ListTutorsOutput::from);
     }
 }

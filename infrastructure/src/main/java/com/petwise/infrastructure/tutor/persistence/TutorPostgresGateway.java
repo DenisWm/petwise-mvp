@@ -12,7 +12,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** PostgreSQL implementation of TutorGateway using Spring Data JPA. */
+/**
+ * PostgreSQL implementation of {@link TutorGateway} backed by Spring Data JPA.
+ *
+ * <p>All write operations are executed inside a transaction. Read operations use
+ * {@code readOnly = true} transactions for performance.
+ */
 @Service
 public class TutorPostgresGateway implements TutorGateway {
 
@@ -25,9 +30,7 @@ public class TutorPostgresGateway implements TutorGateway {
     @Override
     @Transactional
     public Tutor save(final Tutor tutor) {
-        final var entity = TutorJpaEntity.from(tutor);
-        final var saved = this.repository.save(entity);
-        return saved.toAggregate();
+        return this.repository.save(TutorJpaEntity.from(tutor)).toAggregate();
     }
 
     @Override
@@ -45,23 +48,19 @@ public class TutorPostgresGateway implements TutorGateway {
     @Override
     @Transactional(readOnly = true)
     public Pagination<Tutor> findAll(final SearchQuery query) {
-        // Parse sort direction
         final var sortDirection =
                 query.direction().equalsIgnoreCase("desc")
                         ? Sort.Direction.DESC
                         : Sort.Direction.ASC;
 
-        // Create pageable
         final var pageable =
                 PageRequest.of(query.page(), query.perPage(), Sort.by(sortDirection, query.sort()));
 
-        // Execute query
         final var page =
                 (query.terms() == null || query.terms().isBlank())
                         ? this.repository.findAll(pageable)
                         : this.repository.findBySearchTerms(query.terms(), pageable);
 
-        // Map to domain
         final var tutors = page.getContent().stream().map(TutorJpaEntity::toAggregate).toList();
 
         return new Pagination<>(page.getNumber(), page.getSize(), page.getTotalElements(), tutors);
