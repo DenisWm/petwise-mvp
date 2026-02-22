@@ -17,9 +17,13 @@ import java.util.Objects;
  *
  * @param <ID> the strongly-typed identifier for this entity
  */
-public abstract class Entity<ID extends Identifier> {
+@SuppressWarnings({"PMD.ShortVariable", "PMD.GenericsNaming"})
+public abstract class Entity<ID extends Identifier<?>> {
 
-    protected final ID id;
+    /** The entity's strongly-typed identifier. */
+    private final ID id;
+
+    /** Pending domain events to be dispatched after the transaction commits. */
     private final List<DomainEvent> domainEvents;
 
     /**
@@ -28,15 +32,15 @@ public abstract class Entity<ID extends Identifier> {
      * <p>A defensive copy of {@code domainEvents} is always made, so the caller's list is never
      * mutated by this entity.
      *
-     * @param id the entity's identity; must not be {@code null}
-     * @param domainEvents initial domain events; may be {@code null} (treated as empty)
-     * @throws NullPointerException if {@code id} is {@code null}
+     * @param anId the entity's identity; must not be {@code null}
+     * @param anDomainEvents initial domain events; may be {@code null}
+     * @throws NullPointerException if {@code anId} is {@code null}
      */
-    protected Entity(final ID id, final List<DomainEvent> domainEvents) {
+    protected Entity(final ID anId, final List<DomainEvent> anDomainEvents) {
         this.domainEvents =
-                new ArrayList<>(domainEvents == null ? Collections.emptyList() : domainEvents);
-        Objects.requireNonNull(id, "'id' should not be null");
-        this.id = id;
+                new ArrayList<>(anDomainEvents == null ? Collections.emptyList() : anDomainEvents);
+        Objects.requireNonNull(anId, "'id' should not be null");
+        this.id = anId;
     }
 
     /**
@@ -73,14 +77,13 @@ public abstract class Entity<ID extends Identifier> {
      *
      * <p>If {@code publisher} is {@code null} this method is a no-op.
      *
-     * @param publisher the publisher responsible for dispatching each event
+     * @param publisher the publisher responsible for dispatching events
      */
     public void publishDomainEvents(final DomainEventPublisher publisher) {
         if (publisher == null) {
             return;
         }
         getDomainEvents().forEach(publisher::publish);
-
         this.domainEvents.clear();
     }
 
@@ -89,7 +92,7 @@ public abstract class Entity<ID extends Identifier> {
      *
      * <p>Null events are silently ignored.
      *
-     * @param event the domain event to register; ignored if {@code null}
+     * @param event the domain event to register; ignored if null
      */
     public void registerEvent(final DomainEvent event) {
         if (event != null) {
@@ -97,14 +100,36 @@ public abstract class Entity<ID extends Identifier> {
         }
     }
 
+    /**
+     * Checks equality based on the entity's identifier.
+     *
+     * <p>Subclasses that need field-level equality must override this method and provide a safe
+     * implementation.
+     *
+     * @param other the object to compare with
+     * @return {@code true} if both entities share the same identifier
+     */
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Entity<?> entity = (Entity<?>) o;
-        return Objects.equals(getId(), entity.getId());
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other == null || getClass() != other.getClass()) {
+            result = false;
+        } else {
+            final Entity<?> entity = (Entity<?>) other;
+            result = Objects.equals(getId(), entity.getId());
+        }
+        return result;
     }
 
+    /**
+     * Returns a hash code based on the entity's identifier.
+     *
+     * <p>Subclasses that override {@link #equals} must also override this method consistently.
+     *
+     * @return hash code
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getId());

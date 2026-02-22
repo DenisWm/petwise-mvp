@@ -7,26 +7,40 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Email value object that validates email addresses. Ensures the email is not null and follows a
- * valid email format.
+ * Email value object that validates email addresses. Ensures the email follows a valid format when
+ * provided.
  */
-public class Email extends ValueObject {
+@SuppressWarnings({
+    "PMD.ClassWithOnlyPrivateConstructorsShouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.ShortVariable",
+    "PMD.ControlStatementBraces",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.LocalVariableCouldBeFinal"
+})
+public final class Email extends ValueObject {
 
+    /** Regex pattern string for email validation. */
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+    /** Compiled pattern for email validation. */
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
 
+    /** The raw email string. */
     private final String value;
 
-    private Email(final String value) {
-        this.value = value;
+    /** Private constructor — use {@link #from(String)} instead. */
+    private Email(final String aValue) {
+        super();
+        this.value = aValue;
     }
 
     /**
-     * Creates a new Email instance with validation. Email is optional - null and blank values are
-     * allowed. Empty or blank strings are treated as null.
+     * Creates a new Email instance with validation. Email is optional — null and blank values
+     * return {@code null}.
      *
      * @param email the email string to validate (can be null or blank)
-     * @return a new Email instance, or null if email is null or blank
+     * @return a new Email instance, or {@code null} if email is null or blank
      * @throws DomainException if the email format is invalid
      */
     public static Email from(final String email) {
@@ -38,22 +52,30 @@ public class Email extends ValueObject {
     }
 
     private static void validate(final String email) {
-        final String trimmedEmail = email.trim();
-
+        final var trimmedEmail = email.trim();
         if (!EMAIL_PATTERN.matcher(trimmedEmail).matches()) {
             throw DomainException.with(new Error("'email' is not a valid email address"));
         }
     }
 
+    /**
+     * Returns the raw email string.
+     *
+     * @return the email value; never {@code null}
+     */
     public String getValue() {
         return value;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Email email = (Email) o;
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        final Email email = (Email) other;
         return Objects.equals(value, email.value);
     }
 

@@ -9,9 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+/** Integration tests for {@link TutorRepository}. */
 @PostgresGatewayTest
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.TooManyMethods"
+})
 class TutorRepositoryTest {
 
+    /** Default constructor. */
+    TutorRepositoryTest() {}
+
+    /** The repository under test. */
     @Autowired private TutorRepository tutorRepository;
 
     @Test
@@ -348,7 +361,9 @@ class TutorRepositoryTest {
                 .containsExactly("Charlie", "Bob", "Alice");
     }
 
-    private TutorJpaEntity createTutorEntity(String id, String name, String email, String phone) {
+    @SuppressWarnings({"PMD.ShortVariable", "PMD.MethodArgumentCouldBeFinal"})
+    private TutorJpaEntity createTutorEntity(
+            final String id, final String name, final String email, final String phone) {
         final var entity = new TutorJpaEntity();
         entity.setId(id);
         entity.setName(name);

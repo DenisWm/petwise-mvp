@@ -9,6 +9,7 @@ import java.util.Optional;
  * Gateway interface for Tutor persistence operations. To be implemented by the infrastructure
  * layer.
  */
+@SuppressWarnings("PMD.ShortVariable")
 public interface TutorGateway {
 
     /**
@@ -22,10 +23,10 @@ public interface TutorGateway {
     /**
      * Finds a tutor by ID.
      *
-     * @param id the tutor ID
+     * @param anId the tutor ID
      * @return an Optional containing the tutor if found, empty otherwise
      */
-    Optional<Tutor> findById(TutorID id);
+    Optional<Tutor> findById(TutorID anId);
 
     /**
      * Finds all tutors.
@@ -45,7 +46,7 @@ public interface TutorGateway {
     /**
      * Deletes a tutor by ID.
      *
-     * @param id the tutor ID to delete
+     * @param anId the tutor ID to delete
      */
-    void deleteById(TutorID id);
+    void deleteById(TutorID anId);
 }

@@ -22,17 +22,36 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/** Unit tests for {@link DefaultListTutorsUseCase}. */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ListTutorsUseCase Tests")
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate"
+})
 class ListTutorsUseCaseTest {
 
+    /** Default constructor. */
+    ListTutorsUseCaseTest() {}
+
+    /** The mocked tutor gateway. */
     @Mock private TutorGateway tutorGateway;
 
+    /** The use case under test. */
     @InjectMocks private DefaultListTutorsUseCase useCase;
 
+    /** First test tutor. */
     private Tutor tutor1;
+
+    /** Second test tutor. */
     private Tutor tutor2;
+
+    /** Third test tutor. */
     private Tutor tutor3;
+
+    /** The search query used in tests. */
     private SearchQuery searchQuery;
 
     @BeforeEach

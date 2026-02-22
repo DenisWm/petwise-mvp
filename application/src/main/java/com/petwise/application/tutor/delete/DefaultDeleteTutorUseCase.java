@@ -13,14 +13,26 @@ import java.util.Objects;
  * cannot be found. This guarantees the caller receives a meaningful error rather than a silent
  * no-op.
  */
-public class DefaultDeleteTutorUseCase extends DeleteTutorUseCase {
+public final class DefaultDeleteTutorUseCase extends DeleteTutorUseCase {
 
+    /** The gateway used to find and delete tutors. */
     private final TutorGateway tutorGateway;
 
-    public DefaultDeleteTutorUseCase(final TutorGateway tutorGateway) {
-        this.tutorGateway = Objects.requireNonNull(tutorGateway, "TutorGateway cannot be null");
+    /**
+     * Constructs the use case with the required gateway.
+     *
+     * @param aTutorGateway the tutor persistence gateway; must not be {@code null}
+     */
+    public DefaultDeleteTutorUseCase(final TutorGateway aTutorGateway) {
+        super();
+        this.tutorGateway = Objects.requireNonNull(aTutorGateway, "TutorGateway cannot be null");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Finds the tutor by ID, throws {@link NotFoundException} if absent, then deletes it.
+     */
     @Override
     public void execute(final String anId) {
         Objects.requireNonNull(anId, "Tutor ID cannot be null");

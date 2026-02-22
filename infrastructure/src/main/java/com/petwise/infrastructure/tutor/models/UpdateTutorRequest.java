@@ -2,7 +2,13 @@ package com.petwise.infrastructure.tutor.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Request DTO for updating a tutor. */
+/**
+ * Request DTO for updating a tutor.
+ *
+ * @param name the tutor name
+ * @param email the tutor email
+ * @param phone the tutor phone
+ */
 public record UpdateTutorRequest(
         @JsonProperty("name") String name,
         @JsonProperty("email") String email,

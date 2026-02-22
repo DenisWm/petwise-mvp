@@ -1,7 +1,10 @@
 package com.petwise.infrastructure.tutor.persistence;
 
 import com.petwise.domain.tutor.Tutor;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.Instant;
 
 /**
@@ -13,24 +16,40 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "tutors")
+@SuppressWarnings({"PMD.ShortVariable", "PMD.DataClass"})
 public class TutorJpaEntity {
 
+    /** Maximum length for UUID-based ID column. */
+    private static final int ID_LENGTH = 36;
+
+    /** Maximum length for name and email columns. */
+    private static final int TEXT_LENGTH = 255;
+
+    /** Maximum length for phone column. */
+    private static final int PHONE_LENGTH = 20;
+
+    /** The unique tutor identifier. */
     @Id
-    @Column(name = "id", nullable = false, length = 36)
+    @Column(name = "id", nullable = false, length = ID_LENGTH)
     private String id;
 
-    @Column(name = "name", nullable = false, length = 255)
+    /** The tutor's full name. */
+    @Column(name = "name", nullable = false, length = TEXT_LENGTH)
     private String name;
 
-    @Column(name = "email", length = 255)
+    /** The tutor's email address. */
+    @Column(name = "email", length = TEXT_LENGTH)
     private String email;
 
-    @Column(name = "phone", length = 20)
+    /** The tutor's phone number. */
+    @Column(name = "phone", length = PHONE_LENGTH)
     private String phone;
 
+    /** Timestamp of when this tutor was created. */
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
+    /** Timestamp of the last update to this tutor. */
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
@@ -38,20 +57,26 @@ public class TutorJpaEntity {
     public TutorJpaEntity() {}
 
     private TutorJpaEntity(
-            final String id,
-            final String name,
-            final String email,
-            final String phone,
-            final Instant createdAt,
-            final Instant updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+            final String anId,
+            final String aName,
+            final String anEmail,
+            final String aPhone,
+            final Instant aCreatedAt,
+            final Instant anUpdatedAt) {
+        this.id = anId;
+        this.name = aName;
+        this.email = anEmail;
+        this.phone = aPhone;
+        this.createdAt = aCreatedAt;
+        this.updatedAt = anUpdatedAt;
     }
 
+    /**
+     * Converts a domain {@link Tutor} to a persistable JPA entity.
+     *
+     * @param tutor the domain aggregate to convert
+     * @return a new {@code TutorJpaEntity}
+     */
     public static TutorJpaEntity from(final Tutor tutor) {
         return new TutorJpaEntity(
                 tutor.getId().getValue(),
@@ -62,56 +87,121 @@ public class TutorJpaEntity {
                 tutor.getUpdatedAt());
     }
 
+    /**
+     * Reconstructs the domain {@link Tutor} aggregate from this entity.
+     *
+     * @return the domain aggregate
+     */
     public Tutor toAggregate() {
         return Tutor.with(
                 this.id, this.name, this.email, this.phone, this.createdAt, this.updatedAt);
     }
 
+    /**
+     * Returns the tutor ID.
+     *
+     * @return the ID string
+     */
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    /**
+     * Sets the tutor ID.
+     *
+     * @param anId the ID string to set
+     */
+    public void setId(final String anId) {
+        this.id = anId;
     }
 
+    /**
+     * Returns the tutor name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    /**
+     * Sets the tutor name.
+     *
+     * @param aName the name to set
+     */
+    public void setName(final String aName) {
+        this.name = aName;
     }
 
+    /**
+     * Returns the tutor email.
+     *
+     * @return the email
+     */
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    /**
+     * Sets the tutor email.
+     *
+     * @param anEmail the email to set
+     */
+    public void setEmail(final String anEmail) {
+        this.email = anEmail;
     }
 
+    /**
+     * Returns the tutor phone.
+     *
+     * @return the phone
+     */
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    /**
+     * Sets the tutor phone.
+     *
+     * @param aPhone the phone to set
+     */
+    public void setPhone(final String aPhone) {
+        this.phone = aPhone;
     }
 
+    /**
+     * Returns the creation timestamp.
+     *
+     * @return the creation instant
+     */
     public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
+    /**
+     * Sets the creation timestamp.
+     *
+     * @param aCreatedAt the timestamp to set
+     */
+    public void setCreatedAt(final Instant aCreatedAt) {
+        this.createdAt = aCreatedAt;
     }
 
+    /**
+     * Returns the last-updated timestamp.
+     *
+     * @return the updated instant
+     */
     public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
+    /**
+     * Sets the last-updated timestamp.
+     *
+     * @param anUpdatedAt the timestamp to set
+     */
+    public void setUpdatedAt(final Instant anUpdatedAt) {
+        this.updatedAt = anUpdatedAt;
     }
 }

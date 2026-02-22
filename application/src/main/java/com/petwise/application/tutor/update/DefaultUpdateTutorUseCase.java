@@ -15,14 +15,27 @@ import java.util.Objects;
  * applies the new values from the {@link UpdateTutorCommand}, validates domain invariants, and
  * persists the result via the {@link TutorGateway}.
  */
-public class DefaultUpdateTutorUseCase extends UpdateTutorUseCase {
+public final class DefaultUpdateTutorUseCase extends UpdateTutorUseCase {
 
+    /** The gateway used to find and persist tutors. */
     private final TutorGateway tutorGateway;
 
-    public DefaultUpdateTutorUseCase(final TutorGateway tutorGateway) {
-        this.tutorGateway = Objects.requireNonNull(tutorGateway, "TutorGateway cannot be null");
+    /**
+     * Constructs the use case with the required gateway.
+     *
+     * @param aTutorGateway the tutor persistence gateway; must not be {@code null}
+     */
+    public DefaultUpdateTutorUseCase(final TutorGateway aTutorGateway) {
+        super();
+        this.tutorGateway = Objects.requireNonNull(aTutorGateway, "TutorGateway cannot be null");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Loads the tutor, applies updates, validates, and persists. Throws {@link
+     * NotificationException} if validation fails.
+     */
     @Override
     public UpdateTutorOutput execute(final UpdateTutorCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");

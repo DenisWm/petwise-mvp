@@ -1,6 +1,10 @@
 package com.petwise;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -9,12 +13,11 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Composite annotation for integration tests that exercise a {@code *PostgresGateway} class against
- * a real (Testcontainers-managed) PostgreSQL instance.
+ * Composite annotation for integration tests that exercise a {@code *PostgresGateway} against a
+ * Testcontainers PostgreSQL instance.
  *
- * <p>Loads only the JPA slice of the Spring context and includes every bean whose name matches
- * {@code .*PostgresGateway.*}, keeping startup time low. The {@link PostgresCleanUpExtension}
- * truncates all tables before each test to guarantee isolation.
+ * <p>Loads only the JPA slice and includes beans matching {@code .*PostgresGateway.*}. {@link
+ * PostgresCleanUpExtension} truncates all tables before each test to guarantee isolation.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

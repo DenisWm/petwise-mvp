@@ -10,4 +10,9 @@ import org.junit.jupiter.api.Tag;
  * Spring context is loaded — tests should be fast and isolated.
  */
 @Tag("unitTest")
-public class UnitTest {}
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
+public class UnitTest {
+
+    /** Default constructor. */
+    protected UnitTest() {}
+}

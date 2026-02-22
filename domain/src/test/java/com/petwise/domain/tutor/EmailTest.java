@@ -7,7 +7,18 @@ import com.petwise.domain.UnitTest;
 import com.petwise.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Test;
 
+/** Unit tests for {@link Email}. */
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.AvoidDuplicateLiterals"
+})
 class EmailTest extends UnitTest {
+
+    /** Default constructor. */
+    EmailTest() {}
 
     @Test
     void givenValidEmail_whenCallsFrom_thenShouldInstantiateEmail() {

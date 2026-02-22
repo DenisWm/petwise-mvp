@@ -1,5 +1,6 @@
 package com.petwise.domain.utils;
 
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -14,11 +15,11 @@ public final class IDUtils {
     /**
      * Generates a new random UUID formatted as a 32-character lowercase hex string with no hyphens.
      *
-     * <p>Example output: {@code "550e8400e29b41d4a716446655440000"}
+     * <p>Example: {@code "550e8400e29b41d4a716446655440000"}
      *
      * @return a unique 32-character hex string
      */
     public static String uuid() {
-        return UUID.randomUUID().toString().toLowerCase().replace("-", "");
+        return UUID.randomUUID().toString().toLowerCase(Locale.ROOT).replace("-", "");
     }
 }

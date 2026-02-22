@@ -7,8 +7,12 @@ plugins {
 }
 checkstyle {
     toolVersion = "10.17.0"
-    isIgnoreFailures = true
+    isIgnoreFailures = false
     configFile = rootProject.file("build-logic/config/checkstyle/checkstyle.xml")
+    configProperties["org.checkstyle.sun.suppressionfilter.config"] =
+        rootProject.file(
+            "build-logic/config/checkstyle/checkstyle-suppressions.xml"
+        ).absolutePath
 }
 
 tasks.withType<Checkstyle>().configureEach {
@@ -37,6 +41,6 @@ spotless {
 pmd {
     toolVersion = "7.13.0"
     ruleSetFiles = files(project(":").file("build-logic/config/pmd/custom-rules.xml"))
-    isIgnoreFailures = true
+    isIgnoreFailures = false
 }
 

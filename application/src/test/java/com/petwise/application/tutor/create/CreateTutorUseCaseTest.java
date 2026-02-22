@@ -16,12 +16,26 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/** Unit tests for {@link DefaultCreateTutorUseCase}. */
 @ExtendWith(MockitoExtension.class)
-public class CreateTutorUseCaseTest extends UseCaseTest {
+@SuppressWarnings({
+    "PMD.JUnitTestsShouldIncludeAssert",
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.AvoidDuplicateLiterals"
+})
+class CreateTutorUseCaseTest extends UseCaseTest {
 
+    /** The mocked tutor gateway. */
     @Mock private TutorGateway tutorGateway;
 
+    /** The use case under test. */
     @InjectMocks private DefaultCreateTutorUseCase useCase;
+
+    /** Default constructor. */
+    CreateTutorUseCaseTest() {}
 
     @Override
     protected List<Object> getMocks() {
@@ -29,7 +43,7 @@ public class CreateTutorUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenValidCommand_whenExecute_thenCreateTutor() {
+    void givenValidCommand_whenExecute_thenCreateTutor() {
         // given
         final var expectedName = "John Doe";
         final var expectedEmail = "john.doe@example.com";
@@ -61,10 +75,9 @@ public class CreateTutorUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenValidCommandWithoutOptionals_whenExecute_thenCreateTutor() {
+    void givenValidCommandWithoutOptionals_whenExecute_thenCreateTutor() {
         // given
         final var expectedName = "Jane Smith";
-
         final var command = CreateTutorCommand.with(expectedName, null, null);
 
         when(tutorGateway.save(any(Tutor.class)))
@@ -88,7 +101,7 @@ public class CreateTutorUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenInvalidNullName_whenExecute_thenThrowDomainException() {
+    void givenInvalidNullName_whenExecute_thenThrowDomainException() {
         // given
         final var command = CreateTutorCommand.with(null, "test@example.com", "555-1234");
 
@@ -102,7 +115,7 @@ public class CreateTutorUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenInvalidEmptyName_whenExecute_thenThrowDomainException() {
+    void givenInvalidEmptyName_whenExecute_thenThrowDomainException() {
         // given
         final var command = CreateTutorCommand.with("  ", "test@example.com", "555-1234");
 
@@ -116,7 +129,7 @@ public class CreateTutorUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenInvalidEmail_whenExecute_thenThrowDomainException() {
+    void givenInvalidEmail_whenExecute_thenThrowDomainException() {
         // given
         final var command = CreateTutorCommand.with("John Doe", "invalid-email", null);
 
@@ -129,7 +142,7 @@ public class CreateTutorUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenInvalidPhone_whenExecute_thenThrowDomainException() {
+    void givenInvalidPhone_whenExecute_thenThrowDomainException() {
         // given
         final var command = CreateTutorCommand.with("John Doe", null, "abc");
 
@@ -142,7 +155,7 @@ public class CreateTutorUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenNullCommand_whenExecute_thenThrowNullPointerException() {
+    void givenNullCommand_whenExecute_thenThrowNullPointerException() {
         // when & then
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
 
@@ -150,7 +163,7 @@ public class CreateTutorUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenNullGateway_whenInstantiate_thenThrowNullPointerException() {
+    void givenNullGateway_whenInstantiate_thenThrowNullPointerException() {
         // when & then
         assertThrows(NullPointerException.class, () -> new DefaultCreateTutorUseCase(null));
     }

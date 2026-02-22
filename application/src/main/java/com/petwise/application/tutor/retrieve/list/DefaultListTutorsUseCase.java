@@ -11,14 +11,26 @@ import java.util.Objects;
  * <p>Delegates pagination and optional full-text search to the {@link TutorGateway} and maps each
  * result to a {@link ListTutorsOutput} DTO.
  */
-public class DefaultListTutorsUseCase extends ListTutorsUseCase {
+public final class DefaultListTutorsUseCase extends ListTutorsUseCase {
 
+    /** The gateway used to query tutors. */
     private final TutorGateway tutorGateway;
 
-    public DefaultListTutorsUseCase(final TutorGateway tutorGateway) {
-        this.tutorGateway = Objects.requireNonNull(tutorGateway, "TutorGateway cannot be null");
+    /**
+     * Constructs the use case with the required gateway.
+     *
+     * @param aTutorGateway the tutor persistence gateway; must not be {@code null}
+     */
+    public DefaultListTutorsUseCase(final TutorGateway aTutorGateway) {
+        super();
+        this.tutorGateway = Objects.requireNonNull(aTutorGateway, "TutorGateway cannot be null");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Subclasses may override to customise pagination behaviour.
+     */
     @Override
     public Pagination<ListTutorsOutput> execute(final SearchQuery query) {
         Objects.requireNonNull(query, "SearchQuery cannot be null");

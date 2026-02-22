@@ -7,9 +7,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 
+/** Jackson serialisation tests for {@link CreateTutorRequest}. */
 @JacksonTest
-public class CreateTutorRequestTest {
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.AvoidDuplicateLiterals"
+})
+class CreateTutorRequestTest {
 
+    /** Default constructor. */
+    CreateTutorRequestTest() {}
+
+    /** The Jackson tester for CreateTutorRequest. */
     @Autowired private JacksonTester<CreateTutorRequest> json;
 
     @Test

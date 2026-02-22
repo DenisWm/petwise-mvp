@@ -11,6 +11,12 @@ public final class TutorApiPresenter {
         // Utility class
     }
 
+    /**
+     * Converts a {@link TutorOutput} to a {@link TutorResponse}.
+     *
+     * @param output the use case output
+     * @return the API response
+     */
     public static TutorResponse present(final TutorOutput output) {
         return new TutorResponse(
                 output.id(),
@@ -21,6 +27,12 @@ public final class TutorApiPresenter {
                 output.updatedAt());
     }
 
+    /**
+     * Converts a {@link ListTutorsOutput} to a {@link TutorResponse}.
+     *
+     * @param output the use case output
+     * @return the API response
+     */
     public static TutorResponse present(final ListTutorsOutput output) {
         return new TutorResponse(
                 output.id(),

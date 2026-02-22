@@ -8,6 +8,7 @@ package com.petwise.domain.exceptions;
  * not found", "validation failed") the trace provides no debugging value and only adds overhead.
  * Subclass this when creating domain-specific exceptions that do not need a full trace.
  */
+@SuppressWarnings({"PMD.MissingSerialVersionUID", "PMD.MethodArgumentCouldBeFinal"})
 public class NoStacktraceRuntimeException extends RuntimeException {
 
     /**
@@ -20,13 +21,13 @@ public class NoStacktraceRuntimeException extends RuntimeException {
     }
 
     /**
-     * Constructs the exception with a human-readable message and an optional cause. Stack-trace
-     * filling is disabled via the {@code writableStackTrace = false} flag.
+     * Constructs the exception with a message and an optional cause. Stack-trace filling is
+     * disabled via {@code writableStackTrace = false}.
      *
      * @param message the detail message
      * @param cause the underlying cause, or {@code null} if none
      */
-    public NoStacktraceRuntimeException(final String message, Throwable cause) {
+    public NoStacktraceRuntimeException(final String message, final Throwable cause) {
         super(message, cause, true, false);
     }
 }

@@ -7,9 +7,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 
+/** Jackson serialisation tests for {@link TutorIdResponse}. */
 @JacksonTest
-public class TutorIdResponseTest {
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate"
+})
+class TutorIdResponseTest {
 
+    /** Default constructor. */
+    TutorIdResponseTest() {}
+
+    /** The Jackson tester for TutorIdResponse. */
     @Autowired private JacksonTester<TutorIdResponse> json;
 
     @Test

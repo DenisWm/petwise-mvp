@@ -7,16 +7,29 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /** Phone value object that validates phone numbers. Phone is optional - null values are allowed. */
-public class Phone extends ValueObject {
+@SuppressWarnings({
+    "PMD.ClassWithOnlyPrivateConstructorsShouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.ShortVariable",
+    "PMD.ControlStatementBraces",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.LocalVariableCouldBeFinal"
+})
+public final class Phone extends ValueObject {
 
-    // Simple pattern that accepts common phone formats
+    /** Regex pattern string for phone validation. */
     private static final String PHONE_REGEX = "^[\\d\\s()+-]{8,20}$";
+
+    /** Compiled pattern for phone validation. */
     private static final Pattern PHONE_PATTERN = Pattern.compile(PHONE_REGEX);
 
+    /** The raw phone string. */
     private final String value;
 
-    private Phone(final String value) {
-        this.value = value;
+    /** Private constructor — use {@link #from(String)} instead. */
+    private Phone(final String aValue) {
+        super();
+        this.value = aValue;
     }
 
     /**
@@ -37,21 +50,29 @@ public class Phone extends ValueObject {
 
     private static void validate(final String phone) {
         final String trimmedPhone = phone.trim();
-
         if (!PHONE_PATTERN.matcher(trimmedPhone).matches()) {
             throw DomainException.with(new Error("'phone' is not a valid phone number"));
         }
     }
 
+    /**
+     * Returns the raw phone string.
+     *
+     * @return the phone value; never {@code null}
+     */
     public String getValue() {
         return value;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Phone phone = (Phone) o;
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        final Phone phone = (Phone) other;
         return Objects.equals(value, phone.value);
     }
 

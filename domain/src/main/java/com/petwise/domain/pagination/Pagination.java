@@ -6,9 +6,6 @@ import java.util.function.Function;
 /**
  * Immutable container for a single page of query results.
  *
- * <p>Wrap any collection type {@code T} and use {@link #map(Function)} to transform the items
- * without altering the pagination metadata.
- *
  * @param <T> the type of items in this page
  * @param currentPage zero-based page index
  * @param perPage maximum number of items per page
@@ -19,15 +16,14 @@ public record Pagination<T>(int currentPage, int perPage, long total, List<T> it
 
     /**
      * Maps each item in this page to a new type using the supplied {@code mapper}, preserving the
-     * pagination metadata ({@code currentPage}, {@code perPage}, {@code total}).
+     * pagination metadata.
      *
      * @param <R> the target item type
      * @param mapper a function to transform each item
-     * @return a new {@code Pagination} with the mapped items and identical metadata
+     * @return a new {@code Pagination} with transformed items
      */
     public <R> Pagination<R> map(final Function<T, R> mapper) {
-        final List<R> mapperItems = this.items.stream().map(mapper).toList();
-
-        return new Pagination<>(currentPage(), perPage(), total(), mapperItems);
+        final List<R> mappedItems = this.items.stream().map(mapper).toList();
+        return new Pagination<>(currentPage(), perPage(), total(), mappedItems);
     }
 }

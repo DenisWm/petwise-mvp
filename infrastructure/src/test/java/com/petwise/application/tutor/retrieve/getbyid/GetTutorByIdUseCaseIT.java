@@ -10,11 +10,23 @@ import com.petwise.infrastructure.tutor.persistence.TutorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/** Integration tests for GetTutorByIdUseCase. */
 @IntegrationTest
-public class GetTutorByIdUseCaseIT {
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate"
+})
+class GetTutorByIdUseCaseIT {
 
+    /** Default constructor. */
+    GetTutorByIdUseCaseIT() {}
+
+    /** The use case under test. */
     @Autowired private GetTutorByIdUseCase useCase;
 
+    /** The tutor repository. */
     @Autowired private TutorRepository tutorRepository;
 
     @Test

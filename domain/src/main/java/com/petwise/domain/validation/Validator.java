@@ -27,17 +27,18 @@ import java.util.Objects;
  */
 public abstract class Validator {
 
+    /** The handler that accumulates validation errors. */
     private final ValidationHandler validationHandler;
 
     /**
      * Constructs a Validator bound to the given {@link ValidationHandler}.
      *
-     * @param validationHandler the handler that will accumulate errors; must not be {@code null}
-     * @throws NullPointerException if {@code validationHandler} is {@code null}
+     * @param handler the handler that will accumulate errors; must not be {@code null}
+     * @throws NullPointerException if {@code handler} is {@code null}
      */
-    public Validator(final ValidationHandler validationHandler) {
+    public Validator(final ValidationHandler handler) {
         this.validationHandler =
-                Objects.requireNonNull(validationHandler, "validationHandler should not be null");
+                Objects.requireNonNull(handler, "validationHandler should not be null");
     }
 
     /**

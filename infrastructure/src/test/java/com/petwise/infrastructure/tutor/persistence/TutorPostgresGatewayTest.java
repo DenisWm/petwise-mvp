@@ -9,11 +9,25 @@ import com.petwise.domain.tutor.TutorID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/** Integration tests for {@link TutorPostgresGateway}. */
 @PostgresGatewayTest
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.TooManyMethods"
+})
 class TutorPostgresGatewayTest {
 
+    /** Default constructor. */
+    TutorPostgresGatewayTest() {}
+
+    /** The tutor repository for direct DB access. */
     @Autowired private TutorRepository tutorRepository;
 
+    /** The gateway under test. */
     @Autowired private TutorPostgresGateway tutorGateway;
 
     @Test

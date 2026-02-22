@@ -11,6 +11,9 @@ package com.petwise.domain;
  */
 public abstract class Identifier<T> extends ValueObject {
 
+    /** Protected constructor for subclasses. */
+    protected Identifier() {}
+
     /**
      * Returns the raw underlying value of this identifier.
      *

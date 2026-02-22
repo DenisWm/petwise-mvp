@@ -8,7 +8,21 @@ import com.petwise.domain.exceptions.DomainException;
 import com.petwise.domain.validation.handler.Notification;
 import org.junit.jupiter.api.Test;
 
+/** Unit tests for {@link Tutor}. */
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.LongVariable",
+    "PMD.ShortVariable",
+    "PMD.TooManyMethods"
+})
 class TutorTest extends UnitTest {
+
+    /** Default constructor. */
+    TutorTest() {}
 
     @Test
     void givenValidParams_whenCallsNewTutor_thenShouldInstantiateTutor() {

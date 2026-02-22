@@ -9,4 +9,9 @@ package com.petwise.domain;
  *
  * @see <a href="https://martinfowler.com/bliki/ValueObject.html">Martin Fowler – Value Object</a>
  */
-public abstract class ValueObject {}
+@SuppressWarnings({"PMD.AbstractClassWithoutAnyMethod", "PMD.AbstractClassWithoutAbstractMethod"})
+public abstract class ValueObject {
+
+    /** Protected constructor for subclasses. */
+    protected ValueObject() {}
+}

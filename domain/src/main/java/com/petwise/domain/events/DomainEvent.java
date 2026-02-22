@@ -10,7 +10,10 @@ import java.time.Instant;
  * about. Events are immutable and should be named in past tense (e.g., {@code TutorRegistered}).
  *
  * <p>Implement this interface on records or final classes to ensure immutability.
+ *
+ * <p>Implement this interface on records or final classes to ensure immutability.
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface DomainEvent extends Serializable {
 
     /**

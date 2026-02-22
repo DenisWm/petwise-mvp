@@ -6,8 +6,8 @@ import java.util.List;
 /**
  * Base exception for all domain rule violations.
  *
- * <p>Carries a list of {@link Error}s that describe every constraint that was broken. Use the
- * static factory methods to create instances:
+ * <p>Carries a list of {@link Error}s describing every constraint that was broken. Use the static
+ * factory methods to create instances:
  *
  * <ul>
  *   <li>{@link #with(Error)} – single violation
@@ -18,10 +18,18 @@ import java.util.List;
  * <p>Extends {@link NoStacktraceRuntimeException} so that no stack trace is filled in, keeping the
  * cost of domain exceptions low.
  */
+@SuppressWarnings("PMD.MissingSerialVersionUID")
 public class DomainException extends NoStacktraceRuntimeException {
 
-    protected final List<Error> errors;
+    /** The list of validation errors that triggered this exception. */
+    private final List<Error> errors;
 
+    /**
+     * Constructs a {@code DomainException} with a message and errors.
+     *
+     * @param message the detail message
+     * @param anErrors the list of errors; must not be {@code null}
+     */
     protected DomainException(final String message, final List<Error> anErrors) {
         super(message);
         this.errors = anErrors;

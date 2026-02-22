@@ -19,37 +19,64 @@ import org.springframework.transaction.annotation.Transactional;
  * true} transactions for performance.
  */
 @Service
+@SuppressWarnings({"PMD.ShortVariable", "PMD.LiteralsFirstInComparisons"})
 public class TutorPostgresGateway implements TutorGateway {
 
+    /** The underlying Spring Data JPA repository. */
     private final TutorRepository repository;
 
-    public TutorPostgresGateway(final TutorRepository repository) {
-        this.repository = repository;
+    /**
+     * Constructs the gateway with the required repository.
+     *
+     * @param aRepository the JPA repository; must not be {@code null}
+     */
+    public TutorPostgresGateway(final TutorRepository aRepository) {
+        this.repository = aRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Subclasses may override for alternative persistence strategy.
+     */
     @Override
     @Transactional
     public Tutor save(final Tutor tutor) {
         return this.repository.save(TutorJpaEntity.from(tutor)).toAggregate();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Subclasses may override for alternative lookup strategy.
+     */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Tutor> findById(final TutorID id) {
-        return this.repository.findById(id.getValue()).map(TutorJpaEntity::toAggregate);
+    public Optional<Tutor> findById(final TutorID anId) {
+        return this.repository.findById(anId.getValue()).map(TutorJpaEntity::toAggregate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Subclasses may override for alternative retrieval strategy.
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Tutor> findAll() {
         return this.repository.findAll().stream().map(TutorJpaEntity::toAggregate).toList();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Subclasses may override for alternative pagination strategy.
+     */
     @Override
     @Transactional(readOnly = true)
     public Pagination<Tutor> findAll(final SearchQuery query) {
         final var sortDirection =
-                query.direction().equalsIgnoreCase("desc")
+                "desc".equalsIgnoreCase(query.direction())
                         ? Sort.Direction.DESC
                         : Sort.Direction.ASC;
 
@@ -66,9 +93,14 @@ public class TutorPostgresGateway implements TutorGateway {
         return new Pagination<>(page.getNumber(), page.getSize(), page.getTotalElements(), tutors);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Subclasses may override for alternative deletion strategy.
+     */
     @Override
     @Transactional
-    public void deleteById(final TutorID id) {
-        this.repository.deleteById(id.getValue());
+    public void deleteById(final TutorID anId) {
+        this.repository.deleteById(anId.getValue());
     }
 }

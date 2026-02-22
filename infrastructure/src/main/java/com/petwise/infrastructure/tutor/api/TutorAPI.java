@@ -15,13 +15,28 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /** API interface for Tutor operations. Contains all Spring and OpenAPI annotations. */
-@RequestMapping(value = "/tutors")
+@RequestMapping("/tutors")
 @Tag(name = "Tutors", description = "Tutor management API")
+@SuppressWarnings({"PMD.UnnecessaryAnnotationValueElement", "PMD.ShortVariable"})
 public interface TutorAPI {
 
+    /**
+     * Creates a new tutor.
+     *
+     * @param request the create-tutor request body
+     * @return HTTP 201 with Location header
+     */
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,6 +56,12 @@ public interface TutorAPI {
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<Void> createTutor(@RequestBody CreateTutorRequest request);
 
+    /**
+     * Gets a tutor by ID.
+     *
+     * @param tutorId the tutor identifier
+     * @return the tutor response
+     */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get tutor by ID", description = "Retrieves a tutor by its ID")
     @ApiResponses(
@@ -55,12 +76,23 @@ public interface TutorAPI {
                 @ApiResponse(responseCode = "404", description = "Tutor not found")
             })
     TutorResponse getTutorById(
-            @Parameter(description = "Tutor ID", required = true) @PathVariable("id") String id);
+            @Parameter(description = "Tutor ID", required = true) @PathVariable("id")
+                    String tutorId);
 
+    /**
+     * Lists all tutors with pagination.
+     *
+     * @param page the page number
+     * @param perPage the page size
+     * @param search optional search terms
+     * @param sort the sort field
+     * @param direction the sort direction
+     * @return paginated tutor responses
+     */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "List all tutors",
-            description = "Retrieves a paginated list of tutors with optional search")
+            description = "Retrieves a paginated list of tutors with optional" + " search")
     @ApiResponses(
             value = {
                 @ApiResponse(responseCode = "200", description = "Tutors retrieved successfully")
@@ -82,6 +114,13 @@ public interface TutorAPI {
                     @RequestParam(name = "direction", defaultValue = "asc")
                     String direction);
 
+    /**
+     * Updates an existing tutor.
+     *
+     * @param tutorId the tutor identifier
+     * @param request the update request body
+     * @return HTTP 200 with Location header
+     */
     @PutMapping(
             value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -101,10 +140,16 @@ public interface TutorAPI {
                 @ApiResponse(responseCode = "422", description = "Validation error")
             })
     ResponseEntity<Void> updateTutor(
-            @Parameter(description = "Tutor ID", required = true) @PathVariable("id") String id,
+            @Parameter(description = "Tutor ID", required = true) @PathVariable("id")
+                    String tutorId,
             @RequestBody UpdateTutorRequest request);
 
-    @DeleteMapping(value = "/{id}")
+    /**
+     * Deletes a tutor by ID.
+     *
+     * @param tutorId the tutor identifier
+     */
+    @DeleteMapping("/{id}")
     @Operation(summary = "Delete a tutor", description = "Deletes a tutor by its ID")
     @ApiResponses(
             value = {
@@ -113,5 +158,6 @@ public interface TutorAPI {
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteTutor(
-            @Parameter(description = "Tutor ID", required = true) @PathVariable("id") String id);
+            @Parameter(description = "Tutor ID", required = true) @PathVariable("id")
+                    String tutorId);
 }

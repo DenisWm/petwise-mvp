@@ -4,9 +4,17 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petwise.ControllerTest;
@@ -31,21 +39,44 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+/** Integration tests for the Tutor REST API. */
 @ControllerTest(controllers = TutorController.class)
-public class TutorAPITest {
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.TooManyFields",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.LongVariable",
+    "PMD.TooManyStaticImports",
+    "PMD.LiteralsFirstInComparisons",
+    "PMD.ExcessiveImports"
+})
+class TutorAPITest {
 
+    /** Default constructor. */
+    TutorAPITest() {}
+
+    /** MockMvc for performing HTTP requests. */
     @Autowired private MockMvc mockMvc;
 
+    /** Object mapper for JSON serialization. */
     @Autowired private ObjectMapper objectMapper;
 
+    /** Mocked create tutor use case. */
     @MockitoBean private CreateTutorUseCase createTutorUseCase;
 
+    /** Mocked get tutor by id use case. */
     @MockitoBean private GetTutorByIdUseCase getTutorByIdUseCase;
 
+    /** Mocked list tutors use case. */
     @MockitoBean private ListTutorsUseCase listTutorsUseCase;
 
+    /** Mocked update tutor use case. */
     @MockitoBean private UpdateTutorUseCase updateTutorUseCase;
 
+    /** Mocked delete tutor use case. */
     @MockitoBean private DeleteTutorUseCase deleteTutorUseCase;
 
     @Test
@@ -265,7 +296,7 @@ public class TutorAPITest {
                 new TutorOutput(
                         expectedId,
                         expectedName,
-                        null, // null email
+                        null,
                         expectedPhone,
                         Instant.now(),
                         Instant.now());
@@ -277,7 +308,7 @@ public class TutorAPITest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(expectedId)))
                 .andExpect(jsonPath("$.name", equalTo(expectedName)))
-                .andExpect(jsonPath("$.email").doesNotExist()) // email should not be rendered
+                .andExpect(jsonPath("$.email").doesNotExist())
                 .andExpect(jsonPath("$.phone", equalTo(expectedPhone)));
 
         verify(getTutorByIdUseCase, times(1)).execute(expectedId);

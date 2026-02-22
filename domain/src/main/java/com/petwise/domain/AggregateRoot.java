@@ -16,6 +16,7 @@ import java.util.List;
  * @param <ID> the strongly-typed identifier for this aggregate root
  * @see Entity
  */
+@SuppressWarnings({"PMD.ShortVariable", "PMD.GenericsNaming"})
 public abstract class AggregateRoot<ID extends Identifier<?>> extends Entity<ID> {
 
     /**

@@ -22,15 +22,32 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/** Unit tests for {@link DefaultUpdateTutorUseCase}. */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UpdateTutorUseCase Tests")
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.LiteralsFirstInComparisons"
+})
 class UpdateTutorUseCaseTest {
 
+    /** Default constructor. */
+    UpdateTutorUseCaseTest() {}
+
+    /** The mocked tutor gateway. */
     @Mock private TutorGateway tutorGateway;
 
+    /** The use case under test. */
     @InjectMocks private DefaultUpdateTutorUseCase useCase;
 
+    /** The tutor ID used across tests. */
     private TutorID tutorId;
+
+    /** The existing tutor used across tests. */
     private Tutor existingTutor;
 
     @BeforeEach

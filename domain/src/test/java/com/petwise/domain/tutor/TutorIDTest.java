@@ -6,7 +6,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.petwise.domain.UnitTest;
 import org.junit.jupiter.api.Test;
 
+/** Unit tests for {@link TutorID}. */
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.ShortVariable"
+})
 class TutorIDTest extends UnitTest {
+
+    /** Default constructor. */
+    TutorIDTest() {}
 
     @Test
     void givenNoParameters_whenCallsUnique_thenShouldGenerateNewId() {

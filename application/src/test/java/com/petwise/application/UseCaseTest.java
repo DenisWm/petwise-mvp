@@ -32,6 +32,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @Tag("unitTest")
 public abstract class UseCaseTest implements BeforeEachCallback {
 
+    /** Default constructor. */
+    protected UseCaseTest() {}
+
     @Override
     public void beforeEach(final ExtensionContext extensionContext) {
         Mockito.reset(getMocks().toArray());

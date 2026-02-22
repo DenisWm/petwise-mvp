@@ -14,9 +14,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+/** Jackson ObjectMapper configuration for the PetWise API. */
 @Configuration
 public class JsonConfig {
 
+    /** Default constructor. */
+    public JsonConfig() {}
+
+    /**
+     * Produces the primary {@link ObjectMapper} bean.
+     *
+     * @return a configured {@code ObjectMapper}
+     */
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
@@ -34,7 +43,7 @@ public class JsonConfig {
     }
 
     private AfterburnerModule afterburnerModule() {
-        var module = new AfterburnerModule();
+        final var module = new AfterburnerModule();
         module.setUseValueClassLoader(false);
         return module;
     }

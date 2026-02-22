@@ -6,12 +6,26 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** Tutor aggregate root. Represents a pet owner or guardian in the PetWise system. */
-public class Tutor extends AggregateRoot<TutorID> {
+@SuppressWarnings({
+    "PMD.UseObjectForClearerAPI",
+    "PMD.ShortVariable",
+    "PMD.ClassWithOnlyPrivateConstructorsShouldBeFinal"
+})
+public final class Tutor extends AggregateRoot<TutorID> {
 
+    /** The tutor's full name. */
     private String name;
+
+    /** The tutor's email address (optional). */
     private Email email;
+
+    /** The tutor's phone number (optional). */
     private Phone phone;
+
+    /** Timestamp of when this tutor was created. */
     private final Instant createdAt;
+
+    /** Timestamp of the last update to this tutor. */
     private Instant updatedAt;
 
     private Tutor(
@@ -30,7 +44,7 @@ public class Tutor extends AggregateRoot<TutorID> {
     }
 
     /**
-     * Creates a new Tutor with generated ID.
+     * Creates a new Tutor with a generated ID and the current time.
      *
      * @param aName the tutor name (required)
      * @param anEmail the tutor email (optional)
@@ -38,15 +52,15 @@ public class Tutor extends AggregateRoot<TutorID> {
      * @return a new Tutor instance
      */
     public static Tutor newTutor(final String aName, final String anEmail, final String aPhone) {
-        final var id = TutorID.unique();
+        final var anId = TutorID.unique();
         final var now = Instant.now();
-        final var email = Email.from(anEmail);
-        final var phone = Phone.from(aPhone);
-        return new Tutor(id, aName, email, phone, now, now);
+        final var anEmailObj = Email.from(anEmail);
+        final var aPhoneObj = Phone.from(aPhone);
+        return new Tutor(anId, aName, anEmailObj, aPhoneObj, now, now);
     }
 
     /**
-     * Creates a Tutor with all properties (for reconstruction from persistence).
+     * Creates a Tutor from typed objects (for persistence reconstruction).
      *
      * @param anId the tutor ID
      * @param aName the tutor name
@@ -67,7 +81,7 @@ public class Tutor extends AggregateRoot<TutorID> {
     }
 
     /**
-     * Creates a Tutor with string values (for reconstruction from persistence).
+     * Creates a Tutor from raw strings (for persistence reconstruction).
      *
      * @param anId the tutor ID
      * @param aName the tutor name
@@ -114,22 +128,47 @@ public class Tutor extends AggregateRoot<TutorID> {
         new TutorValidator(this, handler).validate();
     }
 
+    /**
+     * Returns the tutor's name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the tutor's email (optional).
+     *
+     * @return the email or {@code null}
+     */
     public Email getEmail() {
         return email;
     }
 
+    /**
+     * Returns the tutor's phone (optional).
+     *
+     * @return the phone or {@code null}
+     */
     public Phone getPhone() {
         return phone;
     }
 
+    /**
+     * Returns the creation timestamp.
+     *
+     * @return the creation instant
+     */
     public Instant getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * Returns the last-updated timestamp.
+     *
+     * @return the updated instant
+     */
     public Instant getUpdatedAt() {
         return updatedAt;
     }

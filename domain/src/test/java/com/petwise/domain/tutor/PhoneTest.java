@@ -7,7 +7,19 @@ import com.petwise.domain.UnitTest;
 import com.petwise.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Test;
 
+/** Unit tests for {@link Phone}. */
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.TooManyMethods"
+})
 class PhoneTest extends UnitTest {
+
+    /** Default constructor. */
+    PhoneTest() {}
 
     @Test
     void givenValidPhone_whenCallsFrom_thenShouldInstantiatePhone() {

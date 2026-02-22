@@ -11,53 +11,71 @@ import com.petwise.application.tutor.retrieve.list.ListTutorsUseCase;
 import com.petwise.application.tutor.update.DefaultUpdateTutorUseCase;
 import com.petwise.application.tutor.update.UpdateTutorUseCase;
 import com.petwise.domain.tutor.TutorGateway;
-import com.petwise.infrastructure.tutor.api.TutorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/** Configuration for Tutor module. Wires together use cases, gateways, and controllers. */
+/**
+ * Spring configuration for the Tutor module. Wires together use cases, gateways, and controllers.
+ */
 @Configuration
+@SuppressWarnings("PMD.LongVariable")
 public class TutorConfig {
 
-    // Use Cases
+    /** Default constructor. */
+    public TutorConfig() {}
+
+    /**
+     * Creates the {@link CreateTutorUseCase} bean.
+     *
+     * @param gateway the tutor persistence gateway
+     * @return the use case implementation
+     */
     @Bean
-    public CreateTutorUseCase createTutorUseCase(final TutorGateway tutorGateway) {
-        return new DefaultCreateTutorUseCase(tutorGateway);
+    public CreateTutorUseCase createTutorUseCase(final TutorGateway gateway) {
+        return new DefaultCreateTutorUseCase(gateway);
     }
 
+    /**
+     * Creates the {@link GetTutorByIdUseCase} bean.
+     *
+     * @param gateway the tutor persistence gateway
+     * @return the use case implementation
+     */
     @Bean
-    public GetTutorByIdUseCase getTutorByIdUseCase(final TutorGateway tutorGateway) {
-        return new DefaultGetTutorByIdUseCase(tutorGateway);
+    public GetTutorByIdUseCase getTutorByIdUseCase(final TutorGateway gateway) {
+        return new DefaultGetTutorByIdUseCase(gateway);
     }
 
+    /**
+     * Creates the {@link ListTutorsUseCase} bean.
+     *
+     * @param gateway the tutor persistence gateway
+     * @return the use case implementation
+     */
     @Bean
-    public ListTutorsUseCase listTutorsUseCase(final TutorGateway tutorGateway) {
-        return new DefaultListTutorsUseCase(tutorGateway);
+    public ListTutorsUseCase listTutorsUseCase(final TutorGateway gateway) {
+        return new DefaultListTutorsUseCase(gateway);
     }
 
+    /**
+     * Creates the {@link UpdateTutorUseCase} bean.
+     *
+     * @param gateway the tutor persistence gateway
+     * @return the use case implementation
+     */
     @Bean
-    public UpdateTutorUseCase updateTutorUseCase(final TutorGateway tutorGateway) {
-        return new DefaultUpdateTutorUseCase(tutorGateway);
+    public UpdateTutorUseCase updateTutorUseCase(final TutorGateway gateway) {
+        return new DefaultUpdateTutorUseCase(gateway);
     }
 
+    /**
+     * Creates the {@link DeleteTutorUseCase} bean.
+     *
+     * @param gateway the tutor persistence gateway
+     * @return the use case implementation
+     */
     @Bean
-    public DeleteTutorUseCase deleteTutorUseCase(final TutorGateway tutorGateway) {
-        return new DefaultDeleteTutorUseCase(tutorGateway);
-    }
-
-    // Controller
-    @Bean
-    public TutorController tutorController(
-            final CreateTutorUseCase createTutorUseCase,
-            final GetTutorByIdUseCase getTutorByIdUseCase,
-            final ListTutorsUseCase listTutorsUseCase,
-            final UpdateTutorUseCase updateTutorUseCase,
-            final DeleteTutorUseCase deleteTutorUseCase) {
-        return new TutorController(
-                createTutorUseCase,
-                getTutorByIdUseCase,
-                listTutorsUseCase,
-                updateTutorUseCase,
-                deleteTutorUseCase);
+    public DeleteTutorUseCase deleteTutorUseCase(final TutorGateway gateway) {
+        return new DefaultDeleteTutorUseCase(gateway);
     }
 }

@@ -20,15 +20,30 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/** Unit tests for {@link DefaultDeleteTutorUseCase}. */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("DeleteTutorUseCase Tests")
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate"
+})
 class DeleteTutorUseCaseTest {
 
+    /** Default constructor. */
+    DeleteTutorUseCaseTest() {}
+
+    /** The mocked tutor gateway. */
     @Mock private TutorGateway tutorGateway;
 
+    /** The use case under test. */
     @InjectMocks private DefaultDeleteTutorUseCase useCase;
 
+    /** The tutor ID used across tests. */
     private TutorID tutorId;
+
+    /** The tutor used across tests. */
     private Tutor tutor;
 
     @BeforeEach
@@ -106,7 +121,7 @@ class DeleteTutorUseCaseTest {
         useCase.execute(tutorIdValue);
 
         // Then - verify findById was called before deleteById
-        var inOrder = inOrder(tutorGateway);
+        final var inOrder = inOrder(tutorGateway);
         inOrder.verify(tutorGateway).findById(tutorId);
         inOrder.verify(tutorGateway).deleteById(tutorId);
     }

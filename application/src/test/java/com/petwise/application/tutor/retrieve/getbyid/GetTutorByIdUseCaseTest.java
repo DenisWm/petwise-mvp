@@ -21,10 +21,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
  */
 @DisplayName("GetTutorByIdUseCase Tests")
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate"
+})
 class GetTutorByIdUseCaseTest {
 
+    /** Default constructor. */
+    GetTutorByIdUseCaseTest() {}
+
+    /** The mocked tutor gateway. */
     @Mock private TutorGateway tutorGateway;
 
+    /** The use case under test. */
     @InjectMocks private DefaultGetTutorByIdUseCase useCase;
 
     @BeforeEach

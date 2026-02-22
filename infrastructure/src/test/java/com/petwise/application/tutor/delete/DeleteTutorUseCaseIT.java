@@ -10,11 +10,23 @@ import com.petwise.infrastructure.tutor.persistence.TutorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/** Integration tests for DeleteTutorUseCase. */
 @IntegrationTest
-public class DeleteTutorUseCaseIT {
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate"
+})
+class DeleteTutorUseCaseIT {
 
+    /** Default constructor. */
+    DeleteTutorUseCaseIT() {}
+
+    /** The use case under test. */
     @Autowired private DeleteTutorUseCase useCase;
 
+    /** The tutor repository. */
     @Autowired private TutorRepository tutorRepository;
 
     @Test

@@ -15,6 +15,7 @@ import java.util.List;
  * handler.append(new Error("'name' should not be null"));
  * }</pre>
  */
+@SuppressWarnings({"PMD.LongVariable", "PMD.OnlyOneReturn"})
 public interface ValidationHandler {
 
     /**
@@ -26,36 +27,34 @@ public interface ValidationHandler {
     ValidationHandler append(Error anError);
 
     /**
-     * Appends all errors from another {@link ValidationHandler} into this one.
+     * Appends all errors from another {@link ValidationHandler}.
      *
-     * @param aValidationHandler the source handler whose errors will be merged; must not be {@code
-     *     null}
+     * @param handler the source handler whose errors will be merged
      * @return this handler (for fluent chaining)
      */
-    ValidationHandler append(ValidationHandler aValidationHandler);
+    ValidationHandler append(ValidationHandler handler);
 
     /**
      * Executes the given {@link Validation}, catching any {@link
      * com.petwise.domain.exceptions.DomainException} and appending its errors to this handler
-     * instead of propagating the exception.
+     * instead of propagating.
      *
      * @param <T> the return type of the validation block
      * @param aValidation the validation logic to execute
-     * @return the result of the validation, or {@code null} if an exception was caught
+     * @return the result of the validation, or {@code null} if caught
      */
     <T> T validate(Validation<T> aValidation);
 
     /**
-     * Returns the first recorded error, or {@code null} if no errors exist.
+     * Returns the first recorded error, or {@code null} if none exist.
      *
      * @return the first {@link Error}, or {@code null}
      */
     default Error firstError() {
         if (getErrors() != null && !getErrors().isEmpty()) {
             return getErrors().getFirst();
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -79,7 +78,13 @@ public interface ValidationHandler {
      *
      * @param <T> the type returned by the validation
      */
+    @SuppressWarnings("PMD.ImplicitFunctionalInterface")
     interface Validation<T> {
+        /**
+         * Executes this validation.
+         *
+         * @return the result
+         */
         T validate();
     }
 }

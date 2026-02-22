@@ -6,7 +6,18 @@ import com.petwise.domain.UnitTest;
 import com.petwise.domain.validation.handler.Notification;
 import org.junit.jupiter.api.Test;
 
+/** Unit tests for {@link TutorValidator}. */
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.AvoidDuplicateLiterals"
+})
 class TutorValidatorTest extends UnitTest {
+
+    /** Default constructor. */
+    TutorValidatorTest() {}
 
     @Test
     void givenValidTutor_whenValidate_thenShouldNotHaveErrors() {

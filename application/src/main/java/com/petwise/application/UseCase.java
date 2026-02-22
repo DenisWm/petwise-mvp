@@ -8,10 +8,14 @@ package com.petwise.application;
  * be free of infrastructure concerns — they interact with the domain model and delegate persistence
  * to a gateway interface.
  *
- * @param <IN> the command or query object that drives the use case
- * @param <OUT> the result produced by the use case
+ * @param <I> the command or query object that drives the use case
+ * @param <O> the result produced by the use case
  */
-public abstract class UseCase<IN, OUT> {
+@SuppressWarnings("PMD.GenericsNaming")
+public abstract class UseCase<I, O> {
+
+    /** Protected constructor for subclasses. */
+    protected UseCase() {}
 
     /**
      * Executes the use case with the supplied input.
@@ -19,5 +23,5 @@ public abstract class UseCase<IN, OUT> {
      * @param anIN the input command or query; must not be {@code null}
      * @return the result of the use case execution
      */
-    public abstract OUT execute(IN anIN);
+    public abstract O execute(I anIN);
 }
