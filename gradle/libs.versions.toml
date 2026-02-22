@@ -1,6 +1,7 @@
 [versions]
 spring-boot = "3.5.7"
 spotless = "8.0.0"
+owasp-dependency-check = "12.1.0"
 spring-dependency-management = "1.1.7"
 junit = "5.10.2"
 mockito = "5.14.2"
@@ -35,6 +36,7 @@ spring-boot-gradle = { module = "org.springframework.boot:spring-boot-gradle-plu
 io-spring-dependency-management-gradle = { module = "io.spring.dependency-management:io.spring.dependency-management.gradle.plugin", version.ref = "spring-dependency-management" }
 spotless-gradle = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 flyway-gradle = { module = "org.flywaydb:flyway-gradle-plugin", version.ref = "flyway" }
+owasp-dependency-check-gradle = { module = "org.owasp:dependency-check-gradle", version.ref = "owasp-dependency-check" }
 
 [bundles]
 spring-boot-starter = ["spring-boot-starter-validation", "spring-boot-starter-data-jpa"]
@@ -44,4 +46,5 @@ spring-boot-starter-test = ["spring-boot-starter-test"]
 spring-boot-app-convention = { id = "petwise.spring-boot-app-conventions" }
 java-library-convention = { id = "petwise.java-library-conventions" }
 jacoco-aggregation-convention = { id = "petwise.jacoco-aggregation-conventions" }
+owasp-dependency-check-convention = { id = "petwise.owasp-dependency-check-conventions" }
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
