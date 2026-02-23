@@ -14,6 +14,7 @@ h2 = "2.2.224"
 springdoc-openapi = "2.3.0"
 flyway = "10.10.0"
 jackson = "2.18.2"
+spotbugs-gradle = "6.0.26"
 
 [libraries]
 # Forced-upgrade libs (transitive deps patched for CVEs)
@@ -37,6 +38,7 @@ junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jun
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
+spotbugs-gradle = { module = "com.github.spotbugs.snom:spotbugs-gradle-plugin", version.ref = "spotbugs-gradle" }
 
 # Plugins
 spring-boot-gradle = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "spring-boot" }

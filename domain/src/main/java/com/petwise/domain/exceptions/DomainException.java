@@ -1,6 +1,8 @@
 package com.petwise.domain.exceptions;
 
 import com.petwise.domain.validation.Error;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,7 +34,7 @@ public class DomainException extends NoStacktraceRuntimeException {
      */
     protected DomainException(final String message, final List<Error> anErrors) {
         super(message);
-        this.errors = anErrors;
+        this.errors = Collections.unmodifiableList(new ArrayList<>(anErrors));
     }
 
     /**

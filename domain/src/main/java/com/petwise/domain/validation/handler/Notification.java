@@ -4,6 +4,7 @@ import com.petwise.domain.exceptions.DomainException;
 import com.petwise.domain.validation.Error;
 import com.petwise.domain.validation.ValidationHandler;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,6 +85,6 @@ public final class Notification implements ValidationHandler {
 
     @Override
     public List<Error> getErrors() {
-        return this.errors;
+        return Collections.unmodifiableList(new ArrayList<>(this.errors));
     }
 }

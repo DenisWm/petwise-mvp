@@ -14,6 +14,10 @@ import java.util.function.Function;
  */
 public record Pagination<T>(int currentPage, int perPage, long total, List<T> items) {
 
+    public Pagination {
+        items = List.copyOf(items);
+    }
+
     /**
      * Maps each item in this page to a new type using the supplied {@code mapper}, preserving the
      * pagination metadata.
