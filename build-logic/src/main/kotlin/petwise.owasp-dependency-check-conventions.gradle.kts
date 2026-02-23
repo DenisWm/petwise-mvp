@@ -32,11 +32,9 @@ dependencyCheck {
         pyDistributionEnabled = false
         pyPackageEnabled = false
         rubygemsEnabled = false
-        retireJsEnabled = false
         golangDepEnabled = false
         golangModEnabled = false
         cocoapodsEnabled = false
-        swiftPackageManagerEnabled = false
         swiftPackageResolvedEnabled = false
         dartEnabled = false
     }
