@@ -6,6 +6,17 @@ plugins {
     pmd
 
 }
+
+// Force patched versions of vulnerable transitive dependencies pulled in by build-time tools
+// (checkstyle, PMD, spotless, etc.) so that the OWASP dependency-check scan passes.
+configurations.all {
+    resolutionStrategy {
+        val libs = versionCatalogs.named("libs")
+        force(libs.findLibrary("commons-beanutils").get())
+        force(libs.findLibrary("commons-lang3").get())
+    }
+}
+
 checkstyle {
     toolVersion = "10.17.0"
     isIgnoreFailures = false
