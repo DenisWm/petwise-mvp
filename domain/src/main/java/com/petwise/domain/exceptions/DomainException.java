@@ -34,7 +34,7 @@ public class DomainException extends NoStacktraceRuntimeException {
      */
     protected DomainException(final String message, final List<Error> anErrors) {
         super(message);
-        this.errors = Collections.unmodifiableList(new ArrayList<>(anErrors));
+        this.errors = List.copyOf(anErrors);
     }
 
     /**

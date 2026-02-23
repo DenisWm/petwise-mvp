@@ -85,6 +85,6 @@ public final class Notification implements ValidationHandler {
 
     @Override
     public List<Error> getErrors() {
-        return Collections.unmodifiableList(new ArrayList<>(this.errors));
+        return List.copyOf(this.errors);
     }
 }
