@@ -9,90 +9,92 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class EntityTest extends UnitTest {
+/** Unit tests for {@link Entity}. */
+@DisplayName("Entity")
+@SuppressWarnings({
+    "PMD.MethodNamingConventions",
+    "PMD.UnitTestContainsTooManyAsserts",
+    "PMD.JUnit5TestShouldBePackagePrivate",
+    "PMD.UnitTestAssertionsShouldIncludeMessage",
+    "PMD.LongVariable",
+    "PMD.AvoidDuplicateLiterals"
+})
+class EntityTest extends UnitTest {
+
+    /** Default constructor. */
+    EntityTest() {}
 
     @Test
-    public void givenNullAsEvents_whenInstantiate_shouldBeOk() {
-        final List<DomainEvent> events = null;
-        final var anEntity = new DummyEntity(new DummyID(), events);
+    @DisplayName("should initialise with an empty event list when null is supplied as events")
+    @SuppressWarnings("PMD.UnitTestAssertionsShouldIncludeMessage")
+    void shouldInitialiseWithEmptyEventList_whenNullEventsAreSupplied() {
+        final var anEntity = new DummyEntity(new DummyID(), null);
 
         assertNotNull(anEntity.getDomainEvents());
         assertTrue(anEntity.getDomainEvents().isEmpty());
     }
 
     @Test
-    public void givenDomainEvents_whenPassInConstructor_shouldCreateADefensiveClone() {
+    @DisplayName("should create a defensive copy of the events list supplied in the constructor")
+    @SuppressWarnings("PMD.UnitTestAssertionsShouldIncludeMessage")
+    void shouldCreateDefensiveCopyOfEventList_whenEventsArePassedToConstructor() {
         final List<DomainEvent> events = new ArrayList<>();
         final var anEntity = new DummyEntity(new DummyID(), events);
 
         assertNotNull(anEntity.getDomainEvents());
         assertTrue(anEntity.getDomainEvents().isEmpty());
         assertNotSame(anEntity.getDomainEvents(), events);
-        assertThrows(
-                RuntimeException.class,
-                () -> {
-                    final var actualEvents = anEntity.getDomainEvents();
-                    actualEvents.add(Instant::now);
-                });
+        assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
     }
 
     @Test
-    public void givenDomainEvents_whenCallsRegisterEvent_shouldAddEventToList() {
-        final List<DomainEvent> events = new ArrayList<>();
-        final var anEntity = new DummyEntity(new DummyID(), events);
-        int expectedEvents = 1;
+    @DisplayName("should add the event to the internal list when registerEvent is called")
+    @SuppressWarnings("PMD.UnitTestAssertionsShouldIncludeMessage")
+    void shouldAddEvent_whenRegisterEventIsCalled() {
+        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
 
         anEntity.registerEvent(Instant::now);
 
         assertNotNull(anEntity.getDomainEvents());
-        assertEquals(expectedEvents, anEntity.getDomainEvents().size());
-        assertNotSame(anEntity.getDomainEvents(), events);
-        assertThrows(
-                RuntimeException.class,
-                () -> {
-                    final var actualEvents = anEntity.getDomainEvents();
-                    actualEvents.add(Instant::now);
-                });
+        assertEquals(1, anEntity.getDomainEvents().size());
+        assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
     }
 
     @Test
-    public void
-            givenDomainEvents_whenCallsPublishDomainEvents_shouldCallPublisherClearEventsList() {
-        final List<DomainEvent> events = new ArrayList<>();
-        final var expectedEvents = 0;
-        final var expectedSentEvents = 2;
-        final var counter = new AtomicInteger(0);
-        final var anEntity = new DummyEntity(new DummyID(), events);
-        anEntity.registerEvent(Instant::now);
+    @DisplayName(
+            "should dispatch all events and clear the list when " + "publishDomainEvents is called")
+    @SuppressWarnings("PMD.UnitTestAssertionsShouldIncludeMessage")
+    void shouldDispatchAllEventsAndClearList_whenPublishDomainEventsIsCalled() {
+        final var expectedRemainingEvents = 0;
+        final var expectedPublishedEvents = 2;
+        final var publishedCount = new AtomicInteger(0);
+        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
 
+        anEntity.registerEvent(Instant::now);
         anEntity.registerEvent(Instant::now);
 
         assertEquals(2, anEntity.getDomainEvents().size());
 
-        anEntity.publishDomainEvents(
-                event -> {
-                    counter.incrementAndGet();
-                });
+        anEntity.publishDomainEvents(event -> publishedCount.incrementAndGet());
 
         assertNotNull(anEntity.getDomainEvents());
-        assertEquals(expectedEvents, anEntity.getDomainEvents().size());
-        assertEquals(expectedSentEvents, counter.get());
-        assertNotSame(anEntity.getDomainEvents(), events);
-        assertThrows(
-                RuntimeException.class,
-                () -> {
-                    final var actualEvents = anEntity.getDomainEvents();
-                    actualEvents.add(Instant::now);
-                });
+        assertEquals(expectedRemainingEvents, anEntity.getDomainEvents().size());
+        assertEquals(expectedPublishedEvents, publishedCount.get());
+        assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
     }
 
-    public static class DummyID extends Identifier {
+    /** Dummy identifier for testing. */
+    @SuppressWarnings({"PMD.ShortVariable", "PMD.CallSuperInConstructor"})
+    static class DummyID extends Identifier<String> {
 
+        /** The raw ID value. */
         private final String id;
 
-        public DummyID() {
+        /** Creates a new DummyID with a random UUID. */
+        DummyID() {
             this.id = IDUtils.uuid();
         }
 
@@ -102,13 +104,21 @@ public class EntityTest extends UnitTest {
         }
     }
 
-    public static class DummyEntity extends Entity<DummyID> {
+    /** Dummy entity for testing. */
+    @SuppressWarnings("PMD.UncommentedEmptyMethodBody")
+    static class DummyEntity extends Entity<DummyID> {
 
-        public DummyEntity(final DummyID dummyID, final List<DomainEvent> domainEvents) {
+        /**
+         * Creates a DummyEntity.
+         *
+         * @param dummyID the entity ID
+         * @param domainEvents initial events
+         */
+        DummyEntity(final DummyID dummyID, final List<DomainEvent> domainEvents) {
             super(dummyID, domainEvents);
         }
 
         @Override
-        public void validate(ValidationHandler handler) {}
+        public void validate(final ValidationHandler handler) {}
     }
 }

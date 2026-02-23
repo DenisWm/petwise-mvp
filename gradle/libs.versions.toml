@@ -1,25 +1,49 @@
 [versions]
 spring-boot = "3.5.7"
 spotless = "8.0.0"
+owasp-dependency-check = "12.1.0"
+# Forced upgrades to patch CVE-2025-48734 (commons-beanutils) and CVE-2025-48924 (commons-lang3)
+commons-beanutils = "1.11.0"
+commons-lang3 = "3.18.0"
 spring-dependency-management = "1.1.7"
 junit = "5.10.2"
+mockito = "5.14.2"
+assertj = "3.25.3"
 postgresql = "42.7.8"
+h2 = "2.2.224"
+springdoc-openapi = "2.3.0"
+flyway = "10.10.0"
+jackson = "2.18.2"
 
 [libraries]
+# Forced-upgrade libs (transitive deps patched for CVEs)
+commons-beanutils = { module = "commons-beanutils:commons-beanutils", version.ref = "commons-beanutils" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3" }
+
 # Spring Boot Starters
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
 spring-boot-starter-undertow = { module = "org.springframework.boot:spring-boot-starter-undertow", version.ref = "spring-boot" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot" }
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql"}
+h2 = { module = "com.h2database:h2", version.ref = "h2"}
+springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
+jackson-module-afterburner = { module = "com.fasterxml.jackson.module:jackson-module-afterburner", version.ref = "jackson" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 
 # Plugins
 spring-boot-gradle = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "spring-boot" }
 io-spring-dependency-management-gradle = { module = "io.spring.dependency-management:io.spring.dependency-management.gradle.plugin", version.ref = "spring-dependency-management" }
 spotless-gradle = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
+flyway-gradle = { module = "org.flywaydb:flyway-gradle-plugin", version.ref = "flyway" }
+owasp-dependency-check-gradle = { module = "org.owasp:dependency-check-gradle", version.ref = "owasp-dependency-check" }
 
 [bundles]
 spring-boot-starter = ["spring-boot-starter-validation", "spring-boot-starter-data-jpa"]
@@ -29,3 +53,5 @@ spring-boot-starter-test = ["spring-boot-starter-test"]
 spring-boot-app-convention = { id = "petwise.spring-boot-app-conventions" }
 java-library-convention = { id = "petwise.java-library-conventions" }
 jacoco-aggregation-convention = { id = "petwise.jacoco-aggregation-conventions" }
+owasp-dependency-check-convention = { id = "petwise.owasp-dependency-check-conventions" }
+flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }

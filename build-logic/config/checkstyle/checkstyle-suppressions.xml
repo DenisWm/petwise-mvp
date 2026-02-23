@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.0//EN"
+        "https://checkstyle.org/dtds/suppressions_1_0.dtd">
+
+<suppressions>
+
+    <!-- ============================================================ -->
+    <!-- LineLength: many javadoc lines and long type names exceed 80 -->
+    <!-- ============================================================ -->
+    <suppress checks="LineLength" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- WhitespaceAround: empty abstract class bodies {}             -->
+    <!-- and record compact bodies                                     -->
+    <!-- ============================================================ -->
+    <suppress checks="WhitespaceAround" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- DesignForExtension — abstract domain/app classes             -->
+    <!-- ============================================================ -->
+    <suppress checks="DesignForExtension" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- HiddenField — constructor parameters shadow fields,          -->
+    <!-- intentional in builders and use-case impls                   -->
+    <!-- ============================================================ -->
+    <suppress checks="HiddenField" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- JavadocType — missing @param tags in records                 -->
+    <!-- ============================================================ -->
+    <suppress checks="JavadocType" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- MissingJavadocMethod — private/protected helpers             -->
+    <!-- ============================================================ -->
+    <suppress checks="MissingJavadocMethod" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- JavadocMethod — @Override methods delegate to interface doc  -->
+    <!-- ============================================================ -->
+    <suppress checks="JavadocMethod" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- JavadocVariable — private/package-private fields             -->
+    <!-- ============================================================ -->
+    <suppress checks="JavadocVariable" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- VisibilityModifier — protected field in DomainException      -->
+    <!-- ============================================================ -->
+    <suppress checks="VisibilityModifier"
+              files="DomainException\.java" />
+
+    <!-- ============================================================ -->
+    <!-- FinalParameters — Spring beans and JPA constructors          -->
+    <!-- ============================================================ -->
+    <suppress checks="FinalParameters" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- MethodName — BDD-style test names use underscores            -->
+    <!-- ============================================================ -->
+    <suppress checks="MethodName"
+              files=".*Test\.java|.*IT\.java" />
+
+    <!-- ============================================================ -->
+    <!-- AvoidStarImport — static imports in test files are common    -->
+    <!-- ============================================================ -->
+    <suppress checks="AvoidStarImport"
+              files=".*Test\.java|.*IT\.java" />
+
+    <!-- ============================================================ -->
+    <!-- MagicNumber — test data                                      -->
+    <!-- ============================================================ -->
+    <suppress checks="MagicNumber"
+              files=".*Test\.java|.*IT\.java" />
+
+    <!-- ============================================================ -->
+    <!-- HideUtilityClassConstructor — Main.java                      -->
+    <!-- ============================================================ -->
+    <suppress checks="HideUtilityClassConstructor"
+              files="Main\.java" />
+
+    <!-- ============================================================ -->
+    <!-- FinalClass — Main.java is a Spring Boot entry point and      -->
+    <!-- cannot be declared final despite only having a private ctor  -->
+    <!-- ============================================================ -->
+    <suppress checks="FinalClass"
+              files="Main\.java" />
+
+    <!-- ============================================================ -->
+    <!-- TodoComment — suppress everywhere                            -->
+    <!-- ============================================================ -->
+    <suppress checks="TodoComment" files=".*\.java" />
+
+    <!-- ============================================================ -->
+    <!-- JavadocPackage — packages already have package-info.java     -->
+    <!-- ============================================================ -->
+    <suppress checks="JavadocPackage" files=".*\.java" />
+
+</suppressions>
+

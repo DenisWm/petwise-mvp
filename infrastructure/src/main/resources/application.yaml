@@ -2,7 +2,7 @@ spring:
   application:
     name: pet-wise
   datasource:
-    url: jdbc:postgresql://${postgres.url}/${postgres.schema}
+    url: jdbc:postgresql://${postgres.url}/petwise
     username: ${postgres.username}
     password: ${postgres.password}
     hikari:
@@ -14,16 +14,24 @@ spring:
       pool-name: master
   jpa:
     open-in-view: false
-    show-sql: true
+    show-sql: false  # Disable direct SQL logging (use logging framework instead)
     hibernate:
       ddl-auto: none
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true  # Format SQL for better readability
+        use_sql_comments: true  # Add comments to SQL showing the origin
+        highlight_sql: true  # Add ANSI color codes for terminal output
       "[hibernate.generate_statistics]": false
       "[hibernate.connection.provider_disables_autocommit]": true
       # Increase performance, disable auto-commit and open-in-view.
       # https://vladmihalcea.com/why-you-should-always-use-hibernate-connection-provider_disables_autocommit-for-resource-local-jpa-transactions/
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+
 
 server:
   port: 8080
@@ -37,3 +45,14 @@ server:
     threads:
       worker: 64 # Generally this should be reasonably high, at least 10 per CPU core: https://undertow.io/undertow-docs/undertow-docs-2.1.0/index.html#listeners-2
       io: 4 # One IO thread per CPU core is a reasonable default: https://undertow.io/undertow-docs/undertow-docs-2.1.0/index.html#listeners-2
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG  # Log all SQL statements
+    org.hibernate.orm.jdbc.bind: TRACE  # Log SQL parameter values
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Log binding parameters
+    org.springframework.jdbc.core: DEBUG  # Log Spring JDBC operations
+    com.petwise: DEBUG  # Your application logs
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"  # Cleaner console output
+

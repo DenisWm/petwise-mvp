@@ -15,3 +15,7 @@ java {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}

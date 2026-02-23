@@ -15,14 +15,31 @@
         <exclude name="CommentDefaultAccessModifier"/>
         <!-- The var keyword has been in Java since version 10 -->
         <exclude name="UseExplicitTypes"/>
+        <!-- Checkstyle requires explicit empty constructors for Javadoc;
+             PMD and Checkstyle disagree — Checkstyle wins -->
+        <exclude name="UnnecessaryConstructor"/>
+        <!-- Related to UnnecessaryConstructor — same rationale -->
+        <exclude name="CallSuperInConstructor"/>
+        <!-- Fields annotated with @Autowired/@MockitoBean must follow
+             Spring conventions; field order is enforced by the framework -->
+        <exclude name="FieldDeclarationsShouldBeAtStartOfClass"/>
     </rule>
     <rule ref="category/java/design.xml">
         <!-- The rule requires manual configuration -->
         <exclude name="LoosePackageCoupling"/>
         <!-- Is not applicable for modern coding style -->
         <exclude name="LawOfDemeter"/>
+        <!-- Use-case commands intentionally use multiple String params -->
+        <exclude name="UseObjectForClearerAPI"/>
     </rule>
-    <rule ref="category/java/documentation.xml"/>
+    <rule ref="category/java/documentation.xml">
+        <!-- Empty constructors are required by Checkstyle/Javadoc policy;
+             suppress PMD's complementary documentation rule -->
+        <exclude name="UncommentedEmptyConstructor"/>
+        <!-- Javadoc blocks for records and complex types exceed the
+             default 5-line / 80-char limits; suppress globally -->
+        <exclude name="CommentSize"/>
+    </rule>
     <rule ref="category/java/errorprone.xml"/>
     <rule ref="category/java/multithreading.xml"/>
     <rule ref="category/java/performance.xml"/>

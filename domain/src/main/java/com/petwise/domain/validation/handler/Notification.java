@@ -6,30 +6,62 @@ import com.petwise.domain.validation.ValidationHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Notification implements ValidationHandler {
+/**
+ * Standard {@link ValidationHandler} that accumulates errors without interrupting the validation
+ * flow.
+ *
+ * <p>Use the static factories to create instances: {@link #create()}, {@link #create(Error)},
+ * {@link #create(Throwable)}.
+ */
+@SuppressWarnings({
+    "PMD.AvoidCatchingThrowable",
+    "PMD.ShortVariable",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.ClassWithOnlyPrivateConstructorsShouldBeFinal",
+    "PMD.OnlyOneReturn"
+})
+public final class Notification implements ValidationHandler {
 
+    /** Accumulated validation errors. */
     private final List<Error> errors;
 
-    @Override
-    public Notification append(Error anError) {
-        this.errors.add(anError);
-        return this;
+    private Notification(final List<Error> anErrors) {
+        this.errors = anErrors;
     }
 
-    private Notification(final List<Error> errors) {
-        this.errors = errors;
-    }
-
-    public static Notification create(final Throwable t) {
-        return create(new Error(t.getMessage()));
-    }
-
+    /**
+     * Creates an empty {@code Notification}.
+     *
+     * @return a new, empty {@code Notification}
+     */
     public static Notification create() {
         return new Notification(new ArrayList<>());
     }
 
-    public static Notification create(Error anError) {
+    /**
+     * Creates a {@code Notification} seeded from a {@link Throwable}.
+     *
+     * @param aThrowable the throwable whose message is the initial error
+     * @return a new {@code Notification} containing one error
+     */
+    public static Notification create(final Throwable aThrowable) {
+        return create(new Error(aThrowable.getMessage()));
+    }
+
+    /**
+     * Creates a {@code Notification} seeded with an {@link Error}.
+     *
+     * @param anError the initial error
+     * @return a new {@code Notification} containing one error
+     */
+    public static Notification create(final Error anError) {
         return new Notification(new ArrayList<>()).append(anError);
+    }
+
+    @Override
+    public Notification append(final Error anError) {
+        this.errors.add(anError);
+        return this;
     }
 
     @Override
@@ -42,10 +74,10 @@ public class Notification implements ValidationHandler {
     public <T> T validate(final Validation<T> aValidation) {
         try {
             return aValidation.validate();
-        } catch (DomainException ex) {
+        } catch (final DomainException ex) {
             this.errors.addAll(ex.getErrors());
-        } catch (Throwable t) {
-            this.errors.add(new Error(t.getMessage()));
+        } catch (final Throwable throwable) { // NOPMD
+            this.errors.add(new Error(throwable.getMessage()));
         }
         return null;
     }
