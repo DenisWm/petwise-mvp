@@ -16,5 +16,29 @@ dependencyCheck {
     outputDirectory = "${project.layout.buildDirectory.get()}/reports/dependency-check"
 
     suppressionFiles = listOf("${rootProject.projectDir}/build-logic/config/owasp/suppressions.xml")
+
+    analyzers {
+        // Sonatype OSS Index fails on build-time deps (checkstyle, antlr, etc.) — use NVD only
+        ossIndex.enabled = false
+
+        // Not a Node.js project
+        nodeAudit.enabled = false
+        nodePackage.enabled = false
+
+        // Not applicable to this project
+        assemblyEnabled = false
+        nuspecEnabled = false
+        nugetconfEnabled = false
+        pyDistributionEnabled = false
+        pyPackageEnabled = false
+        rubygemsEnabled = false
+        retireJsEnabled = false
+        golangDepEnabled = false
+        golangModEnabled = false
+        cocoapodsEnabled = false
+        swiftPackageManagerEnabled = false
+        swiftPackageResolvedEnabled = false
+        dartEnabled = false
+    }
 }
 
