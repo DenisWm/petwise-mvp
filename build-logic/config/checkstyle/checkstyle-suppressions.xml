@@ -99,5 +99,13 @@
     <!-- ============================================================ -->
     <suppress checks="JavadocPackage" files=".*\.java" />
 
+    <!-- ============================================================ -->
+    <!-- ParameterNumber — JPA entity all-field constructors and      -->
+    <!-- domain aggregate factory methods need one parameter per      -->
+    <!-- field; splitting them is impractical                         -->
+    <!-- ============================================================ -->
+    <suppress checks="ParameterNumber"
+              files=".*JpaEntity\.java|Appointment\.java|Pet\.java" />
+
 </suppressions>
 

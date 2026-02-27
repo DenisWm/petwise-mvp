@@ -12,7 +12,8 @@ import org.junit.jupiter.api.Test;
     "PMD.UnitTestContainsTooManyAsserts",
     "PMD.UnitTestAssertionsShouldIncludeMessage",
     "PMD.JUnit5TestShouldBePackagePrivate",
-    "PMD.ShortVariable"
+    "PMD.ShortVariable",
+    "PMD.AvoidDuplicateLiterals"
 })
 class TutorIDTest extends UnitTest {
 
@@ -99,5 +100,23 @@ class TutorIDTest extends UnitTest {
 
         // then
         assertThat(actualValue).isEqualTo(expectedValue);
+    }
+
+    @Test
+    void givenTutorID_whenCompareWithNull_thenShouldNotBeEqual() {
+        final var tutorId = TutorID.from("id-1");
+        assertThat(tutorId).isNotEqualTo(null);
+    }
+
+    @Test
+    void givenTutorID_whenCompareWithSelf_thenShouldBeEqual() {
+        final var tutorId = TutorID.from("id-1");
+        assertThat(tutorId).isEqualTo(tutorId);
+    }
+
+    @Test
+    void givenTutorID_whenCompareWithDifferentType_thenShouldNotBeEqual() {
+        final var tutorId = TutorID.from("id-1");
+        assertThat(tutorId).isNotEqualTo("id-1");
     }
 }

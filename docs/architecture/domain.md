@@ -3,6 +3,7 @@ layout: default
 title: Domain Model
 parent: Architecture
 nav_order: 3
+has_children: true
 ---
 
 # Domain Model
@@ -21,11 +22,11 @@ The core business domain of PetWise: tutors, pets, and appointments.
 
 ## Overview
 
-PetWise domain model follows **Domain-Driven Design** principles with three main aggregates:
+PetWise follows **Domain-Driven Design** principles with three main aggregates:
 
-1. **Tutor** - Pet owner/guardian
-2. **Pet** - Animal under care
-3. **Appointment** - Scheduled veterinary visit
+1. **Tutor** — Pet owner or guardian (Aggregate Root)
+2. **Pet** — Animal under care (Entity inside Tutor aggregate)
+3. **Appointment** — Scheduled daycare or hotel service (Aggregate Root)
 
 ---
 
@@ -36,81 +37,72 @@ PetWise domain model follows **Domain-Driven Design** principles with three main
 **Purpose:** Represents a pet owner or guardian.
 
 **Attributes:**
-- `id: TutorId` - Unique identifier
-- `name: String` - Required, non-empty
-- `email: Email` - Optional, must be valid format
-- `phone: Phone` - Optional, must be valid format
+- `id: TutorID` — Unique identifier (generated UUID)
+- `name: String` — Required, non-empty
+- `email: Email` — Optional, must be valid format if provided
+- `phone: Phone` — Optional, must be valid format if provided
+- `createdAt: Instant` — Creation timestamp
+- `updatedAt: Instant` — Last update timestamp
 
 **Business Rules:**
 - Name cannot be empty
 - Email must be valid format (if provided)
 - Phone must be valid format (if provided)
-- A tutor can have multiple pets
-
-**Invariants:**
-- ID is immutable once created
-- Name is always present
+- Cannot be deleted while pets exist
 
 ---
 
 ### Pet
 
-**Purpose:** Represents an animal under veterinary care.
+**Purpose:** Represents an animal under care, linked to a tutor.
 
 **Attributes:**
-- `id: PetId` - Unique identifier
-- `name: String` - Required, non-empty
-- `species: String` - Required (e.g., "Dog", "Cat")
-- `breed: String` - Optional
-- `tutorId: TutorId` - Required, reference to owner
+- `id: PetID` — Unique identifier (generated UUID)
+- `tutorId: TutorID` — Required, reference to owner
+- `name: String` — Required, non-empty
+- `species: String` — Optional
+- `breed: String` — Optional
+- `birthDate: LocalDate` — Optional, cannot be in the future
+- `notes: String` — Optional
+- `createdAt: Instant` — Creation timestamp
+- `updatedAt: Instant` — Last update timestamp
 
 **Business Rules:**
 - Name cannot be empty
-- Species cannot be empty
-- Must be associated with a valid tutor
-- Tutor must exist when creating/updating pet
-
-**Invariants:**
-- ID is immutable once created
-- Must always have a valid tutor reference
+- Must belong to exactly one tutor
+- Birth date cannot be in the future (if provided)
+- Cannot be deleted while ACTIVE appointments exist
 
 ---
 
 ### Appointment
 
-**Purpose:** Represents a scheduled veterinary appointment.
+**Purpose:** Represents a scheduled daycare or hotel service for a pet.
 
 **Attributes:**
-- `id: AppointmentId` - Unique identifier
-- `petId: PetId` - Required, reference to pet
-- `scheduledAt: LocalDateTime` - Required, future date/time
-- `status: AppointmentStatus` - Required, follows lifecycle
-- `reason: String` - Optional, appointment purpose
-- `notes: String` - Optional, additional notes
+- `id: AppointmentID` — Unique identifier (generated UUID)
+- `petId: PetID` — Required, reference to pet
+- `serviceType: ServiceType` — Required (CRECHE or HOTEL)
+- `status: AppointmentStatus` — Required, follows lifecycle
+- `startAt: Instant` — Required, start of service window
+- `endAt: Instant` — Required, end of service window
+- `notes: String` — Optional
+- `createdAt: Instant` — Creation timestamp
+- `updatedAt: Instant` — Last update timestamp
+
+**Status Lifecycle:**
+
+```
+PENDING → ACTIVE → COMPLETED
+PENDING → CANCELED
+```
 
 **Business Rules:**
 - Pet must exist
-- Scheduled time must be in the future (when creating)
-- Status transitions must follow valid lifecycle
-- Cannot schedule multiple appointments for same pet at same time
-
-**Status Lifecycle:**
-```
-SCHEDULED → CONFIRMED → IN_PROGRESS → COMPLETED
-         ↘ CANCELLED
-```
-
-**Valid Transitions:**
-- `SCHEDULED` → `CONFIRMED`
-- `SCHEDULED` → `CANCELLED`
-- `CONFIRMED` → `IN_PROGRESS`
-- `CONFIRMED` → `CANCELLED`
-- `IN_PROGRESS` → `COMPLETED`
-
-**Invariants:**
-- ID is immutable once created
-- Status transitions are validated
-- Scheduled time cannot be changed once confirmed
+- `startAt` must be before `endAt`
+- Status transitions must follow forward-only lifecycle
+- No overlapping PENDING/ACTIVE appointments for the same pet
+- COMPLETED and CANCELED are terminal states
 
 ---
 
@@ -118,88 +110,72 @@ SCHEDULED → CONFIRMED → IN_PROGRESS → COMPLETED
 
 ### Email
 
-**Purpose:** Encapsulate email validation logic.
-
-**Validation:**
-- Must match email format regex
-- Cannot be null when provided
+Encapsulates email validation. Must match a valid format regex. Optional — `null` or blank values are accepted.
 
 ### Phone
 
-**Purpose:** Encapsulate phone number validation.
+Encapsulates phone number validation. Must match a valid format regex. Optional — `null` or blank values are accepted.
 
-**Validation:**
-- Must match phone format regex
-- Cannot be null when provided
+### ServiceType
+
+Enumerates the types of service:
+- `CRECHE` — Daycare
+- `HOTEL` — Hotel/boarding
 
 ### AppointmentStatus
 
-**Purpose:** Represent appointment lifecycle state.
+Represents appointment lifecycle state:
+- `PENDING` — Created, not yet started
+- `ACTIVE` — Pet is currently in service
+- `COMPLETED` — Service finished
+- `CANCELED` — Appointment canceled before completion
 
-**Values:**
-- `SCHEDULED` - Initial state, awaiting confirmation
-- `CONFIRMED` - Confirmed by tutor/clinic
-- `IN_PROGRESS` - Currently happening
-- `COMPLETED` - Finished successfully
-- `CANCELLED` - Cancelled before completion
+### AppointmentSearchQuery
 
----
-
-## Aggregates
-
-### Appointment Aggregate
-
-**Aggregate Root:** `Appointment`
-
-**Responsibilities:**
-- Enforce status transition rules
-- Validate business invariants
-- Maintain consistency within appointment lifecycle
-
-**Why it's an Aggregate:**
-- Status is part of appointment lifecycle
-- Transitions must be atomic
-- External access only through appointment root
+Immutable query object for the daily agenda. Captures the required `date`, optional `status` and `serviceType` filters, and standard pagination parameters (`page`, `perPage`, `sort`, `direction`).
 
 ---
 
 ## Entity Relationships
 
+```mermaid
+erDiagram
+    TUTOR ||--o{ PET : "has many"
+    PET ||--o{ APPOINTMENT : "has many"
+
+    TUTOR {
+        UUID id PK
+        String name
+        String email
+        String phone
+        Instant createdAt
+        Instant updatedAt
+    }
+
+    PET {
+        UUID id PK
+        UUID tutorId FK
+        String name
+        String species
+        String breed
+        LocalDate birthDate
+        String notes
+        Instant createdAt
+        Instant updatedAt
+    }
+
+    APPOINTMENT {
+        UUID id PK
+        UUID petId FK
+        ServiceType serviceType
+        AppointmentStatus status
+        Instant startAt
+        Instant endAt
+        String notes
+        Instant createdAt
+        Instant updatedAt
+    }
 ```
-Tutor (1) ----< (many) Pet
-  |
-  | (via Pet)
-  |
-  +----< (many) Appointment
-```
-
-**Relationships:**
-- A **Tutor** can have many **Pets**
-- A **Pet** belongs to one **Tutor**
-- An **Appointment** is for one **Pet** (and thus one **Tutor**)
-- A **Pet** can have many **Appointments**
-
----
-
-## Business Rules Summary
-
-### Cross-Aggregate Rules
-
-1. **Cannot delete a tutor with existing pets**
-   - Must delete/reassign pets first
-
-2. **Cannot delete a pet with scheduled appointments**
-   - Must complete/cancel appointments first
-
-3. **Appointments inherit tutor from pet**
-   - Pet must exist when creating appointment
-
-### Invariant Protection
-
-All business rules are enforced at the **domain layer**:
-- Entities validate their own state
-- Use cases orchestrate multi-entity operations
-- Infrastructure layer is dumb - just persistence
 
 ---
 
@@ -208,28 +184,17 @@ All business rules are enforced at the **domain layer**:
 | Term | Definition |
 |:-----|:-----------|
 | **Tutor** | Pet owner or guardian |
-| **Pet** | Animal under veterinary care |
-| **Appointment** | Scheduled veterinary visit |
-| **Aggregate** | Consistency boundary in DDD |
-| **Entity** | Domain object with unique identity |
-| **Value Object** | Immutable object without identity |
-| **Invariant** | Business rule that must always be true |
-
----
-
-## Full Documentation
-
-Detailed domain documentation available in repository:
-
-- 📄 [Business Rules](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/domain/business-rules.md)
-- 📄 [Glossary](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/domain/glossary.md)
-- 📄 [ERD Diagram](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/domain/erd.puml)
+| **Pet** | Animal under care at the daycare/hotel |
+| **Appointment** | Scheduled daycare or hotel service for a pet |
+| **Aggregate Root** | Consistency boundary in DDD (Tutor, Appointment) |
+| **Entity** | Domain object with unique identity (Pet) |
+| **Value Object** | Immutable object without identity (Email, Phone, ServiceType, AppointmentStatus, AppointmentSearchQuery) |
+| **Gateway** | Port interface for persistence operations |
 
 ---
 
 ## Related
 
-- [Architecture Decision Records](decisions) - Why we made these design choices
-- [Use Cases](../use-cases) - How the domain is used
-- [API Reference](../api-reference) - REST API for domain operations
-
+- [Architecture Decision Records](decisions) — Design choices
+- [Use Cases](../use-cases) — How the domain is used
+- [API Reference](../api-reference) — REST API for domain operations

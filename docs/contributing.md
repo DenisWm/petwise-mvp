@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Contributing
-nav_order: 10
+nav_order: 8
 ---
 
 # Contributing to PetWise
@@ -77,9 +77,6 @@ cd petwise
 - Improve build configuration
 - Enhance testing infrastructure
 
-{: .note }
-Check the [Implementation Roadmap](implementation-roadmap) for planned features.
-
 ### 2. Create a Branch
 
 ```bash
@@ -112,7 +109,7 @@ Follow the [Architecture Guidelines](#architecture-guidelines) below.
 
 If your change affects:
 - **Architecture** → Update diagrams and ADRs
-- **API** → Update OpenAPI spec
+- **API** → Update annotations on API interfaces, then regenerate: `./gradlew :infrastructure:generateOpenApiDocs`
 - **Use Cases** → Update use case docs and sequence diagrams
 - **Domain Model** → Update ERD, glossary, business rules
 

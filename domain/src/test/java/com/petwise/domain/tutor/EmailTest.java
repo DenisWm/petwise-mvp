@@ -13,7 +13,8 @@ import org.junit.jupiter.api.Test;
     "PMD.UnitTestContainsTooManyAsserts",
     "PMD.UnitTestAssertionsShouldIncludeMessage",
     "PMD.JUnit5TestShouldBePackagePrivate",
-    "PMD.AvoidDuplicateLiterals"
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.TooManyMethods"
 })
 class EmailTest extends UnitTest {
 
@@ -134,5 +135,23 @@ class EmailTest extends UnitTest {
 
         // then
         assertThat(result).isEqualTo(expectedEmail);
+    }
+
+    @Test
+    void givenEmail_whenCompareWithSelf_thenShouldBeEqual() {
+        final var email = Email.from("user@example.com");
+        assertThat(email).isEqualTo(email);
+    }
+
+    @Test
+    void givenEmail_whenCompareWithNull_thenShouldNotBeEqual() {
+        final var email = Email.from("user@example.com");
+        assertThat(email).isNotEqualTo(null);
+    }
+
+    @Test
+    void givenEmail_whenCompareWithDifferentType_thenShouldNotBeEqual() {
+        final var email = Email.from("user@example.com");
+        assertThat(email).isNotEqualTo("user@example.com");
     }
 }

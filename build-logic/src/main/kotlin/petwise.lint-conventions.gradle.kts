@@ -1,10 +1,9 @@
-
 plugins {
     id("com.diffplug.spotless")
     id("petwise.owasp-dependency-check-conventions")
     checkstyle
     pmd
-
+    id("com.github.spotbugs")
 }
 
 // Force patched versions of vulnerable transitive dependencies pulled in by build-time tools
@@ -56,3 +55,15 @@ pmd {
     isIgnoreFailures = false
 }
 
+spotbugs {
+    toolVersion.set("4.8.6")
+    ignoreFailures.set(false)
+    effort.set(com.github.spotbugs.snom.Effort.MAX)
+    reportLevel.set(com.github.spotbugs.snom.Confidence.MEDIUM)
+    excludeFilter.set(rootProject.file("build-logic/config/spotbugs/spotbugs-exclude.xml"))
+}
+
+tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {
+    reports.maybeCreate("xml").required.set(true)
+    reports.maybeCreate("html").required.set(true)
+}

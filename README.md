@@ -53,20 +53,17 @@ PetWise follows a three-layer architecture inspired by Clean Architecture and He
 # Build the project
 ./gradlew build
 
-# Run the application (uses SQLite by default)
+# Run with Docker Compose (PostgreSQL + application)
+docker-compose up --build
+
+# Or run the application with Gradle (requires PostgreSQL)
+# Start only the database: docker-compose up db
 ./gradlew :infrastructure:bootRun
 
 # Access the API
 curl http://localhost:8080/api/v1/tutors
 ```
 
-### Run with Docker Compose
-
-```bash
-docker-compose up --build
-```
-
-This starts PostgreSQL on port 5432 and the application on port 8080.
 
 ---
 
@@ -134,7 +131,7 @@ make clean
 
 ## Contributing
 
-Contributions are welcome. See `docs/contributing.md` for contribution guidelines and the implementation roadmap.
+Contributions are welcome. See `docs/contributing.md` for contribution guidelines.
 
 Quick contributor checklist:
 

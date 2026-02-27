@@ -1,5 +1,7 @@
 package com.petwise;
 
+import com.petwise.infrastructure.appointment.persistence.AppointmentRepository;
+import com.petwise.infrastructure.pet.persistence.PetRepository;
 import com.petwise.infrastructure.tutor.persistence.TutorRepository;
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +27,11 @@ class PostgresCleanUpExtension implements BeforeEachCallback {
     @Override
     public void beforeEach(final ExtensionContext context) {
         final var appContext = SpringExtension.getApplicationContext(context);
-        cleanUp(List.of(appContext.getBean(TutorRepository.class)));
+        cleanUp(
+                List.of(
+                        appContext.getBean(AppointmentRepository.class),
+                        appContext.getBean(PetRepository.class),
+                        appContext.getBean(TutorRepository.class)));
     }
 
     @SuppressWarnings("rawtypes")

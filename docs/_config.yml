@@ -102,8 +102,7 @@ exclude:
   - docker-compose.yml
   - start.sh
   - assets/css/
-#  - architecture/c4/
-  - architecture/domain/
   - architecture/README.md
   - architecture/readme.md
   - diagrams/
+  - use-cases/specs/

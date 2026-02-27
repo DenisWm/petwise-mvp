@@ -2,52 +2,47 @@
 title UC05 - View Daily Agenda (PetWise MVP)\nInfrastructure + Application + Domain
 
 actor User as U  <<Attendant/Manager>>
-participant "Web UI" as UI
 participant "AppointmentController\n(infrastructure)" as C
-participant "ViewDailyAgendaUseCase\n(application)" as UC
+participant "DefaultViewDailyAgendaUseCase\n(application)" as UC
 participant "AppointmentGateway\n(port)" as GApp
-participant "JpaAppointmentRepository\n(adapter)" as AApp
-database "SQLite DB" as DB
+participant "AppointmentPostgresGateway\n(adapter)" as AApp
+database "PostgreSQL" as DB
 
 == Happy Path: View Agenda ==
 
-U -> UI : Open agenda screen
-UI -> UI : Set default date = today\noptional filters: status, type
+U -> C : GET /appointments/agenda\n?date=YYYY-MM-DD&status=&serviceType=&page=&perPage=
+C -> C : Build ViewDailyAgendaCommand
+C -> UC : execute(command)
 
-U -> UI : Select date/filters\nand click \"Search\"
-UI -> C : GET /api/v1/appointments\n?date=YYYY-MM-DD&status=&type=&page=&size=
-C -> UC : execute(query)
-
-UC -> GApp : findByDateAndFilters(query)
-GApp -> AApp : findByDateAndFilters(query)
-AApp -> DB : SELECT * FROM appointment\nWHERE date(start_at) = ?\nAND type/status filters...
+UC -> UC : Build AppointmentSearchQuery\n(date → UTC Instant range)
+UC -> GApp : findDailyAgenda(query)
+GApp -> AApp : findDailyAgenda(query)
+AApp -> DB : SELECT * FROM appointments\nWHERE start_at >= ? AND start_at < ?\nAND status/serviceType filters...
 DB --> AApp : result set (0..n rows)
-AApp --> GApp : list<Appointment>
-GApp --> UC : list<Appointment>
+AApp --> GApp : Pagination<Appointment>
+GApp --> UC : Pagination<Appointment>
 
-UC --> C : Page<AppointmentSummaryResponse>
-C --> UI : 200 OK\nJSON list
-
-UI -> UI : Render agenda table/list
+UC --> UC : map → Pagination<ViewDailyAgendaOutput>
+UC --> C : Pagination<ViewDailyAgendaOutput>
+C --> C : map → Pagination<AppointmentResponse>
+C --> U : 200 OK\nJSON paginated list
 
 == Alternative: No Appointments ==
 
-... same call path ...
-
+U -> C : GET /appointments/agenda?date=2026-12-25
+C -> UC : execute(command)
+UC -> GApp : findDailyAgenda(query)
+GApp -> AApp : query
+AApp -> DB : SELECT ... (no rows)
 DB --> AApp : empty result set
-AApp --> GApp : empty list
-GApp --> UC : empty list
+AApp --> GApp : Pagination(empty)
+GApp --> UC : Pagination(empty)
 UC --> C : empty page
-C --> UI : 200 OK with empty list
-UI -> UI : Show \"No appointments for this day\"
+C --> U : 200 OK with empty list
 
-== Alternative: Invalid Date ==
+== Alternative: Missing Date ==
 
-U -> UI : Enter invalid date format
-UI -> C : GET /api/v1/appointments?date=invalid
-C -> UC : execute(query)
-UC --> C : throws DomainException(Validation)
-C -> "ApiExceptionHandler" as H : handle(DomainException)
-H --> UI : 400 Bad Request\napplication/problem+json
+U -> C : GET /appointments/agenda
+C --> U : 400 Bad Request\n(required parameter 'date' missing)
 
 @enduml

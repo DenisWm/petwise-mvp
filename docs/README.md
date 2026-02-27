@@ -2,20 +2,15 @@
 
 This directory contains the canonical documentation and Jekyll site for the PetWise project.
 
-This README covers:
-- Contents and structure of the documentation
-- How to run and preview the Jekyll site locally
-- Guidelines for maintaining documentation and diagrams
-
 ## Project overview
 
-PetWise is an MVP application that manages tutors, pets, and appointments. The documentation includes:
+PetWise is an MVP application that manages tutors, pets, and appointments for a pet daycare and hotel service. The documentation includes:
 
-- Getting started and developer onboarding guides
+- Getting started and developer onboarding
 - API reference and OpenAPI specification
-- Use cases and sequence diagrams
+- Use cases with portable spec files
 - Architecture (C4) diagrams, domain model, and ADRs
-- Contribution and build system guidance
+- Build system and contribution guidance
 
 Refer to the repository root `README.md` for a high-level project summary.
 
@@ -29,48 +24,53 @@ The documentation site is Jekyll-based and can be run locally using Docker Compo
 ### Run the site locally
 
 ```bash
-# From the repository root
+cd docs
 docker-compose up
 # The site will be available at http://localhost:4000
 ```
 
 ## Documentation structure
 
-Top-level files and folders include:
-
 ```
 docs/
 ├─ _config.yml
 ├─ index.md
 ├─ getting-started.md
-├─ architecture-deep-dive.md
-├─ contributing.md
+├─ architecture.md
+├─ use-cases.md
 ├─ build-system.md
-├─ implementation-roadmap.md
-├─ github-project.md
 ├─ api-reference.md
+├─ contributing.md
+├─ faq.md
+├─ architecture/
+│  ├─ overview.md
+│  ├─ decisions.md
+│  ├─ domain.md
+│  ├─ diagrams.md
+│  ├─ c4/           (PlantUML sources)
+│  ├─ domain/       (business-rules, glossary, ERD)
+│  └─ sequences/    (PlantUML sources)
+├─ use-cases/
+│  ├─ uc-01-register-tutor.md      (Jekyll pages)
+│  ├─ ...
+│  └─ specs/                        (portable specs)
+│     ├─ uc-template.md
+│     ├─ uc-01-register-tutor.md
+│     └─ ...
+├─ api/
+│  ├─ guidelines.md
+│  └─ openapi.yaml
 └─ assets/
 ```
 
 ## Rendering diagrams
 
-Diagram sources are PlantUML (`.puml`) files under `docs/`. Use the repository Makefile to render and publish PNGs:
-
 ```bash
 make diagrams
 ```
 
-## Adding content
-
-- Create pages with standard Jekyll front matter (`layout`, `title`, `nav_order`)
-- Use collections for grouped content (`_architecture`, `_use-cases`, `_api`)
-
-## Validation and testing
-
-To validate the generated site and check for broken links, use HTML validation tools against `_site` after building.
-
 ## Maintenance notes
 
-When updating documentation:
-- Update or add `.puml` diagram sources as needed
 - Keep ADRs and the domain model up to date when architectural changes occur
+- Update use case specs in `use-cases/specs/` (the authoritative source); Jekyll pages are thin wrappers
+- Regenerate `.puml` diagrams with `make diagrams` when sources change
