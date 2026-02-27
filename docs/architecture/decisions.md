@@ -21,9 +21,9 @@ Key architectural decisions documented for future reference.
 
 ## What are ADRs?
 
-Architecture Decision Records (ADRs) document important architectural decisions made during the project. Each ADR captures:
+Architecture Decision Records capture important architectural decisions:
 
-- **Context:** What is the issue we're facing?
+- **Context:** What issue are we facing?
 - **Decision:** What did we decide?
 - **Consequences:** What are the trade-offs?
 
@@ -31,22 +31,21 @@ Architecture Decision Records (ADRs) document important architectural decisions 
 
 ## Decision Records
 
-### ADR-0001: SQLite First Strategy
+### ADR-0001: PostgreSQL with H2 for Tests
 
 **Status:** ✅ Accepted
 
 **Context:**  
-Need a simple database for MVP without complex setup.
+Need a reliable database for the MVP with easy test setup.
 
 **Decision:**  
-Use SQLite for initial development, with clean repository interfaces to allow PostgreSQL migration later.
+Use PostgreSQL as the primary database (via Docker Compose) and H2 as an in-memory database for integration tests. Flyway manages schema migrations.
 
 **Consequences:**
-- ✅ Zero configuration for developers
-- ✅ Easy local testing
-- ⚠️ Limited concurrency (acceptable for MVP)
-
-📄 [Full Document](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/decisions/adr-0001-database-sqlite-first.md)
+- ✅ Production-grade database from the start
+- ✅ H2 provides fast, zero-config test execution
+- ✅ Flyway ensures consistent schema across environments
+- ⚠️ Requires Docker for local development
 
 ---
 
@@ -58,16 +57,24 @@ Use SQLite for initial development, with clean repository interfaces to allow Po
 Appointments need a clear state machine with valid transitions.
 
 **Decision:**  
-Implement explicit status enum with transition validation in the aggregate:
-- `SCHEDULED` → `CONFIRMED` → `IN_PROGRESS` → `COMPLETED`
-- `SCHEDULED` → `CANCELLED`
+Implement a forward-only status lifecycle with transition validation in the aggregate:
+
+```
+PENDING → ACTIVE → COMPLETED
+PENDING → CANCELED
+```
+
+**Valid transitions:**
+- `PENDING` → `ACTIVE`
+- `PENDING` → `CANCELED`
+- `ACTIVE` → `COMPLETED`
+
+No backward transitions. `COMPLETED` and `CANCELED` are terminal states.
 
 **Consequences:**
 - ✅ Business rules enforced at domain level
 - ✅ Clear lifecycle prevents invalid states
-- ℹ️ Status transitions must be explicit
-
-📄 [Full Document](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/decisions/adr-0002-appointment-status-model.md)
+- ✅ Simple and predictable
 
 ---
 
@@ -80,16 +87,14 @@ Need clear separation between entities, value objects, and aggregates.
 
 **Decision:**  
 Apply DDD tactical patterns:
-- **Entities:** Objects with identity (Tutor, Pet, Appointment)
-- **Value Objects:** Immutable, identity-less (Email, Phone, DateRange)
-- **Aggregates:** Consistency boundaries (Appointment manages AppointmentStatus)
+- **Aggregate Roots:** `Tutor`, `Appointment` — consistency boundaries
+- **Entities:** `Pet` — has identity, lives inside Tutor aggregate
+- **Value Objects:** `Email`, `Phone`, `ServiceType`, `AppointmentStatus` — immutable
 
 **Consequences:**
 - ✅ Clear business logic encapsulation
 - ✅ Testable domain model
 - ℹ️ Requires discipline to maintain boundaries
-
-📄 [Full Document](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/decisions/adr-0003-domain-modeling-ddd-basics.md)
 
 ---
 
@@ -101,16 +106,14 @@ Apply DDD tactical patterns:
 Need persistence abstraction without coupling to JPA.
 
 **Decision:**  
-Use repository pattern with domain-level interfaces (gateways):
-- Domain defines contracts (e.g., `TutorGateway`)
-- Infrastructure implements with JPA or other tech
+Use domain-level gateway interfaces as ports:
+- Domain defines contracts (e.g., `TutorGateway`, `PetGateway`, `AppointmentGateway`)
+- Infrastructure implements adapters (e.g., `TutorPostgresGateway`)
 
 **Consequences:**
-- ✅ Domain independent of persistence tech
+- ✅ Domain independent of persistence technology
 - ✅ Easy to test with in-memory implementations
 - ✅ Can swap JPA for other solutions
-
-📄 [Full Document](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/decisions/adr-0004-repository-and-gateway-strategy.md)
 
 ---
 
@@ -124,31 +127,35 @@ Need consistent structure for application layer operations.
 **Decision:**  
 Every use case follows single responsibility:
 ```java
-public interface UseCase<INPUT, OUTPUT> {
-    OUTPUT execute(INPUT input);
+public abstract class UseCase<INPUT, OUTPUT> {
+    public abstract OUTPUT execute(INPUT input);
 }
 ```
 
+Variants: `UnitUseCase<INPUT>` (no output), `NullaryUseCase<OUTPUT>` (no input).
+
 **Consequences:**
 - ✅ Clear, testable, single-purpose operations
-- ✅ Easy to compose and orchestrate
-- ℹ️ One class per use case (can grow file count)
-
-📄 [Full Document](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/decisions/adr-0005-usecase-pattern.md)
+- ✅ 1:1 mapping between documented use cases and code
+- ℹ️ One class per use case (increases file count)
 
 ---
 
 ## ADR Template
 
-Want to create a new ADR? Use our template:
+Use this structure for new ADRs:
 
-📄 [ADR Template](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/decisions/adr-template.md)
+```markdown
+### ADR-NNNN: Title
 
----
+**Status:** Proposed / Accepted / Deprecated / Superseded
 
-## Full ADR Documents
+**Context:**
+What is the issue?
 
-All ADRs are available in the repository:
+**Decision:**
+What did we decide?
 
-📁 [`docs/architecture/decisions/`](https://github.com/deniswm/petwise-mvp/tree/master/docs/architecture/decisions)
-
+**Consequences:**
+What are the trade-offs?
+```

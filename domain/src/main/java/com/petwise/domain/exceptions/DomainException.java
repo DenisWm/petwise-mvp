@@ -1,8 +1,6 @@
 package com.petwise.domain.exceptions;
 
 import com.petwise.domain.validation.Error;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

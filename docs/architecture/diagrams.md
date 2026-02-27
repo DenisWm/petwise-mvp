@@ -47,7 +47,7 @@ The architecture is documented using the **C4 model** for visualizing software a
 **Containers:**
 - **Web Browser** - User interface (future)
 - **REST API** - Spring Boot application
-- **Database** - SQLite (MVP) / PostgreSQL (production)
+- **Database** - PostgreSQL (production), H2 (tests)
 
 <div style="text-align: center;">
   <img src="{{ site.baseurl }}/architecture/c4/c4-container.png" alt="C4 Container" />
@@ -159,11 +159,11 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 ### UC-05: View Daily Agenda
 
 **Flow:**
-1. Client → REST Controller
-2. Controller → Use Case
-3. Use Case queries appointments by date range (via AppointmentGateway)
-4. Use Case optionally enriches with pet/tutor data
-5. Response flows back
+1. Client → REST Controller (`GET /appointments/agenda?date=...`)
+2. Controller builds `ViewDailyAgendaCommand` with date, optional status/serviceType filters
+3. `DefaultViewDailyAgendaUseCase` creates `AppointmentSearchQuery` and delegates to `AppointmentGateway.findDailyAgenda(...)`
+4. Gateway converts date to UTC range, queries by `startAt` within range + optional filters
+5. Paginated response flows back
 
 <div style="text-align: center;">
   <img src="{{ site.baseurl }}/architecture/sequences/uc05-view-daily-agenda.png" alt="UC-05 Sequence Diagram" />

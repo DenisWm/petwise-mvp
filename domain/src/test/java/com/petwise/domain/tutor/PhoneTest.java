@@ -177,4 +177,22 @@ class PhoneTest extends UnitTest {
         // then
         assertThat(result).isEqualTo(expectedPhone);
     }
+
+    @Test
+    void givenPhone_whenCompareWithSelf_thenShouldBeEqual() {
+        final var phone = Phone.from("555-123-4567");
+        assertThat(phone).isEqualTo(phone);
+    }
+
+    @Test
+    void givenPhone_whenCompareWithNull_thenShouldNotBeEqual() {
+        final var phone = Phone.from("555-123-4567");
+        assertThat(phone).isNotEqualTo(null);
+    }
+
+    @Test
+    void givenPhone_whenCompareWithDifferentType_thenShouldNotBeEqual() {
+        final var phone = Phone.from("555-123-4567");
+        assertThat(phone).isNotEqualTo("555-123-4567");
+    }
 }

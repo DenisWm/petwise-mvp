@@ -11,7 +11,7 @@ Quick reference for PetWise REST API endpoints.
 {: .fs-6 .fw-300 }
 
 {: .note }
-> **Complete Specification:** See [OpenAPI YAML](https://github.com/deniswm/petwise-mvp/blob/master/docs/api/openapi.yaml)
+> **Complete Specification:** The [OpenAPI YAML](https://github.com/deniswm/petwise-mvp/blob/master/docs/api/openapi.yaml) is auto-generated from annotated controllers. Run `./gradlew :infrastructure:generateOpenApiDocs` to regenerate.
 
 ## Table of contents
 {: .no_toc .text-delta }
@@ -24,7 +24,7 @@ Quick reference for PetWise REST API endpoints.
 ## Base URL
 
 ```
-http://localhost:8080/api/v1
+http://localhost:8080/api
 ```
 
 ---
@@ -51,7 +51,7 @@ GET /actuator/health
 ### Create Tutor
 
 ```http
-POST /api/v1/tutors
+POST /api/tutors
 Content-Type: application/json
 
 {
@@ -76,7 +76,7 @@ Content-Type: application/json
 ### List Tutors
 
 ```http
-GET /api/v1/tutors?page=0&size=20
+GET /api/tutors?page=0&size=20
 ```
 
 **Response:** `200 OK` (paginated)
@@ -84,7 +84,7 @@ GET /api/v1/tutors?page=0&size=20
 ### Get Tutor by ID
 
 ```http
-GET /api/v1/tutors/{id}
+GET /api/tutors/{id}
 ```
 
 **Response:** `200 OK` or `404 Not Found`
@@ -92,7 +92,7 @@ GET /api/v1/tutors/{id}
 ### Update Tutor
 
 ```http
-PUT /api/v1/tutors/{id}
+PUT /api/tutors/{id}
 Content-Type: application/json
 
 {
@@ -107,7 +107,7 @@ Content-Type: application/json
 ### Delete Tutor
 
 ```http
-DELETE /api/v1/tutors/{id}
+DELETE /api/tutors/{id}
 ```
 
 **Response:** `204 No Content` or `409 Conflict` (if has pets)
@@ -119,7 +119,7 @@ DELETE /api/v1/tutors/{id}
 ### Create Pet
 
 ```http
-POST /api/v1/pets
+POST /api/pets
 Content-Type: application/json
 
 {
@@ -137,7 +137,7 @@ Content-Type: application/json
 ### List Pets
 
 ```http
-GET /api/v1/pets?tutorId={tutorId}&page=0&size=20
+GET /api/pets?tutorId={tutorId}&page=0&size=20
 ```
 
 **Query Parameters:**
@@ -150,7 +150,7 @@ GET /api/v1/pets?tutorId={tutorId}&page=0&size=20
 ### Get Pet by ID
 
 ```http
-GET /api/v1/pets/{id}
+GET /api/pets/{id}
 ```
 
 **Response:** `200 OK` or `404 Not Found`
@@ -158,7 +158,7 @@ GET /api/v1/pets/{id}
 ### Update Pet
 
 ```http
-PUT /api/v1/pets/{id}
+PUT /api/pets/{id}
 ```
 
 **Response:** `200 OK`
@@ -166,7 +166,7 @@ PUT /api/v1/pets/{id}
 ### Delete Pet
 
 ```http
-DELETE /api/v1/pets/{id}
+DELETE /api/pets/{id}
 ```
 
 **Response:** `204 No Content` or `409 Conflict` (if has active appointments)
@@ -178,7 +178,7 @@ DELETE /api/v1/pets/{id}
 ### Create Appointment
 
 ```http
-POST /api/v1/appointments
+POST /api/appointments
 Content-Type: application/json
 
 {
@@ -215,7 +215,7 @@ Content-Type: application/json
 ### Change Appointment Status
 
 ```http
-PATCH /api/v1/appointments/{id}/status
+PATCH /api/appointments/{id}/status
 Content-Type: application/json
 
 {
@@ -243,23 +243,40 @@ PENDING → CANCELED
 ### Get Appointment by ID
 
 ```http
-GET /api/v1/appointments/{id}
+GET /api/appointments/{id}
 ```
 
 **Response:** `200 OK` or `404 Not Found`
 
-### View Daily Agenda
+### List Appointments
 
 ```http
-GET /api/v1/appointments?date=2025-11-28&status=ACTIVE&serviceType=CRECHE
+GET /appointments?page=0&perPage=10&search=CRECHE&sort=startAt&direction=asc
 ```
 
 **Query Parameters:**
-- `date` (required) - Date in `YYYY-MM-DD` format
-- `status` (optional) - `PENDING`, `ACTIVE`, `COMPLETED`, `CANCELED`
-- `serviceType` (optional) - `CRECHE`, `HOTEL`
-- `page` (optional) - Page number
-- `size` (optional) - Page size
+- `page` (optional, default: 0) — Page number (0-based)
+- `perPage` (optional, default: 10) — Items per page
+- `search` (optional) — Free-text search terms
+- `sort` (optional, default: startAt) — Sort field
+- `direction` (optional, default: asc) — Sort direction (asc/desc)
+
+**Response:** `200 OK` (paginated)
+
+### View Daily Agenda
+
+```http
+GET /appointments/agenda?date=2026-02-26&status=ACTIVE&serviceType=CRECHE
+```
+
+**Query Parameters:**
+- `date` (required) — Date in `YYYY-MM-DD` format
+- `status` (optional) — `PENDING`, `ACTIVE`, `COMPLETED`, `CANCELED`
+- `serviceType` (optional) — `CRECHE`, `HOTEL`
+- `page` (optional, default: 0) — Page number
+- `perPage` (optional, default: 20) — Page size
+- `sort` (optional, default: startAt) — Sort field
+- `direction` (optional, default: asc) — Sort direction
 
 **Response:** `200 OK` (paginated)
 
@@ -275,7 +292,7 @@ All errors follow **RFC 7807 Problem Details** format:
   "title": "Resource Not Found",
   "status": 404,
   "detail": "Tutor with ID 550e8400-... not found",
-  "instance": "/api/v1/tutors/550e8400-...",
+  "instance": "/api/tutors/550e8400-...",
   "timestamp": "2025-11-27T10:15:00Z"
 }
 ```
@@ -295,27 +312,30 @@ All errors follow **RFC 7807 Problem Details** format:
 
 ```bash
 # Create a tutor
-curl -X POST http://localhost:8080/api/v1/tutors \
+curl -X POST http://localhost:8080/api/tutors \
   -H "Content-Type: application/json" \
   -d '{"name":"Alice Smith","email":"alice@example.com"}'
 
 # List tutors
-curl http://localhost:8080/api/v1/tutors
+curl http://localhost:8080/api/tutors
 
 # Create a pet (replace TUTOR_ID)
-curl -X POST http://localhost:8080/api/v1/pets \
+curl -X POST http://localhost:8080/api/pets \
   -H "Content-Type: application/json" \
   -d '{"tutorId":"TUTOR_ID","name":"Fluffy","species":"Cat"}'
 
-# View today's agenda
-curl "http://localhost:8080/api/v1/appointments?date=$(date +%Y-%m-%d)"
+# List appointments
+curl "http://localhost:8080/api/appointments?page=0&perPage=10&sort=startAt&direction=asc"
+
+# View daily agenda
+curl "http://localhost:8080/api/appointments/agenda?date=$(date +%Y-%m-%d)"
 ```
 
 ---
 
 ## Further Reading
 
-- [API Guidelines](https://github.com/deniswm/petwise-mvp/blob/master/docs/api/guidelines.md)
+- [API Guidelines](api/guidelines)
 - [OpenAPI Specification](https://github.com/deniswm/petwise-mvp/blob/master/docs/api/openapi.yaml)
 - [Use Cases](use-cases/)
 

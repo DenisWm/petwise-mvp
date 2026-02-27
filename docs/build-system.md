@@ -71,7 +71,7 @@ spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-start
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 
 [bundles]
-spring-boot-starter = ["spring-boot-starter-web", "spring-boot-starter-validation"]
+spring-boot-starter = ["spring-boot-starter-validation", "spring-boot-starter-data-jpa"]
 
 [plugins]
 spring-boot-app-convention = { id = "petwise.spring-boot-app-conventions" }
@@ -166,27 +166,43 @@ With convention plugins, module build files are minimal:
 plugins {
     alias(libs.plugins.java.library.convention)
 }
+
+dependencies {
+    testImplementation(libs.assertj.core)
+}
 ```
 
-That's it! The convention plugin provides Java 21, JUnit 5, Spotless, and JaCoCo.
+The convention plugin provides Java 21, JUnit 5, Spotless, and JaCoCo. Only test-specific dependencies are declared explicitly.
 
 ### Infrastructure Module
 
 ```kotlin
 plugins {
     alias(libs.plugins.spring.boot.app.convention)
+    alias(libs.plugins.springdoc.openapi)
 }
 
 dependencies {
     implementation(project(":application"))
     implementation(project(":domain"))
-    
+
     implementation(libs.bundles.spring.boot.starter)
+    implementation(libs.spring.boot.starter.undertow)
     implementation(libs.spring.boot.starter.web)
-    
+    { exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat") }
+    implementation(libs.springdoc.openapi.starter.webmvc.ui)
+
     runtimeOnly(libs.postgresql)
-    
+
     testImplementation(libs.spring.boot.starter.test)
+    testRuntimeOnly(libs.h2)
+}
+
+openApi {
+    apiDocsUrl.set("http://localhost:8080/api/v3/api-docs.yaml")
+    outputDir.set(layout.projectDirectory.dir("../docs/api"))
+    outputFileName.set("openapi.yaml")
+    forkProperties.set("-Dspring.profiles.active=test-integration")
 }
 ```
 
@@ -235,6 +251,14 @@ dependencies {
 ./gradlew spotlessCheck
 ./gradlew spotlessApply
 ```
+
+### Generate OpenAPI Specification
+
+```bash
+./gradlew :infrastructure:generateOpenApiDocs
+```
+
+Starts the application with H2 (test-integration profile), fetches the spec from Springdoc, and writes it to `docs/api/openapi.yaml`. Do not edit that file by hand — update the `@Operation` / `@Parameter` annotations on the API interfaces instead.
 
 ---
 

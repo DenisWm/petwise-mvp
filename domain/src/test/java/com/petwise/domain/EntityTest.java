@@ -20,7 +20,8 @@ import org.junit.jupiter.api.Test;
     "PMD.JUnit5TestShouldBePackagePrivate",
     "PMD.UnitTestAssertionsShouldIncludeMessage",
     "PMD.LongVariable",
-    "PMD.AvoidDuplicateLiterals"
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.ShortVariable"
 })
 class EntityTest extends UnitTest {
 
@@ -84,6 +85,58 @@ class EntityTest extends UnitTest {
         assertEquals(expectedRemainingEvents, anEntity.getDomainEvents().size());
         assertEquals(expectedPublishedEvents, publishedCount.get());
         assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
+    }
+
+    @Test
+    @DisplayName("should be a no-op when publishDomainEvents is called with null publisher")
+    void shouldBeNoOp_whenPublishDomainEventsCalledWithNullPublisher() {
+        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+        anEntity.registerEvent(Instant::now);
+
+        // must not throw
+        anEntity.publishDomainEvents(null);
+
+        // events should still be present since publish did nothing
+        assertEquals(1, anEntity.getDomainEvents().size());
+    }
+
+    @Test
+    @DisplayName("should silently ignore null events passed to registerEvent")
+    void shouldIgnoreNullEvent_whenRegisterEventCalledWithNull() {
+        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+        anEntity.registerEvent(null);
+        assertTrue(anEntity.getDomainEvents().isEmpty());
+    }
+
+    @Test
+    @DisplayName("should be equal to itself")
+    void shouldBeEqualToItself() {
+        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+        assertEquals(anEntity, anEntity);
+    }
+
+    @Test
+    @DisplayName("should not be equal to null")
+    void shouldNotBeEqualToNull() {
+        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+        assertNotEquals(null, anEntity);
+    }
+
+    @Test
+    @DisplayName("should not be equal to a different class instance")
+    void shouldNotBeEqualToDifferentClassInstance() {
+        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+        assertNotEquals("not-an-entity", anEntity);
+    }
+
+    @Test
+    @DisplayName("two entities with the same ID should be equal")
+    void shouldBeEqual_whenSameId() {
+        final var id = new DummyID();
+        final var entity1 = new DummyEntity(id, new ArrayList<>());
+        final var entity2 = new DummyEntity(id, new ArrayList<>());
+        assertEquals(entity1, entity2);
+        assertEquals(entity1.hashCode(), entity2.hashCode());
     }
 
     /** Dummy identifier for testing. */

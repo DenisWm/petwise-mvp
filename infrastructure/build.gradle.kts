@@ -1,5 +1,8 @@
+import org.gradle.jvm.tasks.Jar
+
 plugins {
     alias(libs.plugins.spring.boot.app.convention)
+    alias(libs.plugins.springdoc.openapi)
 }
 
 
@@ -21,4 +24,18 @@ dependencies {
     testImplementation(libs.spring.boot.starter.test)
     testRuntimeOnly(libs.h2)
 
+}
+
+openApi {
+    apiDocsUrl.set("http://localhost:8080/api/v3/api-docs.yaml")
+    outputDir.set(layout.projectDirectory.dir("../docs/api"))
+    outputFileName.set("openapi.yaml")
+//    forkProperties.set("-Dspring.profiles.active=test-integration")
+}
+
+tasks.named("forkedSpringBootRun") {
+    val domainJar = project(":domain").tasks.named<Jar>("jar").flatMap { it.archiveFile }
+    val applicationJar = project(":application").tasks.named<Jar>("jar").flatMap { it.archiveFile }
+    inputs.file(domainJar)
+    inputs.file(applicationJar)
 }

@@ -4,7 +4,6 @@ import com.petwise.domain.exceptions.DomainException;
 import com.petwise.domain.validation.Error;
 import com.petwise.domain.validation.ValidationHandler;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

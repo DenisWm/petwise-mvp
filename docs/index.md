@@ -2,7 +2,7 @@
 layout: default
 title: Home
 nav_order: 1
-description: "PetWise is a pedagogical Spring Boot application demonstrating Clean Architecture, Domain-Driven Design, and modern Java practices."
+description: "PetWise – Clean Architecture & DDD reference implementation with Spring Boot 3 and Java 21."
 permalink: /
 ---
 
@@ -49,16 +49,11 @@ New to the project? Start here:
 
 ### 📚 Core Documentation
 
-**Architecture**
-- [Architecture Deep Dive](architecture-deep-dive) - Design patterns and decisions
-- [C4 Diagrams](architecture/c4/) - System visualization
-- [Domain Model](architecture/domain/) - ERD, glossary, business rules
-- [ADRs](architecture/decisions/) - Architectural decision records
-
-**Implementation**
-- [Use Cases](use-cases/) - UC-01 through UC-06
-- [API Documentation](api/) - OpenAPI spec and guidelines
-- [Build System](build-system) - Gradle convention plugins
+- [Architecture Overview](architecture/overview) — Layers, modules, patterns and decisions
+- [Domain Model](architecture/domain) — ERD, glossary, business rules
+- [Use Cases](use-cases/) — UC-01 through UC-06
+- [API Reference](api-reference) — REST endpoints and OpenAPI spec
+- [Build System](build-system) — Gradle convention plugins
 
 </div>
 
@@ -66,32 +61,10 @@ New to the project? Start here:
 
 ### 🤝 Contributing
 
-Want to contribute or learn by implementing?
-
-- [**Contributing Guide**](contributing) - How to contribute
-- [**Implementation Roadmap**](implementation-roadmap) - 34 issues ready to implement
-- [**GitHub Project**](github-project) - Team workflow
+- [**Contributing Guide**](contributing) — How to contribute
+- [**FAQ**](faq) — Common questions
 
 </div>
-
----
-
-## Key Features
-
-Clean Architecture
-{: .label .label-blue }
-
-Domain-Driven Design
-{: .label .label-green }
-
-Multi-Module Gradle
-{: .label .label-purple }
-
-Java 21
-{: .label .label-yellow }
-
-Spring Boot 3
-{: .label .label-red }
 
 ---
 
@@ -100,39 +73,13 @@ Spring Boot 3
 | Layer | Technologies |
 |:------|:-------------|
 | **Backend** | Java 21, Spring Boot 3.5.7, Spring Data JPA |
-| **Build** | Gradle 8.14 (Kotlin DSL), custom convention plugins |
-| **Database** | SQLite (default), PostgreSQL (Docker) |
-| **Testing** | JUnit 5, Spring Boot Test, JaCoCo |
-| **Quality** | Spotless (Google Java Format) |
+| **Build** | Gradle 8.14 (Kotlin DSL), convention plugins |
+| **Database** | PostgreSQL (Docker Compose), H2 (tests) |
+| **Web Server** | Undertow |
+| **Testing** | JUnit 5, Mockito, AssertJ, Spring Boot Test, JaCoCo |
+| **Quality** | Spotless, SpotBugs, PMD, Checkstyle, OWASP Dependency-Check |
 | **Diagrams** | PlantUML, C4 Model |
-| **API** | REST, OpenAPI 3.0 |
-
----
-
-## Learning Path
-
-{: .highlight }
-Follow this path to master the codebase:
-
-**Level 1: Getting Started** (30-60 minutes)
-1. Read the [Getting Started Guide](getting-started)
-2. Run the project locally
-3. Explore the API with curl
-
-**Level 2: Domain Understanding** (1-2 hours)
-1. Review [Use Cases](use-cases/)
-2. Study the [Domain Model](architecture/domain/)
-3. Understand [Business Rules](architecture/domain/business-rules)
-
-**Level 3: Architecture** (2-3 hours)
-1. Read [Architecture Deep Dive](architecture-deep-dive)
-2. View [C4 Diagrams](architecture/c4/)
-3. Trace a use case through all layers
-
-**Level 4: Contributing** (1-2 hours)
-1. Read [Contributing Guide](contributing)
-2. Review [Build System](build-system)
-3. Pick an issue from the [Roadmap](implementation-roadmap)
+| **API** | REST, OpenAPI 3.0, Springdoc |
 
 ---
 
@@ -147,15 +94,7 @@ PetWise serves three complementary purposes:
 ---
 
 {: .warning }
-> **Note:** This is an MVP (Minimum Viable Product) focused on demonstrating architectural patterns. Production deployment requires additional security, monitoring, and infrastructure considerations.
-
----
-
-## Need Help?
-
-- **Documentation Issues?** [Report here](https://github.com/deniswm/petwise-mvp/issues)
-- **Questions?** [Start a discussion](https://github.com/deniswm/petwise-mvp/discussions)
-- **Contributing?** Read the [Contributing Guide](contributing)
+> This is an MVP focused on demonstrating architectural patterns. Production deployment requires additional security, monitoring, and infrastructure considerations.
 
 ---
 

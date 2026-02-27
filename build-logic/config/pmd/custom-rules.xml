@@ -61,4 +61,12 @@
     <!-- Uncomment this if do want to exclude tests classes from analysis -->
     <!-- <exclude-pattern>.*/src/test/.*</exclude-pattern> -->
 
+    <!-- Allow variable names up to 20 characters to accommodate descriptive
+         domain names like appointmentGateway and appointmentIdValue -->
+    <rule ref="category/java/codestyle.xml/LongVariable">
+        <properties>
+            <property name="minimum" value="21" />
+        </properties>
+    </rule>
+
 </ruleset>

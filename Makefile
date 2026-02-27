@@ -49,6 +49,13 @@ clean-dry-run:
 	@echo "🧹 Dry-run: PNGs that would be removed (excluding published assets and images):"
 	@find docs -type f -name '*.png' ! -path 'docs/_site/*' ! -path 'docs/assets/diagrams/*' ! -path 'docs/assets/images/*' -print
 
+# Generate OpenAPI spec from annotated controllers (requires no external DB)
+.PHONY: openapi
+openapi:
+	@echo "📝 Generating OpenAPI specification..."
+	@./gradlew :infrastructure:generateOpenApiDocs
+	@echo "✅ docs/api/openapi.yaml updated"
+
 # Help (default)
 .PHONY: help
 help:
@@ -61,6 +68,7 @@ help:
 	@echo "  make clean             Delete all generated .png files under docs/"
 	@echo "  make <path>.png        Render a single diagram (side-by-side)"
 	@echo "  make publish           Copy generated .png files into docs/assets/diagrams preserving subfolders"
+	@echo "  make openapi           Generate docs/api/openapi.yaml from annotated controllers"
 	@echo ""
 	@echo "Examples:"
 	@echo "  make diagrams"

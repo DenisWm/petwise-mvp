@@ -66,22 +66,7 @@ This will:
 
 ## Running the Application
 
-### Option 1: Local Development (SQLite)
-
-By default, PetWise uses **SQLite** for local development:
-
-```bash
-./gradlew :infrastructure:bootRun
-```
-
-The application starts on **http://localhost:8080**
-
-{: .note }
-> SQLite requires zero configuration and is perfect for local development and learning.
-
-### Option 2: Docker Compose (PostgreSQL)
-
-To run with PostgreSQL in Docker:
+### Docker Compose (recommended)
 
 ```bash
 docker-compose up --build
@@ -91,24 +76,27 @@ This starts:
 - **PostgreSQL** on port 5432
 - **PetWise API** on port 8080
 
-### Option 3: Standalone Docker
+### Standalone Docker
 
 ```bash
 docker build -t petwise:latest .
 docker run -p 8080:8080 petwise:latest
 ```
 
+### Local Development
+
+```bash
+./gradlew :infrastructure:bootRun
+```
+
+{: .note }
+> Running locally requires a PostgreSQL instance. Use `docker-compose up db` to start only the database, then run the application with Gradle.
+
 ---
 
 ## Exploring the API
 
-### Health Check
-
-```bash
-curl http://localhost:8080/actuator/health
-```
-
-### Example: Create a Tutor
+### Create a Tutor
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/tutors \
@@ -120,16 +108,6 @@ curl -X POST http://localhost:8080/api/v1/tutors \
   }'
 ```
 
-**Response:**
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "name": "Alice Smith",
-  "email": "alice@example.com",
-  "phone": "+1234567890"
-}
-```
-
 ### List Tutors
 
 ```bash
@@ -137,7 +115,7 @@ curl http://localhost:8080/api/v1/tutors
 ```
 
 {: .highlight }
-For a complete API reference, see the [API Reference](api-reference) page.
+For the complete API reference, see the [API Reference](api-reference) page.
 
 ---
 
@@ -200,10 +178,10 @@ PetWise uses **Spotless** with **Google Java Format** to ensure consistent code 
 
 Now that you have the project running:
 
-1. **Explore the Architecture** - Read [Architecture Deep Dive](architecture-deep-dive)
-2. **Understand the Domain** - Review [Domain Model](architecture/domain/)
-3. **Try the API** - See [API Reference](api-reference)
-4. **Contribute** - Check out the [Contributing Guide](contributing)
+1. [**Architecture Overview**](architecture/overview) — Understand the design
+2. [**Domain Model**](architecture/domain/) — Review entities and business rules
+3. [**API Reference**](api-reference) — Explore the REST API
+4. [**Contributing Guide**](contributing) — Learn how to contribute
 
 ---
 

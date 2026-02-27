@@ -14,6 +14,18 @@ import java.util.function.Function;
  */
 public record Pagination<T>(int currentPage, int perPage, long total, List<T> items) {
 
+    /**
+     * Canonical constructor.
+     *
+     * <p>Performs a defensive copy of the {@code items} list to ensure the stored list is
+     * unmodifiable. Note: {@link List#copyOf(java.util.Collection)} will throw {@link
+     * NullPointerException} if {@code items} or any of its elements is {@code null}.
+     *
+     * @param currentPage zero-based page index
+     * @param perPage maximum number of items per page
+     * @param total total number of items across all pages
+     * @param items the items on the current page
+     */
     public Pagination {
         items = List.copyOf(items);
     }
