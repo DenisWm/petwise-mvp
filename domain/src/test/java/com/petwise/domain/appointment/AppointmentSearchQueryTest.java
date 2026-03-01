@@ -22,7 +22,7 @@ class AppointmentSearchQueryTest {
 
     @Test
     @DisplayName("Should create query with all parameters")
-    void shouldCreateQueryWithAllParameters() {
+    void givenAllParameters_whenCreateQuery_thenShouldStoreAllFields() {
         final var date = LocalDate.of(2026, 2, 26);
         final var query =
                 new AppointmentSearchQuery(
@@ -45,7 +45,7 @@ class AppointmentSearchQueryTest {
 
     @Test
     @DisplayName("Should allow null status and serviceType")
-    void shouldAllowNullOptionalFilters() {
+    void givenNullOptionalFilters_whenCreateQuery_thenShouldAllowNulls() {
         final var date = LocalDate.of(2026, 2, 26);
         final var query = new AppointmentSearchQuery(date, null, null, 0, 10, "startAt", "asc");
 
@@ -56,7 +56,7 @@ class AppointmentSearchQueryTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when date is null")
-    void shouldThrowWhenDateIsNull() {
+    void givenNullDate_whenCreateQuery_thenShouldThrowNullPointerException() {
         assertThrows(
                 NullPointerException.class,
                 () -> new AppointmentSearchQuery(null, null, null, 0, 10, "startAt", "asc"));

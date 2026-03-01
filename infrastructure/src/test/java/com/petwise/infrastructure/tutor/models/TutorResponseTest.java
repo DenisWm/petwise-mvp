@@ -26,7 +26,7 @@ class TutorResponseTest {
     @Autowired private JacksonTester<TutorResponse> json;
 
     @Test
-    void testSerialize() throws Exception {
+    void givenValidResponse_whenSerialize_thenShouldContainAllFields() throws Exception {
         // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
@@ -58,7 +58,7 @@ class TutorResponseTest {
     }
 
     @Test
-    void testDeserialize() throws Exception {
+    void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -85,7 +85,7 @@ class TutorResponseTest {
     }
 
     @Test
-    void testSerializeWithNullEmail() throws Exception {
+    void givenResponseWithNullEmail_whenSerialize_thenShouldOmitEmail() throws Exception {
         // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
@@ -110,7 +110,7 @@ class TutorResponseTest {
     }
 
     @Test
-    void testDeserializeWithNullEmail() throws Exception {
+    void givenJsonWithoutEmail_whenDeserialize_thenShouldMapEmailAsNull() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -136,7 +136,7 @@ class TutorResponseTest {
     }
 
     @Test
-    void testSerializeWithNullPhone() throws Exception {
+    void givenResponseWithNullPhone_whenSerialize_thenShouldOmitPhone() throws Exception {
         // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
@@ -163,7 +163,7 @@ class TutorResponseTest {
     }
 
     @Test
-    void testDeserializeWithNullPhone() throws Exception {
+    void givenJsonWithoutPhone_whenDeserialize_thenShouldMapPhoneAsNull() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -189,7 +189,7 @@ class TutorResponseTest {
     }
 
     @Test
-    void testSerializeWithBothNullEmailAndPhone() throws Exception {
+    void givenResponseWithNullEmailAndPhone_whenSerialize_thenShouldOmitBoth() throws Exception {
         // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");

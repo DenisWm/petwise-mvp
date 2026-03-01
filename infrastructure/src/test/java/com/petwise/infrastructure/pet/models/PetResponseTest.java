@@ -27,7 +27,7 @@ class PetResponseTest {
     @Autowired private JacksonTester<PetResponse> json;
 
     @Test
-    void testSerialize() throws Exception {
+    void givenValidResponse_whenSerialize_thenShouldContainAllFields() throws Exception {
         // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
@@ -65,7 +65,7 @@ class PetResponseTest {
     }
 
     @Test
-    void testDeserialize() throws Exception {
+    void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -98,7 +98,7 @@ class PetResponseTest {
     }
 
     @Test
-    void testSerializeWithNullOptionalFields() throws Exception {
+    void givenResponseWithNullOptionals_whenSerialize_thenShouldOmitOptionals() throws Exception {
         // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
@@ -127,7 +127,7 @@ class PetResponseTest {
     }
 
     @Test
-    void testDeserializeWithMissingOptionalFields() throws Exception {
+    void givenJsonWithoutOptionals_whenDeserialize_thenShouldMapOptionalsAsNull() throws Exception {
         // given
         final var jsonContent =
                 """

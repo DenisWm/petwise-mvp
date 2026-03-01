@@ -63,7 +63,7 @@ class GetPetByIdUseCaseTest {
 
     @Test
     @DisplayName("Should return pet output when pet exists")
-    void shouldReturnPetOutputWhenPetExists() {
+    void givenExistingPet_whenExecute_thenShouldReturnPetOutput() {
         // Given
         when(petGateway.findById(petId)).thenReturn(Optional.of(pet));
 
@@ -82,7 +82,7 @@ class GetPetByIdUseCaseTest {
 
     @Test
     @DisplayName("Should throw NotFoundException when pet does not exist")
-    void shouldThrowNotFoundExceptionWhenPetDoesNotExist() {
+    void givenNonExistingPet_whenExecute_thenShouldThrowNotFoundException() {
         // Given
         when(petGateway.findById(petId)).thenReturn(Optional.empty());
 
@@ -94,14 +94,14 @@ class GetPetByIdUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when ID is null")
-    void shouldThrowNullPointerExceptionWhenIdIsNull() {
+    void givenNullId_whenExecute_thenShouldThrowNullPointerException() {
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
         verify(petGateway, never()).findById(any());
     }
 
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
-    void shouldThrowNullPointerExceptionWhenGatewayIsNull() {
+    void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
         assertThrows(NullPointerException.class, () -> new DefaultGetPetByIdUseCase(null));
     }
 }

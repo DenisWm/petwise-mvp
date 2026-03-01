@@ -26,7 +26,7 @@ class ChangeAppointmentStatusRequestTest {
     @Autowired private JacksonTester<ChangeAppointmentStatusRequest> json;
 
     @Test
-    void testSerialize() throws Exception {
+    void givenValidRequest_whenSerialize_thenShouldContainStatus() throws Exception {
         // given
         final var request = new ChangeAppointmentStatusRequest(AppointmentStatus.ACTIVE);
 
@@ -38,7 +38,7 @@ class ChangeAppointmentStatusRequestTest {
     }
 
     @Test
-    void testDeserialize() throws Exception {
+    void givenValidJson_whenDeserialize_thenShouldMapStatus() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -55,7 +55,7 @@ class ChangeAppointmentStatusRequestTest {
     }
 
     @Test
-    void testSerializePendingStatus() throws Exception {
+    void givenPendingStatus_whenSerialize_thenShouldContainPending() throws Exception {
         // given
         final var request = new ChangeAppointmentStatusRequest(AppointmentStatus.PENDING);
 
@@ -67,7 +67,7 @@ class ChangeAppointmentStatusRequestTest {
     }
 
     @Test
-    void testSerializeCompletedStatus() throws Exception {
+    void givenCompletedStatus_whenSerialize_thenShouldContainCompleted() throws Exception {
         // given
         final var request = new ChangeAppointmentStatusRequest(AppointmentStatus.COMPLETED);
 
@@ -79,7 +79,7 @@ class ChangeAppointmentStatusRequestTest {
     }
 
     @Test
-    void testDeserializeAllStatuses() throws Exception {
+    void givenAllStatuses_whenDeserialize_thenShouldMapEachCorrectly() throws Exception {
         for (final var status : AppointmentStatus.values()) {
             // given
             final var jsonContent = "{\"status\": \"" + status.name() + "\"}";

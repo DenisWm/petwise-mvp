@@ -66,7 +66,7 @@ class ChangeAppointmentStatusUseCaseTest {
 
     @Test
     @DisplayName("Should change status from PENDING to ACTIVE successfully")
-    void shouldChangeStatusToActiveSuccessfully() {
+    void givenPendingAppointment_whenChangeToActive_thenShouldSucceed() {
         // Given
         final var command =
                 ChangeAppointmentStatusCommand.with(
@@ -86,7 +86,7 @@ class ChangeAppointmentStatusUseCaseTest {
 
     @Test
     @DisplayName("Should change status from PENDING to CANCELED successfully")
-    void shouldChangeStatusToCanceledSuccessfully() {
+    void givenPendingAppointment_whenChangeToCanceled_thenShouldSucceed() {
         // Given
         final var command =
                 ChangeAppointmentStatusCommand.with(
@@ -103,7 +103,7 @@ class ChangeAppointmentStatusUseCaseTest {
 
     @Test
     @DisplayName("Should throw DomainException on invalid status transition")
-    void shouldThrowDomainExceptionOnInvalidTransition() {
+    void givenPendingAppointment_whenChangeToCompleted_thenShouldThrowDomainException() {
         // Given — PENDING cannot go to COMPLETED directly
         final var command =
                 ChangeAppointmentStatusCommand.with(
@@ -117,7 +117,7 @@ class ChangeAppointmentStatusUseCaseTest {
 
     @Test
     @DisplayName("Should throw NotFoundException when appointment does not exist")
-    void shouldThrowNotFoundExceptionWhenAppointmentDoesNotExist() {
+    void givenNonExistingAppointment_whenExecute_thenShouldThrowNotFoundException() {
         // Given
         final var command =
                 ChangeAppointmentStatusCommand.with(
@@ -130,14 +130,14 @@ class ChangeAppointmentStatusUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when command is null")
-    void shouldThrowNullPointerExceptionWhenCommandIsNull() {
+    void givenNullCommand_whenExecute_thenShouldThrowNullPointerException() {
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
         verify(appointmentGateway, never()).save(any());
     }
 
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
-    void shouldThrowNullPointerExceptionWhenGatewayIsNull() {
+    void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
         assertThrows(
                 NullPointerException.class, () -> new DefaultChangeAppointmentStatusUseCase(null));
     }

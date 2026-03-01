@@ -16,6 +16,17 @@ tasks.named<JacocoReport>("jacocoTestReport") {
         xml.required.set(true)
         html.required.set(true)
     }
+    classDirectories.setFrom(
+        classDirectories.files.map { dir ->
+            fileTree(dir) {
+                exclude("**/package-info.class")
+                exclude("**/NullaryUseCase.class")
+                exclude("**/UnitUseCase.class")
+                exclude("**/UseCase.class")
+                exclude("**/Main.class")
+            }
+        }
+    )
 }
 
 tasks.named("check") {

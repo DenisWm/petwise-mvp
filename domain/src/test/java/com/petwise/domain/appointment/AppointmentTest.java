@@ -219,6 +219,25 @@ class AppointmentTest extends UnitTest {
     }
 
     @Test
+    void givenValidAppointment_whenValidate_thenShouldNotHaveErrors() {
+        // given
+        final var appointment =
+                Appointment.newAppointment(
+                        PetID.unique(),
+                        ServiceType.CRECHE,
+                        Instant.parse("2025-11-28T08:00:00Z"),
+                        Instant.parse("2025-11-28T18:00:00Z"),
+                        "Notes");
+        final var notification = com.petwise.domain.validation.handler.Notification.create();
+
+        // when
+        appointment.validate(notification);
+
+        // then
+        assertThat(notification.hasErrors()).isFalse();
+    }
+
+    @Test
     void givenCanceledAppointment_whenChangeStatus_thenShouldThrowDomainException() {
         // given
         final var appointment =

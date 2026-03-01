@@ -65,7 +65,7 @@ class GetAppointmentByIdUseCaseTest {
 
     @Test
     @DisplayName("Should return appointment output when appointment exists")
-    void shouldReturnAppointmentOutputWhenExists() {
+    void givenExistingAppointment_whenExecute_thenShouldReturnAppointmentOutput() {
         // Given
         when(appointmentGateway.findById(appointmentId)).thenReturn(Optional.of(appointment));
 
@@ -84,7 +84,7 @@ class GetAppointmentByIdUseCaseTest {
 
     @Test
     @DisplayName("Should throw NotFoundException when appointment does not exist")
-    void shouldThrowNotFoundExceptionWhenAppointmentDoesNotExist() {
+    void givenNonExistingAppointment_whenExecute_thenShouldThrowNotFoundException() {
         // Given
         when(appointmentGateway.findById(appointmentId)).thenReturn(Optional.empty());
 
@@ -95,14 +95,14 @@ class GetAppointmentByIdUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when ID is null")
-    void shouldThrowNullPointerExceptionWhenIdIsNull() {
+    void givenNullId_whenExecute_thenShouldThrowNullPointerException() {
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
         verify(appointmentGateway, never()).findById(any());
     }
 
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
-    void shouldThrowNullPointerExceptionWhenGatewayIsNull() {
+    void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
         assertThrows(NullPointerException.class, () -> new DefaultGetAppointmentByIdUseCase(null));
     }
 }
