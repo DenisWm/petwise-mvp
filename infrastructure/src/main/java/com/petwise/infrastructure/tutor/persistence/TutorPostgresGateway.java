@@ -7,6 +7,8 @@ import com.petwise.domain.tutor.TutorGateway;
 import com.petwise.domain.tutor.TutorID;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @SuppressWarnings({"PMD.ShortVariable", "PMD.LiteralsFirstInComparisons"})
 public class TutorPostgresGateway implements TutorGateway {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG = LoggerFactory.getLogger(TutorPostgresGateway.class);
 
     /** The underlying Spring Data JPA repository. */
     private final TutorRepository repository;
@@ -42,6 +47,9 @@ public class TutorPostgresGateway implements TutorGateway {
     @Override
     @Transactional
     public Tutor save(final Tutor tutor) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Persisting tutor with id={}", tutor.getId().getValue());
+        }
         return this.repository.save(TutorJpaEntity.from(tutor)).toAggregate();
     }
 
@@ -53,6 +61,9 @@ public class TutorPostgresGateway implements TutorGateway {
     @Override
     @Transactional(readOnly = true)
     public Optional<Tutor> findById(final TutorID anId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Finding tutor by id={}", anId.getValue());
+        }
         return this.repository.findById(anId.getValue()).map(TutorJpaEntity::toAggregate);
     }
 
@@ -101,6 +112,9 @@ public class TutorPostgresGateway implements TutorGateway {
     @Override
     @Transactional
     public void deleteById(final TutorID anId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Deleting tutor by id={}", anId.getValue());
+        }
         this.repository.deleteById(anId.getValue());
     }
 }

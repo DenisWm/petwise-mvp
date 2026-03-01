@@ -1,10 +1,6 @@
-# UC-02 – Register Pet
-
-> Allow an attendant to register a new pet and associate it with an existing tutor.
-
 ## Goal
 
-Allow an attendant to register a new pet and associate it with an existing tutor.
+Register a new pet and associate it with an existing tutor.
 
 ## Primary Actor
 

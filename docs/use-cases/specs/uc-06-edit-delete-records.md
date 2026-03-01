@@ -1,10 +1,6 @@
-# UC-06 – Edit/Delete Records
-
-> Allow an attendant to update or remove tutor and pet records, while respecting domain constraints.
-
 ## Goal
 
-Allow an attendant to update or remove tutor and pet records, while respecting domain constraints.
+Update or remove tutor and pet records, while respecting domain constraints.
 
 ## Primary Actor
 

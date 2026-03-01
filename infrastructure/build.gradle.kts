@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":domain"))
 
     implementation(libs.bundles.spring.boot.starter)
+    implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.undertow)
     implementation(libs.spring.boot.starter.web)
     { exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat") }
@@ -20,6 +21,7 @@ dependencies {
     implementation(libs.flyway.database.postgresql)
 
     runtimeOnly(libs.postgresql)
+    runtimeOnly(libs.logstash.logback.encoder)
 
     testImplementation(libs.spring.boot.starter.test)
     testRuntimeOnly(libs.h2)

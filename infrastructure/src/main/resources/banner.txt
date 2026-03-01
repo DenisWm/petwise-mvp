@@ -1,0 +1,12 @@
+
+${AnsiColor.CYAN}    ____       __  _       ___
+   / __ \___  / /_| |     / (_)_______
+  / /_/ / _ \/ __/| | /| / / / ___/ _ \
+ / ____/  __/ /_  | |/ |/ / (__  )  __/
+/_/    \___/\__/  |__/|__/_/____/\___/${AnsiColor.DEFAULT}
+
+  ${AnsiColor.GREEN}:: ${spring.application.name} ::${AnsiColor.DEFAULT}   v${application.version:1.0.0-SNAPSHOT}
+  ${AnsiColor.YELLOW}:: Spring Boot ${spring-boot.version} ::${AnsiColor.DEFAULT}
+  ${AnsiColor.MAGENTA}:: Profile(s): ${spring.profiles.active:default}${AnsiColor.DEFAULT}
+  ${AnsiColor.BLUE}:: Java: ${java.version} | PID: ${PID}${AnsiColor.DEFAULT}
+

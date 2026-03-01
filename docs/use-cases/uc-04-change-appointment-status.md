@@ -20,7 +20,10 @@ Allow an attendant to update the status of an existing appointment following val
 ## Sequence Diagram
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/sequences/uc04-change-appointment-status.png" alt="UC-04 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc04-change-appointment-status.png" alt="UC-04 Sequence Diagram" />
 </div>
+
+{: .note }
+> If the diagram is not visible, run `make diagrams publish` from the project root to render PlantUML sources.
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc04-change-appointment-status.puml)

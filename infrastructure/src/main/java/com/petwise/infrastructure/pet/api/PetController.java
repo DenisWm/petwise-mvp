@@ -14,6 +14,8 @@ import com.petwise.infrastructure.pet.models.PetResponse;
 import com.petwise.infrastructure.pet.models.UpdatePetRequest;
 import com.petwise.infrastructure.pet.presenters.PetApiPresenter;
 import java.net.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SuppressWarnings({"PMD.LongVariable", "PMD.ShortVariable"})
 public class PetController implements PetAPI {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG = LoggerFactory.getLogger(PetController.class);
 
     /** Use case for creating a pet. */
     private final CreatePetUseCase createPetUseCase;
@@ -67,6 +72,12 @@ public class PetController implements PetAPI {
     /** {@inheritDoc} */
     @Override
     public ResponseEntity<Void> createPet(final CreatePetRequest request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("POST /pets");
+        }
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Create pet request body: {}", request);
+        }
         final var command =
                 CreatePetCommand.with(
                         request.tutorId(),
@@ -82,6 +93,9 @@ public class PetController implements PetAPI {
     /** {@inheritDoc} */
     @Override
     public PetResponse getPetById(final String petId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("GET /pets/{}", petId);
+        }
         return PetApiPresenter.present(this.getPetByIdUseCase.execute(petId));
     }
 
@@ -93,6 +107,9 @@ public class PetController implements PetAPI {
             final String search,
             final String sort,
             final String direction) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("GET /pets — page={}, perPage={}, search={}", page, perPage, search);
+        }
         final var query = new SearchQuery(page, perPage, search, sort, direction);
         return this.listPetsUseCase.execute(query).map(PetApiPresenter::present);
     }
@@ -100,6 +117,12 @@ public class PetController implements PetAPI {
     /** {@inheritDoc} */
     @Override
     public ResponseEntity<Void> updatePet(final String petId, final UpdatePetRequest request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("PUT /pets/{}", petId);
+        }
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Update pet request body: {}", request);
+        }
         final var command =
                 UpdatePetCommand.with(
                         petId,
@@ -115,6 +138,9 @@ public class PetController implements PetAPI {
     /** {@inheritDoc} */
     @Override
     public void deletePet(final String petId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("DELETE /pets/{}", petId);
+        }
         this.deletePetUseCase.execute(petId);
     }
 }

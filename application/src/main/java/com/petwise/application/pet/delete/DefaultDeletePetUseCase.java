@@ -5,6 +5,8 @@ import com.petwise.domain.pet.Pet;
 import com.petwise.domain.pet.PetGateway;
 import com.petwise.domain.pet.PetID;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link DeletePetUseCase}.
@@ -14,6 +16,9 @@ import java.util.Objects;
  * no-op.
  */
 public final class DefaultDeletePetUseCase extends DeletePetUseCase {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultDeletePetUseCase.class);
 
     /** The gateway used to find and delete pets. */
     private final PetGateway petGateway;
@@ -36,11 +41,25 @@ public final class DefaultDeletePetUseCase extends DeletePetUseCase {
     @Override
     public void execute(final String anId) {
         Objects.requireNonNull(anId, "Pet ID cannot be null");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Deleting pet with id={}", anId);
+        }
 
         final var petId = PetID.from(anId);
 
-        this.petGateway.findById(petId).orElseThrow(() -> NotFoundException.with(Pet.class, petId));
+        this.petGateway
+                .findById(petId)
+                .orElseThrow(
+                        () -> {
+                            if (LOG.isWarnEnabled()) {
+                                LOG.warn("Pet not found for deletion with id={}", anId);
+                            }
+                            return NotFoundException.with(Pet.class, petId);
+                        });
 
         this.petGateway.deleteById(petId);
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Pet deleted successfully with id={}", anId);
+        }
     }
 }

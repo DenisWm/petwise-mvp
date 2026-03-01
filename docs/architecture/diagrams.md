@@ -33,7 +33,7 @@ The architecture is documented using the **C4 model** for visualizing software a
 - External systems (future integrations)
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/c4/c4-context.png" alt="C4 Context" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/c4/c4-context.png" alt="C4 Context" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/c4/c4-context.puml)
@@ -50,7 +50,7 @@ The architecture is documented using the **C4 model** for visualizing software a
 - **Database** - PostgreSQL (production), H2 (tests)
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/c4/c4-container.png" alt="C4 Container" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/c4/c4-container.png" alt="C4 Container" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/c4/c4-container.puml)
@@ -72,7 +72,7 @@ The architecture is documented using the **C4 model** for visualizing software a
 - Vertical slices per feature
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/c4/c4-components.png" alt="C4 Components" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/c4/c4-components.png" alt="C4 Components" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/c4/c4-components.puml)
@@ -94,7 +94,7 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 6. Response flows back
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/sequences/uc01-create-tutor.png" alt="UC-01 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc01-create-tutor.png" alt="UC-01 Sequence Diagram" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc01-create-tutor.puml)
@@ -112,7 +112,7 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 6. Response flows back
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/sequences/uc02-create-pet.png" alt="UC-02 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc02-create-pet.png" alt="UC-02 Sequence Diagram" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc02-create-pet.puml)
@@ -130,7 +130,7 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 6. Response flows back
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/sequences/uc03-create-appointment.png" alt="UC-03 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc03-create-appointment.png" alt="UC-03 Sequence Diagram" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc03-create-appointment.puml)
@@ -149,7 +149,7 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 7. Response flows back
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/sequences/uc04-change-appointment-status.png" alt="UC-04 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc04-change-appointment-status.png" alt="UC-04 Sequence Diagram" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc04-change-appointment-status.puml)
@@ -166,7 +166,7 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 5. Paginated response flows back
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/sequences/uc05-view-daily-agenda.png" alt="UC-05 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc05-view-daily-agenda.png" alt="UC-05 Sequence Diagram" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc05-view-daily-agenda.puml)
@@ -180,7 +180,7 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 - **Delete:** Validate no dependencies → Delete
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/sequences/uc06-edit-delete-records.png" alt="UC-06 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc06-edit-delete-records.png" alt="UC-06 Sequence Diagram" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc06-edit-delete-records.puml)
@@ -195,7 +195,7 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 - Attributes and types
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/domain/erd.png" alt="Domain ERD" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/domain/erd.png" alt="Domain ERD" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/domain/erd.puml)
@@ -228,6 +228,11 @@ Copy diagram source and paste into:
 Install PlantUML and Graphviz, then:
 ```bash
 plantuml docs/architecture/**/*.puml
+```
+
+To publish diagrams to the correct location, run:
+```bash
+make diagrams publish
 ```
 
 ---

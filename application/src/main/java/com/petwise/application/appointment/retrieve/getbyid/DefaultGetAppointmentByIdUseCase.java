@@ -5,6 +5,8 @@ import com.petwise.domain.appointment.AppointmentGateway;
 import com.petwise.domain.appointment.AppointmentID;
 import com.petwise.domain.exceptions.NotFoundException;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link GetAppointmentByIdUseCase}.
@@ -14,6 +16,10 @@ import java.util.Objects;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultGetAppointmentByIdUseCase extends GetAppointmentByIdUseCase {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG =
+            LoggerFactory.getLogger(DefaultGetAppointmentByIdUseCase.class);
 
     /** The gateway used to look up appointments. */
     private final AppointmentGateway appointmentGateway;
@@ -37,13 +43,21 @@ public final class DefaultGetAppointmentByIdUseCase extends GetAppointmentByIdUs
     @Override
     public AppointmentOutput execute(final String anId) {
         Objects.requireNonNull(anId, "Appointment ID cannot be null");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Retrieving appointment with id={}", anId);
+        }
 
         final var appointmentId = AppointmentID.from(anId);
         final var appointment =
                 this.appointmentGateway
                         .findById(appointmentId)
                         .orElseThrow(
-                                () -> NotFoundException.with(Appointment.class, appointmentId));
+                                () -> {
+                                    if (LOG.isWarnEnabled()) {
+                                        LOG.warn("Appointment not found with id={}", anId);
+                                    }
+                                    return NotFoundException.with(Appointment.class, appointmentId);
+                                });
 
         return AppointmentOutput.from(appointment);
     }

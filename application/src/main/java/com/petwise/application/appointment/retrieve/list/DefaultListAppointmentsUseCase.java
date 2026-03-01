@@ -4,6 +4,8 @@ import com.petwise.domain.appointment.AppointmentGateway;
 import com.petwise.domain.pagination.Pagination;
 import com.petwise.domain.pagination.SearchQuery;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link ListAppointmentsUseCase}.
@@ -13,6 +15,9 @@ import java.util.Objects;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultListAppointmentsUseCase extends ListAppointmentsUseCase {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultListAppointmentsUseCase.class);
 
     /** The gateway used to query appointments. */
     private final AppointmentGateway appointmentGateway;
@@ -36,6 +41,13 @@ public final class DefaultListAppointmentsUseCase extends ListAppointmentsUseCas
     @Override
     public Pagination<ListAppointmentsOutput> execute(final SearchQuery query) {
         Objects.requireNonNull(query, "SearchQuery cannot be null");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
+                    "Listing appointments: page={}, perPage={}, terms={}",
+                    query.page(),
+                    query.perPage(),
+                    query.terms());
+        }
 
         return this.appointmentGateway.findAll(query).map(ListAppointmentsOutput::from);
     }

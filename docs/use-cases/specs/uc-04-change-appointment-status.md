@@ -1,10 +1,6 @@
-# UC-04 – Change Appointment Status
-
-> Allow an attendant to update the status of an existing appointment following valid lifecycle transitions.
-
 ## Goal
 
-Allow an attendant to update the status of an existing appointment following the valid lifecycle transitions.
+Update the status of an existing appointment following the valid lifecycle transitions.
 
 ## Primary Actor
 

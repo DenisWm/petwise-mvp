@@ -1,10 +1,6 @@
-# UC-05 – View Daily Agenda
-
-> Allow an attendant or manager to view appointments for a specific date, with optional status and service type filters.
-
 ## Goal
 
-Allow an attendant or manager to retrieve a paginated list of appointments for a given day, optionally filtered by status and service type.
+Retrieve a paginated list of appointments for a given day, optionally filtered by status and service type.
 
 ## Primary Actors
 

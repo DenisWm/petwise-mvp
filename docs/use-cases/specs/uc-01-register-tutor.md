@@ -1,10 +1,6 @@
-# UC-01 – Register Tutor
-
-> Allow an attendant to register a new tutor so that pets can be associated with this person.
-
 ## Goal
 
-Allow an attendant to register a new tutor so that pets can be associated with this person.
+Register a new tutor so that pets can be associated with this person.
 
 ## Primary Actor
 

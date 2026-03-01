@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="APP_NAME" value="petwise"/>
+
+    <!-- ================================================================== -->
+    <!-- Console appender – human-readable format for dev/test              -->
+    <!-- Pattern: timestamp, thread, MDC requestId + method + uri, level    -->
+    <!-- ================================================================== -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{requestId:-}] [%X{method:-} %X{uri:-}] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ================================================================== -->
+    <!-- JSON Console appender – structured output for production           -->
+    <!-- Uses logstash-logback-encoder; auto-includes MDC fields            -->
+    <!-- ================================================================== -->
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app":"${APP_NAME}"}</customFields>
+            <timestampPattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</timestampPattern>
+        </encoder>
+    </appender>
+
+    <!-- ================================================================== -->
+    <!-- JSON File appender – structured rolling log for production          -->
+    <!-- ================================================================== -->
+    <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/petwise.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/petwise.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app":"${APP_NAME}"}</customFields>
+            <timestampPattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</timestampPattern>
+        </encoder>
+    </appender>
+
+    <!-- ================================================================== -->
+    <!-- Profile: default / development                                     -->
+    <!-- Human-readable console, DEBUG for application code                 -->
+    <!-- ================================================================== -->
+    <springProfile name="default | development">
+        <logger name="com.petwise" level="DEBUG"/>
+        <logger name="org.hibernate.SQL" level="INFO"/>
+        <logger name="org.hibernate.orm.jdbc.bind" level="INFO"/>
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="INFO"/>
+        <logger name="org.springframework.jdbc.core" level="DEBUG"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- ================================================================== -->
+    <!-- Profile: production                                                -->
+    <!-- Structured JSON on console + file; INFO for app code, WARN root    -->
+    <!-- ================================================================== -->
+    <springProfile name="production">
+        <logger name="com.petwise" level="INFO"/>
+        <logger name="org.hibernate.SQL" level="WARN"/>
+
+        <root level="WARN">
+            <appender-ref ref="JSON_CONSOLE"/>
+            <appender-ref ref="JSON_FILE"/>
+        </root>
+    </springProfile>
+
+    <!-- ================================================================== -->
+    <!-- Profile: test-integration                                          -->
+    <!-- ================================================================== -->
+    <springProfile name="test-integration">
+        <logger name="com.petwise" level="DEBUG"/>
+        <logger name="org.hibernate.SQL" level="DEBUG"/>
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+        <logger name="org.flywaydb" level="DEBUG"/>
+
+        <root level="WARN">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+</configuration>
+
