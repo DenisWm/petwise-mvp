@@ -5,6 +5,8 @@ import com.petwise.domain.appointment.AppointmentGateway;
 import com.petwise.domain.appointment.AppointmentID;
 import com.petwise.domain.exceptions.NotFoundException;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link ChangeAppointmentStatusUseCase}.
@@ -15,6 +17,10 @@ import java.util.Objects;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultChangeAppointmentStatusUseCase extends ChangeAppointmentStatusUseCase {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG =
+            LoggerFactory.getLogger(DefaultChangeAppointmentStatusUseCase.class);
 
     /** The gateway used to find and persist appointments. */
     private final AppointmentGateway appointmentGateway;
@@ -40,16 +46,39 @@ public final class DefaultChangeAppointmentStatusUseCase extends ChangeAppointme
     @Override
     public ChangeAppointmentStatusOutput execute(final ChangeAppointmentStatusCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
+                    "Changing appointment status for id={}, targetStatus={}",
+                    command.id(),
+                    command.status());
+        }
 
         final var appointmentId = AppointmentID.from(command.id());
         final var appointment =
                 this.appointmentGateway
                         .findById(appointmentId)
                         .orElseThrow(
-                                () -> NotFoundException.with(Appointment.class, appointmentId));
+                                () -> {
+                                    if (LOG.isWarnEnabled()) {
+                                        LOG.warn(
+                                                "Appointment not found for status change with id={}",
+                                                command.id());
+                                    }
+                                    return NotFoundException.with(Appointment.class, appointmentId);
+                                });
 
+        final var previousStatus = appointment.getStatus();
         appointment.changeStatus(command.status());
 
-        return ChangeAppointmentStatusOutput.from(this.appointmentGateway.save(appointment));
+        final var output =
+                ChangeAppointmentStatusOutput.from(this.appointmentGateway.save(appointment));
+        if (LOG.isInfoEnabled()) {
+            LOG.info(
+                    "Appointment status changed: id={}, from={}, to={}",
+                    output.id(),
+                    previousStatus,
+                    command.status());
+        }
+        return output;
     }
 }

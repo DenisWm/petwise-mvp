@@ -14,6 +14,8 @@ import com.petwise.infrastructure.tutor.models.TutorResponse;
 import com.petwise.infrastructure.tutor.models.UpdateTutorRequest;
 import com.petwise.infrastructure.tutor.presenters.TutorApiPresenter;
 import java.net.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SuppressWarnings({"PMD.LongVariable", "PMD.ShortVariable"})
 public class TutorController implements TutorAPI {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG = LoggerFactory.getLogger(TutorController.class);
 
     /** Use case for creating a tutor. */
     private final CreateTutorUseCase createTutorUseCase;
@@ -72,6 +77,12 @@ public class TutorController implements TutorAPI {
      */
     @Override
     public ResponseEntity<Void> createTutor(final CreateTutorRequest request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("POST /tutors");
+        }
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Create tutor request body: {}", request);
+        }
         final var command =
                 CreateTutorCommand.with(request.name(), request.email(), request.phone());
         final var output = this.createTutorUseCase.execute(command);
@@ -85,6 +96,9 @@ public class TutorController implements TutorAPI {
      */
     @Override
     public TutorResponse getTutorById(final String tutorId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("GET /tutors/{}", tutorId);
+        }
         final var output = this.getTutorByIdUseCase.execute(tutorId);
         return TutorApiPresenter.present(output);
     }
@@ -101,6 +115,9 @@ public class TutorController implements TutorAPI {
             final String search,
             final String sort,
             final String direction) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("GET /tutors — page={}, perPage={}, search={}", page, perPage, search);
+        }
         final var query = new SearchQuery(page, perPage, search, sort, direction);
         final var output = this.listTutorsUseCase.execute(query);
         return output.map(TutorApiPresenter::present);
@@ -114,6 +131,12 @@ public class TutorController implements TutorAPI {
     @Override
     public ResponseEntity<Void> updateTutor(
             final String tutorId, final UpdateTutorRequest request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("PUT /tutors/{}", tutorId);
+        }
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Update tutor request body: {}", request);
+        }
         final var command =
                 UpdateTutorCommand.with(tutorId, request.name(), request.email(), request.phone());
         final var output = this.updateTutorUseCase.execute(command);
@@ -127,6 +150,9 @@ public class TutorController implements TutorAPI {
      */
     @Override
     public void deleteTutor(final String tutorId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("DELETE /tutors/{}", tutorId);
+        }
         this.deleteTutorUseCase.execute(tutorId);
     }
 }

@@ -1,6 +1,9 @@
 spring:
   application:
     name: pet-wise
+  web:
+    resources:
+      add-mappings: false  # Pure REST API – no static content (prevents favicon.ico noise)
   datasource:
     url: jdbc:postgresql://${postgres.url}/petwise
     username: ${postgres.username}
@@ -46,13 +49,25 @@ server:
       worker: 64 # Generally this should be reasonably high, at least 10 per CPU core: https://undertow.io/undertow-docs/undertow-docs-2.1.0/index.html#listeners-2
       io: 4 # One IO thread per CPU core is a reasonable default: https://undertow.io/undertow-docs/undertow-docs-2.1.0/index.html#listeners-2
 
-logging:
-  level:
-    org.hibernate.SQL: DEBUG  # Log all SQL statements
-    org.hibernate.orm.jdbc.bind: TRACE  # Log SQL parameter values
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Log binding parameters
-    org.springframework.jdbc.core: DEBUG  # Log Spring JDBC operations
-    com.petwise: DEBUG  # Your application logs
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"  # Cleaner console output
+
+# ---------------------------------------------------------------------------
+# Actuator – runtime observability & management
+# ---------------------------------------------------------------------------
+# Expose on a separate internal port so it is never reachable from the public
+# API gateway / load-balancer.  Only health, info, and loggers are enabled;
+# everything else stays off to minimise the attack surface.
+management:
+  server:
+    port: 9090                         # separate port – keep out of public traffic
+  endpoints:
+    web:
+      base-path: /management           # /management/health, /management/loggers, …
+      exposure:
+        include: health,info,loggers   # only what we need
+  endpoint:
+    health:
+      show-details: when-authorized    # hide internals from anonymous callers
+    loggers:
+      enabled: true                    # allows GET (read) and POST (change) at runtime
+
 

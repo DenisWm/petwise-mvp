@@ -6,6 +6,8 @@ import com.petwise.domain.exceptions.NotificationException;
 import com.petwise.domain.pet.PetID;
 import com.petwise.domain.validation.handler.Notification;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link CreateAppointmentUseCase}.
@@ -16,6 +18,10 @@ import java.util.Objects;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultCreateAppointmentUseCase extends CreateAppointmentUseCase {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG =
+            LoggerFactory.getLogger(DefaultCreateAppointmentUseCase.class);
 
     /** The gateway used to persist the appointment. */
     private final AppointmentGateway appointmentGateway;
@@ -40,6 +46,12 @@ public final class DefaultCreateAppointmentUseCase extends CreateAppointmentUseC
     @Override
     public CreateAppointmentOutput execute(final CreateAppointmentCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
+                    "Creating appointment for petId={}, serviceType={}",
+                    command.petId(),
+                    command.serviceType());
+        }
 
         final var petId = PetID.from(command.petId());
         final var appointment =
@@ -54,9 +66,16 @@ public final class DefaultCreateAppointmentUseCase extends CreateAppointmentUseC
         appointment.validate(notification);
 
         if (notification.hasErrors()) {
+            if (LOG.isWarnEnabled()) {
+                LOG.warn("Appointment creation validation failed: {}", notification.getErrors());
+            }
             throw new NotificationException("Could not create Aggregate Appointment", notification);
         }
 
-        return CreateAppointmentOutput.from(this.appointmentGateway.save(appointment));
+        final var output = CreateAppointmentOutput.from(this.appointmentGateway.save(appointment));
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Appointment created successfully with id={}", output.id());
+        }
+        return output;
     }
 }

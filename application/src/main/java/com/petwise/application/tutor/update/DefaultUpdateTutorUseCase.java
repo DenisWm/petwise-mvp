@@ -7,6 +7,8 @@ import com.petwise.domain.tutor.TutorGateway;
 import com.petwise.domain.tutor.TutorID;
 import com.petwise.domain.validation.handler.Notification;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link UpdateTutorUseCase}.
@@ -16,6 +18,9 @@ import java.util.Objects;
  * persists the result via the {@link TutorGateway}.
  */
 public final class DefaultUpdateTutorUseCase extends UpdateTutorUseCase {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultUpdateTutorUseCase.class);
 
     /** The gateway used to find and persist tutors. */
     private final TutorGateway tutorGateway;
@@ -39,12 +44,23 @@ public final class DefaultUpdateTutorUseCase extends UpdateTutorUseCase {
     @Override
     public UpdateTutorOutput execute(final UpdateTutorCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Updating tutor id={}", command.id());
+        }
 
         final var tutorId = TutorID.from(command.id());
         final var tutor =
                 this.tutorGateway
                         .findById(tutorId)
-                        .orElseThrow(() -> NotFoundException.with(Tutor.class, tutorId));
+                        .orElseThrow(
+                                () -> {
+                                    if (LOG.isWarnEnabled()) {
+                                        LOG.warn(
+                                                "Tutor not found for update with id={}",
+                                                command.id());
+                                    }
+                                    return NotFoundException.with(Tutor.class, tutorId);
+                                });
 
         tutor.update(command.name(), command.email(), command.phone());
 
@@ -52,10 +68,20 @@ public final class DefaultUpdateTutorUseCase extends UpdateTutorUseCase {
         tutor.validate(notification);
 
         if (notification.hasErrors()) {
+            if (LOG.isWarnEnabled()) {
+                LOG.warn(
+                        "Tutor update validation failed for id={}: {}",
+                        command.id(),
+                        notification.getErrors());
+            }
             throw new NotificationException(
                     "Could not update Aggregate Tutor %s".formatted(command.id()), notification);
         }
 
-        return UpdateTutorOutput.from(this.tutorGateway.save(tutor));
+        final var output = UpdateTutorOutput.from(this.tutorGateway.save(tutor));
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Tutor updated successfully with id={}", output.id());
+        }
+        return output;
     }
 }

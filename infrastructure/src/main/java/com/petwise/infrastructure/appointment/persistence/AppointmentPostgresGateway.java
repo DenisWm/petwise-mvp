@@ -9,6 +9,8 @@ import com.petwise.domain.pagination.SearchQuery;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @SuppressWarnings({"PMD.ShortVariable", "PMD.LiteralsFirstInComparisons"})
 public class AppointmentPostgresGateway implements AppointmentGateway {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG = LoggerFactory.getLogger(AppointmentPostgresGateway.class);
 
     /** The underlying Spring Data JPA repository. */
     private final AppointmentRepository repository;
@@ -41,6 +46,9 @@ public class AppointmentPostgresGateway implements AppointmentGateway {
     @Override
     @Transactional
     public Appointment save(final Appointment appointment) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Persisting appointment with id={}", appointment.getId().getValue());
+        }
         return this.repository.save(AppointmentJpaEntity.from(appointment)).toAggregate();
     }
 
@@ -48,6 +56,9 @@ public class AppointmentPostgresGateway implements AppointmentGateway {
     @Override
     @Transactional(readOnly = true)
     public Optional<Appointment> findById(final AppointmentID anId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Finding appointment by id={}", anId.getValue());
+        }
         return this.repository.findById(anId.getValue()).map(AppointmentJpaEntity::toAggregate);
     }
 
@@ -82,6 +93,13 @@ public class AppointmentPostgresGateway implements AppointmentGateway {
     @Override
     @Transactional(readOnly = true)
     public Pagination<Appointment> findDailyAgenda(final AppointmentSearchQuery query) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
+                    "Finding daily agenda for date={}, status={}, serviceType={}",
+                    query.date(),
+                    query.status(),
+                    query.serviceType());
+        }
         final var startOfDay = query.date().atStartOfDay(ZoneOffset.UTC).toInstant();
         final var endOfDay = query.date().plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant();
 
@@ -127,6 +145,9 @@ public class AppointmentPostgresGateway implements AppointmentGateway {
     @Override
     @Transactional
     public void deleteById(final AppointmentID anId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Deleting appointment by id={}", anId.getValue());
+        }
         this.repository.deleteById(anId.getValue());
     }
 

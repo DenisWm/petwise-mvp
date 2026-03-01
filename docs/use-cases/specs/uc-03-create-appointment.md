@@ -1,10 +1,6 @@
-# UC-03 – Create Appointment
-
-> Allow an attendant to create a daycare (creche) or hotel appointment for a pet.
-
 ## Goal
 
-Allow an attendant to create a daycare (creche) or hotel appointment for a pet.
+Create a daycare (creche) or hotel appointment for a pet.
 
 ## Primary Actor
 

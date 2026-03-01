@@ -1,6 +1,5 @@
-# UC-NNNN – Title
-
-> One-line goal description.
+<!-- This file is included via {% include_relative %} from the parent use-case page.
+     Do NOT add an H1 heading or blockquote here — the parent page already provides them. -->
 
 ## Goal
 

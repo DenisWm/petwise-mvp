@@ -19,6 +19,8 @@ import com.petwise.infrastructure.appointment.models.CreateAppointmentRequest;
 import com.petwise.infrastructure.appointment.presenters.AppointmentApiPresenter;
 import java.net.URI;
 import java.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +33,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SuppressWarnings({"PMD.LongVariable", "PMD.ShortVariable"})
 public class AppointmentController implements AppointmentAPI {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG = LoggerFactory.getLogger(AppointmentController.class);
 
     /** Use case for creating an appointment. */
     private final CreateAppointmentUseCase createAppointmentUseCase;
@@ -78,6 +83,12 @@ public class AppointmentController implements AppointmentAPI {
     /** {@inheritDoc} */
     @Override
     public ResponseEntity<Void> createAppointment(final CreateAppointmentRequest request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("POST /appointments");
+        }
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Create appointment request body: {}", request);
+        }
         final var command =
                 CreateAppointmentCommand.with(
                         request.petId(),
@@ -92,6 +103,9 @@ public class AppointmentController implements AppointmentAPI {
     /** {@inheritDoc} */
     @Override
     public AppointmentResponse getAppointmentById(final String appointmentId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("GET /appointments/{}", appointmentId);
+        }
         return AppointmentApiPresenter.present(
                 this.getAppointmentByIdUseCase.execute(appointmentId));
     }
@@ -104,6 +118,9 @@ public class AppointmentController implements AppointmentAPI {
             final String search,
             final String sort,
             final String direction) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("GET /appointments — page={}, perPage={}, search={}", page, perPage, search);
+        }
         final var query = new SearchQuery(page, perPage, search, sort, direction);
         return this.listAppointmentsUseCase.execute(query).map(AppointmentApiPresenter::present);
     }
@@ -118,6 +135,11 @@ public class AppointmentController implements AppointmentAPI {
             final int perPage,
             final String sort,
             final String direction) {
+        LOG.debug(
+                "GET /appointments/daily-agenda — date={}, status={}, serviceType={}",
+                date,
+                status,
+                serviceType);
         final var command =
                 ViewDailyAgendaCommand.with(
                         date, status, serviceType, page, perPage, sort, direction);
@@ -128,6 +150,12 @@ public class AppointmentController implements AppointmentAPI {
     @Override
     public ResponseEntity<Void> changeAppointmentStatus(
             final String appointmentId, final ChangeAppointmentStatusRequest request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
+                    "PATCH /appointments/{}/status — targetStatus={}",
+                    appointmentId,
+                    request.status());
+        }
         final var command = ChangeAppointmentStatusCommand.with(appointmentId, request.status());
         final var output = this.changeAppointmentStatusUseCase.execute(command);
         return ResponseEntity.ok().location(URI.create("/appointments/" + output.id())).build();
@@ -136,6 +164,9 @@ public class AppointmentController implements AppointmentAPI {
     /** {@inheritDoc} */
     @Override
     public void deleteAppointment(final String appointmentId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("DELETE /appointments/{}", appointmentId);
+        }
         this.deleteAppointmentUseCase.execute(appointmentId);
     }
 }

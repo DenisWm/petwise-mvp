@@ -7,6 +7,8 @@ import com.petwise.domain.pet.PetGateway;
 import com.petwise.domain.pet.PetID;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @SuppressWarnings({"PMD.ShortVariable", "PMD.LiteralsFirstInComparisons"})
 public class PetPostgresGateway implements PetGateway {
+
+    /** SLF4J logger for this class. */
+    private static final Logger LOG = LoggerFactory.getLogger(PetPostgresGateway.class);
 
     /** The underlying Spring Data JPA repository. */
     private final PetRepository repository;
@@ -38,6 +43,9 @@ public class PetPostgresGateway implements PetGateway {
     @Override
     @Transactional
     public Pet save(final Pet pet) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Persisting pet with id={}", pet.getId().getValue());
+        }
         return this.repository.save(PetJpaEntity.from(pet)).toAggregate();
     }
 
@@ -45,6 +53,9 @@ public class PetPostgresGateway implements PetGateway {
     @Override
     @Transactional(readOnly = true)
     public Optional<Pet> findById(final PetID anId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Finding pet by id={}", anId.getValue());
+        }
         return this.repository.findById(anId.getValue()).map(PetJpaEntity::toAggregate);
     }
 
@@ -81,6 +92,9 @@ public class PetPostgresGateway implements PetGateway {
     @Override
     @Transactional
     public void deleteById(final PetID anId) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Deleting pet by id={}", anId.getValue());
+        }
         this.repository.deleteById(anId.getValue());
     }
 }

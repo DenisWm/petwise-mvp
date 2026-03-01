@@ -20,7 +20,10 @@ Allow an attendant or manager to view appointments for a specific date, with opt
 ## Sequence Diagram
 
 <div style="text-align: center;">
-  <img src="{{ site.baseurl }}/architecture/sequences/uc05-view-daily-agenda.png" alt="UC-05 Sequence Diagram" />
+  <img src="{{ site.baseurl }}/assets/diagrams/architecture/sequences/uc05-view-daily-agenda.png" alt="UC-05 Sequence Diagram" />
 </div>
+
+{: .note }
+> If the diagram is not visible, run `make diagrams publish` from the project root to render PlantUML sources.
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/sequences/uc05-view-daily-agenda.puml)
