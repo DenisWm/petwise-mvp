@@ -137,6 +137,7 @@ jobs:
       - name: Create release tag
         run: |
           ./gradlew release --no-daemon \
+            -Prelease.disableChecks \
             -Prelease.customUsername=${{ github.actor }} \
             -Prelease.customPassword=${{ secrets.GITHUB_TOKEN }}
 
