@@ -2,7 +2,7 @@ FROM gradle:8.14-jdk21 AS build
 
 WORKDIR /app
 
-COPY settings.gradle.kts /app/
+COPY settings.gradle.kts build.gradle.kts gradle.properties /app/
 COPY gradle/libs.versions.toml /app/gradle/
 COPY domain/build.gradle.kts domain/
 COPY application/build.gradle.kts application/
@@ -14,7 +14,7 @@ COPY application/src /app/application/src
 COPY infrastructure/src /app/infrastructure/src
 COPY build-logic/src /app/build-logic/src
 
-RUN gradle bootJar --no-daemon
+RUN gradle bootJar --no-daemon -Prelease.forceVersion=docker
 
 FROM eclipse-temurin:21-jre-alpine
 

@@ -18,6 +18,7 @@ jackson = "2.18.2"
 slf4j = "2.0.16"
 logstash-logback-encoder = "8.0"
 spotbugs-gradle = "6.0.26"
+axion-release = "1.18.16"
 
 [libraries]
 # Forced-upgrade libs (transitive deps patched for CVEs)
@@ -56,6 +57,7 @@ owasp-dependency-check-gradle = { module = "org.owasp:dependency-check-gradle", 
 spring-boot-starter = ["spring-boot-starter-validation", "spring-boot-starter-data-jpa"]
 
 [plugins]
+axion-release = { id = "pl.allegro.tech.build.axion-release", version.ref = "axion-release" }
 springdoc-openapi = { id = "org.springdoc.openapi-gradle-plugin", version.ref = "springdoc-openapi-gradle-plugin" }
 spring-boot-app-convention = { id = "petwise.spring-boot-app-conventions" }
 java-library-convention = { id = "petwise.java-library-conventions" }

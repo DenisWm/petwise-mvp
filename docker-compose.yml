@@ -14,6 +14,7 @@ services:
       - petwise_network
   app:
     container_name: petwise-springboot-app
+    image: ghcr.io/${GITHUB_REPOSITORY:-petwise/petwise}:${PETWISE_VERSION:-latest}
     build:
       context: .
       dockerfile: Dockerfile
