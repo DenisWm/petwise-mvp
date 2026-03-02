@@ -182,6 +182,45 @@ class PetTest extends UnitTest {
     }
 
     @Test
+    void givenValidParams_whenCallsWithTypedIds_thenShouldInstantiatePet() {
+        // given
+        final var expectedId = PetID.from("pet-typed-id");
+        final var expectedTutorId = TutorID.unique();
+        final var expectedName = "Typed";
+        final var expectedSpecies = "Dog";
+        final var expectedBreed = "Labrador";
+        final var expectedBirthDate = LocalDate.of(2021, 6, 10);
+        final var expectedNotes = "Typed notes";
+        final var expectedCreatedAt = java.time.Instant.now();
+        final var expectedUpdatedAt = java.time.Instant.now();
+
+        // when
+        final var actualPet =
+                Pet.with(
+                        expectedId,
+                        expectedTutorId,
+                        expectedName,
+                        expectedSpecies,
+                        expectedBreed,
+                        expectedBirthDate,
+                        expectedNotes,
+                        expectedCreatedAt,
+                        expectedUpdatedAt);
+
+        // then
+        assertThat(actualPet).isNotNull();
+        assertThat(actualPet.getId()).isEqualTo(expectedId);
+        assertThat(actualPet.getTutorId()).isEqualTo(expectedTutorId);
+        assertThat(actualPet.getName()).isEqualTo(expectedName);
+        assertThat(actualPet.getSpecies()).isEqualTo(expectedSpecies);
+        assertThat(actualPet.getBreed()).isEqualTo(expectedBreed);
+        assertThat(actualPet.getBirthDate()).isEqualTo(expectedBirthDate);
+        assertThat(actualPet.getNotes()).isEqualTo(expectedNotes);
+        assertThat(actualPet.getCreatedAt()).isEqualTo(expectedCreatedAt);
+        assertThat(actualPet.getUpdatedAt()).isEqualTo(expectedUpdatedAt);
+    }
+
+    @Test
     void givenValidParams_whenCallsWith_thenShouldInstantiatePet() {
         // given
         final var expectedId = "123456789";

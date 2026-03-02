@@ -65,7 +65,7 @@ class UpdateTutorUseCaseTest {
 
     @Test
     @DisplayName("Should update tutor successfully with all fields")
-    void shouldUpdateTutorSuccessfully() {
+    void givenValidCommand_whenExecute_thenShouldUpdateTutor() {
         // Given
         final var command =
                 UpdateTutorCommand.with(
@@ -98,7 +98,7 @@ class UpdateTutorUseCaseTest {
 
     @Test
     @DisplayName("Should update tutor with optional fields as null")
-    void shouldUpdateTutorWithNullOptionalFields() {
+    void givenCommandWithNullOptionalFields_whenExecute_thenShouldUpdateTutor() {
         // Given
         final var command = UpdateTutorCommand.with(tutorId.getValue(), "Jane Doe", null, null);
 
@@ -119,7 +119,7 @@ class UpdateTutorUseCaseTest {
 
     @Test
     @DisplayName("Should throw NotFoundException when tutor does not exist")
-    void shouldThrowNotFoundExceptionWhenTutorDoesNotExist() {
+    void givenNonExistingTutor_whenExecute_thenShouldThrowNotFoundException() {
         // Given
         final var command =
                 UpdateTutorCommand.with(
@@ -136,7 +136,7 @@ class UpdateTutorUseCaseTest {
 
     @Test
     @DisplayName("Should throw DomainException when validation fails")
-    void shouldThrowDomainExceptionWhenValidationFails() {
+    void givenInvalidName_whenExecute_thenShouldThrowDomainException() {
         // Given
         final var command =
                 UpdateTutorCommand.with(
@@ -156,7 +156,7 @@ class UpdateTutorUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when command is null")
-    void shouldThrowNullPointerExceptionWhenCommandIsNull() {
+    void givenNullCommand_whenExecute_thenShouldThrowNullPointerException() {
         // When & Then
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
 
@@ -166,7 +166,7 @@ class UpdateTutorUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
-    void shouldThrowNullPointerExceptionWhenGatewayIsNull() {
+    void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
         // When & Then
         assertThrows(NullPointerException.class, () -> new DefaultUpdateTutorUseCase(null));
     }

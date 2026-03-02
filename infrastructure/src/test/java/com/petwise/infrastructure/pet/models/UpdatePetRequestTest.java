@@ -26,7 +26,7 @@ class UpdatePetRequestTest {
     @Autowired private JacksonTester<UpdatePetRequest> json;
 
     @Test
-    void testSerialize() throws Exception {
+    void givenValidRequest_whenSerialize_thenShouldContainAllFields() throws Exception {
         // given
         final var request =
                 new UpdatePetRequest(
@@ -46,7 +46,7 @@ class UpdatePetRequestTest {
     }
 
     @Test
-    void testDeserialize() throws Exception {
+    void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -71,7 +71,7 @@ class UpdatePetRequestTest {
     }
 
     @Test
-    void testSerializeWithNullOptionalFields() throws Exception {
+    void givenRequestWithNullOptionals_whenSerialize_thenShouldOmitOptionals() throws Exception {
         // given
         final var request = new UpdatePetRequest("Rocky", null, null, null, null);
 
@@ -87,7 +87,7 @@ class UpdatePetRequestTest {
     }
 
     @Test
-    void testDeserializeWithMissingOptionalFields() throws Exception {
+    void givenJsonWithoutOptionals_whenDeserialize_thenShouldMapOptionalsAsNull() throws Exception {
         // given
         final var jsonContent =
                 """

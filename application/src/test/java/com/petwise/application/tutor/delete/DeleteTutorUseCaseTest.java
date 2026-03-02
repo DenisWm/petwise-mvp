@@ -61,7 +61,7 @@ class DeleteTutorUseCaseTest {
 
     @Test
     @DisplayName("Should delete tutor successfully")
-    void shouldDeleteTutorSuccessfully() {
+    void givenExistingTutor_whenExecute_thenShouldDeleteTutor() {
         // Given
         final var tutorIdValue = tutorId.getValue();
 
@@ -78,7 +78,7 @@ class DeleteTutorUseCaseTest {
 
     @Test
     @DisplayName("Should throw NotFoundException when tutor does not exist")
-    void shouldThrowNotFoundExceptionWhenTutorDoesNotExist() {
+    void givenNonExistingTutor_whenExecute_thenShouldThrowNotFoundException() {
         // Given
         final var tutorIdValue = tutorId.getValue();
 
@@ -93,7 +93,7 @@ class DeleteTutorUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when ID is null")
-    void shouldThrowNullPointerExceptionWhenIdIsNull() {
+    void givenNullId_whenExecute_thenShouldThrowNullPointerException() {
         // When & Then
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
 
@@ -103,14 +103,14 @@ class DeleteTutorUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
-    void shouldThrowNullPointerExceptionWhenGatewayIsNull() {
+    void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
         // When & Then
         assertThrows(NullPointerException.class, () -> new DefaultDeleteTutorUseCase(null));
     }
 
     @Test
     @DisplayName("Should verify tutor exists before deletion")
-    void shouldVerifyTutorExistsBeforeDeletion() {
+    void givenExistingTutor_whenExecute_thenShouldCallFindBeforeDelete() {
         // Given
         final var tutorIdValue = tutorId.getValue();
 

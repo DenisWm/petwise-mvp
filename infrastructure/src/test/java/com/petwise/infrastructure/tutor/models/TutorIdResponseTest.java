@@ -24,7 +24,7 @@ class TutorIdResponseTest {
     @Autowired private JacksonTester<TutorIdResponse> json;
 
     @Test
-    void testSerialize() throws Exception {
+    void givenValidResponse_whenSerialize_thenShouldContainId() throws Exception {
         // given
         final var response = new TutorIdResponse("tutor-123");
 
@@ -36,7 +36,7 @@ class TutorIdResponseTest {
     }
 
     @Test
-    void testDeserialize() throws Exception {
+    void givenValidJson_whenDeserialize_thenShouldMapId() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -53,7 +53,7 @@ class TutorIdResponseTest {
     }
 
     @Test
-    void testSerializeWithLongId() throws Exception {
+    void givenResponseWithLongId_whenSerialize_thenShouldContainLongId() throws Exception {
         // given
         final var response = new TutorIdResponse("tutor-abc123-def456-ghi789");
 
@@ -67,7 +67,7 @@ class TutorIdResponseTest {
     }
 
     @Test
-    void testDeserializeWithLongId() throws Exception {
+    void givenJsonWithLongId_whenDeserialize_thenShouldMapLongId() throws Exception {
         // given
         final var jsonContent =
                 """

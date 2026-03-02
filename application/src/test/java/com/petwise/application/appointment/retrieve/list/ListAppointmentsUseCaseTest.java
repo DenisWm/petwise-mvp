@@ -43,7 +43,7 @@ class ListAppointmentsUseCaseTest {
 
     @Test
     @DisplayName("Should return paginated list of appointments")
-    void shouldReturnPaginatedListOfAppointments() {
+    void givenExistingAppointments_whenExecute_thenShouldReturnPaginatedList() {
         // Given
         final var query = new SearchQuery(0, 10, "", "startAt", "asc");
         final var appointment =
@@ -74,14 +74,14 @@ class ListAppointmentsUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when query is null")
-    void shouldThrowNullPointerExceptionWhenQueryIsNull() {
+    void givenNullQuery_whenExecute_thenShouldThrowNullPointerException() {
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
         verify(appointmentGateway, never()).findAll(any());
     }
 
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
-    void shouldThrowNullPointerExceptionWhenGatewayIsNull() {
+    void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
         assertThrows(NullPointerException.class, () -> new DefaultListAppointmentsUseCase(null));
     }
 }

@@ -25,7 +25,7 @@ class UpdateTutorRequestTest {
     @Autowired private JacksonTester<UpdateTutorRequest> json;
 
     @Test
-    void testSerialize() throws Exception {
+    void givenValidRequest_whenSerialize_thenShouldContainAllFields() throws Exception {
         // given
         final var request = new UpdateTutorRequest("Jane Smith", "jane@example.com", "+9876543210");
 
@@ -41,7 +41,7 @@ class UpdateTutorRequestTest {
     }
 
     @Test
-    void testDeserialize() throws Exception {
+    void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -62,7 +62,7 @@ class UpdateTutorRequestTest {
     }
 
     @Test
-    void testSerializeWithNullEmail() throws Exception {
+    void givenRequestWithNullEmail_whenSerialize_thenShouldOmitEmail() throws Exception {
         // given
         final var request = new UpdateTutorRequest("Jane Smith", null, "+9876543210");
 
@@ -76,7 +76,7 @@ class UpdateTutorRequestTest {
     }
 
     @Test
-    void testDeserializeWithNullEmail() throws Exception {
+    void givenJsonWithoutEmail_whenDeserialize_thenShouldMapEmailAsNull() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -96,7 +96,7 @@ class UpdateTutorRequestTest {
     }
 
     @Test
-    void testSerializeWithNullPhone() throws Exception {
+    void givenRequestWithNullPhone_whenSerialize_thenShouldOmitPhone() throws Exception {
         // given
         final var request = new UpdateTutorRequest("Jane Smith", "jane@example.com", null);
 
@@ -112,7 +112,7 @@ class UpdateTutorRequestTest {
     }
 
     @Test
-    void testDeserializeWithNullPhone() throws Exception {
+    void givenJsonWithoutPhone_whenDeserialize_thenShouldMapPhoneAsNull() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -132,7 +132,7 @@ class UpdateTutorRequestTest {
     }
 
     @Test
-    void testSerializeWithAllNullOptionalFields() throws Exception {
+    void givenRequestWithAllNullOptionals_whenSerialize_thenShouldOmitAll() throws Exception {
         // given
         final var request = new UpdateTutorRequest("Jane Smith", null, null);
 

@@ -88,7 +88,7 @@ class ListTutorsUseCaseTest {
 
     @Test
     @DisplayName("Should list tutors with pagination successfully")
-    void shouldListTutorsWithPaginationSuccessfully() {
+    void givenExistingTutors_whenExecute_thenShouldReturnPaginatedResults() {
         // Given
         final var tutors = List.of(tutor1, tutor2, tutor3);
         final var pagination = new Pagination<>(0, 10, 3L, tutors);
@@ -131,7 +131,7 @@ class ListTutorsUseCaseTest {
 
     @Test
     @DisplayName("Should return empty pagination when no tutors exist")
-    void shouldReturnEmptyPaginationWhenNoTutorsExist() {
+    void givenNoTutors_whenExecute_thenShouldReturnEmptyPagination() {
         // Given
         final var emptyPagination = new Pagination<Tutor>(0, 10, 0L, Collections.emptyList());
 
@@ -153,7 +153,7 @@ class ListTutorsUseCaseTest {
 
     @Test
     @DisplayName("Should handle paginated results correctly")
-    void shouldHandlePaginatedResultsCorrectly() {
+    void givenSecondPageQuery_whenExecute_thenShouldReturnCorrectPage() {
         // Given - Second page with 2 items, total of 5
         final var tutors = List.of(tutor1, tutor2);
         final var pagination = new Pagination<>(1, 2, 5L, tutors);
@@ -176,7 +176,7 @@ class ListTutorsUseCaseTest {
 
     @Test
     @DisplayName("Should handle tutors with all optional fields null")
-    void shouldHandleTutorsWithAllOptionalFieldsNull() {
+    void givenTutorWithNullOptionalFields_whenExecute_thenShouldReturnNullFields() {
         // Given
         final var tutorMinimal =
                 Tutor.with(
@@ -208,7 +208,7 @@ class ListTutorsUseCaseTest {
 
     @Test
     @DisplayName("Should handle search with terms")
-    void shouldHandleSearchWithTerms() {
+    void givenSearchTerms_whenExecute_thenShouldFilterResults() {
         // Given
         final var searchWithTerms = new SearchQuery(0, 10, "John", "name", "asc");
         final var pagination = new Pagination<>(0, 10, 1L, List.of(tutor1));
@@ -228,7 +228,7 @@ class ListTutorsUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when query is null")
-    void shouldThrowNullPointerExceptionWhenQueryIsNull() {
+    void givenNullQuery_whenExecute_thenShouldThrowNullPointerException() {
         // When & Then
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
 
@@ -237,7 +237,7 @@ class ListTutorsUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
-    void shouldThrowNullPointerExceptionWhenGatewayIsNull() {
+    void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
         // When & Then
         assertThrows(NullPointerException.class, () -> new DefaultListTutorsUseCase(null));
     }

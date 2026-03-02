@@ -44,7 +44,7 @@ class ViewDailyAgendaUseCaseTest {
 
     @Test
     @DisplayName("Should return paginated agenda for a given date")
-    void shouldReturnPaginatedAgendaForDate() {
+    void givenValidDateCommand_whenExecute_thenShouldReturnPaginatedAgenda() {
         // Given
         final var date = LocalDate.of(2026, 2, 26);
         final var command = ViewDailyAgendaCommand.with(date, null, null, 0, 20, "startAt", "asc");
@@ -81,7 +81,7 @@ class ViewDailyAgendaUseCaseTest {
 
     @Test
     @DisplayName("Should pass status and serviceType filters to gateway")
-    void shouldPassFiltersToGateway() {
+    void givenCommandWithFilters_whenExecute_thenShouldPassFiltersToGateway() {
         // Given
         final var date = LocalDate.of(2026, 2, 26);
         final var command =
@@ -116,7 +116,7 @@ class ViewDailyAgendaUseCaseTest {
 
     @Test
     @DisplayName("Should return empty page when no appointments for date")
-    void shouldReturnEmptyPageWhenNoAppointments() {
+    void givenNoAppointments_whenExecute_thenShouldReturnEmptyPage() {
         // Given
         final var date = LocalDate.of(2026, 12, 25);
         final var command = ViewDailyAgendaCommand.with(date, null, null, 0, 20, "startAt", "asc");
@@ -136,14 +136,14 @@ class ViewDailyAgendaUseCaseTest {
 
     @Test
     @DisplayName("Should throw NullPointerException when command is null")
-    void shouldThrowNullPointerExceptionWhenCommandIsNull() {
+    void givenNullCommand_whenExecute_thenShouldThrowNullPointerException() {
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
         verify(appointmentGateway, never()).findDailyAgenda(any());
     }
 
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
-    void shouldThrowNullPointerExceptionWhenGatewayIsNull() {
+    void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
         assertThrows(NullPointerException.class, () -> new DefaultViewDailyAgendaUseCase(null));
     }
 }

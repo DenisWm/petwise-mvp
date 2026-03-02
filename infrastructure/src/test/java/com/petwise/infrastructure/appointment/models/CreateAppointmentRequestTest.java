@@ -27,7 +27,7 @@ class CreateAppointmentRequestTest {
     @Autowired private JacksonTester<CreateAppointmentRequest> json;
 
     @Test
-    void testSerialize() throws Exception {
+    void givenValidRequest_whenSerialize_thenShouldContainAllFields() throws Exception {
         // given
         final var startAt = Instant.parse("2025-11-28T08:00:00Z");
         final var endAt = Instant.parse("2025-11-28T18:00:00Z");
@@ -51,7 +51,7 @@ class CreateAppointmentRequestTest {
     }
 
     @Test
-    void testDeserialize() throws Exception {
+    void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
         // given
         final var jsonContent =
                 """
@@ -76,7 +76,7 @@ class CreateAppointmentRequestTest {
     }
 
     @Test
-    void testSerializeWithHotelServiceType() throws Exception {
+    void givenRequestWithHotelType_whenSerialize_thenShouldContainHotel() throws Exception {
         // given
         final var startAt = Instant.parse("2025-12-01T10:00:00Z");
         final var endAt = Instant.parse("2025-12-03T10:00:00Z");
@@ -93,7 +93,7 @@ class CreateAppointmentRequestTest {
     }
 
     @Test
-    void testDeserializeWithNullNotes() throws Exception {
+    void givenJsonWithoutNotes_whenDeserialize_thenShouldMapNotesAsNull() throws Exception {
         // given
         final var jsonContent =
                 """

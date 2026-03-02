@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 /** Unit tests for {@link Entity}. */
@@ -21,122 +22,159 @@ import org.junit.jupiter.api.Test;
     "PMD.UnitTestAssertionsShouldIncludeMessage",
     "PMD.LongVariable",
     "PMD.AvoidDuplicateLiterals",
-    "PMD.ShortVariable"
+    "PMD.ShortVariable",
+    "PMD.AbstractClassWithoutAbstractMethod"
 })
 class EntityTest extends UnitTest {
 
     /** Default constructor. */
     EntityTest() {}
 
-    @Test
-    @DisplayName("should initialise with an empty event list when null is supplied as events")
-    @SuppressWarnings("PMD.UnitTestAssertionsShouldIncludeMessage")
-    void shouldInitialiseWithEmptyEventList_whenNullEventsAreSupplied() {
-        final var anEntity = new DummyEntity(new DummyID(), null);
+    /** Tests for entity construction and initialisation. */
+    @Nested
+    @DisplayName("Construction")
+    class ConstructionTest {
 
-        assertNotNull(anEntity.getDomainEvents());
-        assertTrue(anEntity.getDomainEvents().isEmpty());
+        /** Default constructor. */
+        ConstructionTest() {}
+
+        @Test
+        @DisplayName("should initialise with an empty event list when null is supplied as events")
+        void shouldInitialiseWithEmptyEventList_whenNullEventsAreSupplied() {
+            final var anEntity = new DummyEntity(new DummyID(), null);
+
+            assertNotNull(anEntity.getDomainEvents());
+            assertTrue(anEntity.getDomainEvents().isEmpty());
+        }
+
+        @Test
+        @DisplayName(
+                "should create a defensive copy of the events list supplied in the constructor")
+        void shouldCreateDefensiveCopyOfEventList_whenEventsArePassedToConstructor() {
+            final List<DomainEvent> events = new ArrayList<>();
+            final var anEntity = new DummyEntity(new DummyID(), events);
+
+            assertNotNull(anEntity.getDomainEvents());
+            assertTrue(anEntity.getDomainEvents().isEmpty());
+            assertNotSame(anEntity.getDomainEvents(), events);
+            assertThrows(
+                    RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
+        }
     }
 
-    @Test
-    @DisplayName("should create a defensive copy of the events list supplied in the constructor")
-    @SuppressWarnings("PMD.UnitTestAssertionsShouldIncludeMessage")
-    void shouldCreateDefensiveCopyOfEventList_whenEventsArePassedToConstructor() {
-        final List<DomainEvent> events = new ArrayList<>();
-        final var anEntity = new DummyEntity(new DummyID(), events);
+    /** Tests for domain event registration and publishing. */
+    @Nested
+    @DisplayName("Domain Events")
+    class DomainEventsTest {
 
-        assertNotNull(anEntity.getDomainEvents());
-        assertTrue(anEntity.getDomainEvents().isEmpty());
-        assertNotSame(anEntity.getDomainEvents(), events);
-        assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
+        /** Default constructor. */
+        DomainEventsTest() {}
+
+        @Test
+        @DisplayName("should add the event to the internal list when registerEvent is called")
+        void shouldAddEvent_whenRegisterEventIsCalled() {
+            final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+
+            anEntity.registerEvent(Instant::now);
+
+            assertNotNull(anEntity.getDomainEvents());
+            assertEquals(1, anEntity.getDomainEvents().size());
+            assertThrows(
+                    RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
+        }
+
+        @Test
+        @DisplayName(
+                "should dispatch all events and clear the list when "
+                        + "publishDomainEvents is called")
+        void shouldDispatchAllEventsAndClearList_whenPublishDomainEventsIsCalled() {
+            final var expectedRemainingEvents = 0;
+            final var expectedPublishedEvents = 2;
+            final var publishedCount = new AtomicInteger(0);
+            final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+
+            anEntity.registerEvent(Instant::now);
+            anEntity.registerEvent(Instant::now);
+
+            assertEquals(2, anEntity.getDomainEvents().size());
+
+            anEntity.publishDomainEvents(event -> publishedCount.incrementAndGet());
+
+            assertNotNull(anEntity.getDomainEvents());
+            assertEquals(expectedRemainingEvents, anEntity.getDomainEvents().size());
+            assertEquals(expectedPublishedEvents, publishedCount.get());
+            assertThrows(
+                    RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
+        }
+
+        @Test
+        @DisplayName("should be a no-op when publishDomainEvents is called with null publisher")
+        void shouldBeNoOp_whenPublishDomainEventsCalledWithNullPublisher() {
+            final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+            anEntity.registerEvent(Instant::now);
+
+            // must not throw
+            anEntity.publishDomainEvents(null);
+
+            // events should still be present since publish did nothing
+            assertEquals(1, anEntity.getDomainEvents().size());
+        }
+
+        @Test
+        @DisplayName("should silently ignore null events passed to registerEvent")
+        void shouldIgnoreNullEvent_whenRegisterEventCalledWithNull() {
+            final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+            anEntity.registerEvent(null);
+            assertTrue(anEntity.getDomainEvents().isEmpty());
+        }
     }
 
-    @Test
-    @DisplayName("should add the event to the internal list when registerEvent is called")
-    @SuppressWarnings("PMD.UnitTestAssertionsShouldIncludeMessage")
-    void shouldAddEvent_whenRegisterEventIsCalled() {
-        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+    /** Tests for the equals / hashCode contract. */
+    @Nested
+    @DisplayName("Equality")
+    class EqualityTest {
 
-        anEntity.registerEvent(Instant::now);
+        /** Default constructor. */
+        EqualityTest() {}
 
-        assertNotNull(anEntity.getDomainEvents());
-        assertEquals(1, anEntity.getDomainEvents().size());
-        assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
-    }
+        @Test
+        @DisplayName("should be equal to itself")
+        void shouldBeEqualToItself() {
+            final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+            assertEquals(anEntity, anEntity);
+        }
 
-    @Test
-    @DisplayName(
-            "should dispatch all events and clear the list when " + "publishDomainEvents is called")
-    @SuppressWarnings("PMD.UnitTestAssertionsShouldIncludeMessage")
-    void shouldDispatchAllEventsAndClearList_whenPublishDomainEventsIsCalled() {
-        final var expectedRemainingEvents = 0;
-        final var expectedPublishedEvents = 2;
-        final var publishedCount = new AtomicInteger(0);
-        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+        @Test
+        @DisplayName("should not be equal to null")
+        void shouldNotBeEqualToNull() {
+            final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+            assertNotEquals(null, anEntity);
+        }
 
-        anEntity.registerEvent(Instant::now);
-        anEntity.registerEvent(Instant::now);
+        @Test
+        @DisplayName("should not be equal to a different class instance")
+        void shouldNotBeEqualToDifferentClassInstance() {
+            final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
+            assertNotEquals("not-an-entity", anEntity);
+        }
 
-        assertEquals(2, anEntity.getDomainEvents().size());
+        @Test
+        @DisplayName("two entities with the same ID should be equal")
+        void shouldBeEqual_whenSameId() {
+            final var id = new DummyID();
+            final var entity1 = new DummyEntity(id, new ArrayList<>());
+            final var entity2 = new DummyEntity(id, new ArrayList<>());
+            assertEquals(entity1, entity2);
+            assertEquals(entity1.hashCode(), entity2.hashCode());
+        }
 
-        anEntity.publishDomainEvents(event -> publishedCount.incrementAndGet());
-
-        assertNotNull(anEntity.getDomainEvents());
-        assertEquals(expectedRemainingEvents, anEntity.getDomainEvents().size());
-        assertEquals(expectedPublishedEvents, publishedCount.get());
-        assertThrows(RuntimeException.class, () -> anEntity.getDomainEvents().add(Instant::now));
-    }
-
-    @Test
-    @DisplayName("should be a no-op when publishDomainEvents is called with null publisher")
-    void shouldBeNoOp_whenPublishDomainEventsCalledWithNullPublisher() {
-        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
-        anEntity.registerEvent(Instant::now);
-
-        // must not throw
-        anEntity.publishDomainEvents(null);
-
-        // events should still be present since publish did nothing
-        assertEquals(1, anEntity.getDomainEvents().size());
-    }
-
-    @Test
-    @DisplayName("should silently ignore null events passed to registerEvent")
-    void shouldIgnoreNullEvent_whenRegisterEventCalledWithNull() {
-        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
-        anEntity.registerEvent(null);
-        assertTrue(anEntity.getDomainEvents().isEmpty());
-    }
-
-    @Test
-    @DisplayName("should be equal to itself")
-    void shouldBeEqualToItself() {
-        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
-        assertEquals(anEntity, anEntity);
-    }
-
-    @Test
-    @DisplayName("should not be equal to null")
-    void shouldNotBeEqualToNull() {
-        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
-        assertNotEquals(null, anEntity);
-    }
-
-    @Test
-    @DisplayName("should not be equal to a different class instance")
-    void shouldNotBeEqualToDifferentClassInstance() {
-        final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
-        assertNotEquals("not-an-entity", anEntity);
-    }
-
-    @Test
-    @DisplayName("two entities with the same ID should be equal")
-    void shouldBeEqual_whenSameId() {
-        final var id = new DummyID();
-        final var entity1 = new DummyEntity(id, new ArrayList<>());
-        final var entity2 = new DummyEntity(id, new ArrayList<>());
-        assertEquals(entity1, entity2);
-        assertEquals(entity1.hashCode(), entity2.hashCode());
+        @Test
+        @DisplayName("two entities with different IDs should not be equal")
+        void shouldNotBeEqual_whenDifferentId() {
+            final var entity1 = new DummyEntity(new DummyID(), new ArrayList<>());
+            final var entity2 = new DummyEntity(new DummyID(), new ArrayList<>());
+            assertNotEquals(entity1, entity2);
+        }
     }
 
     /** Dummy identifier for testing. */
