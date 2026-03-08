@@ -50,7 +50,7 @@ class ListAppointmentsUseCaseTest {
                 Appointment.with(
                         AppointmentID.unique(),
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         AppointmentStatus.PENDING,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
@@ -67,7 +67,7 @@ class ListAppointmentsUseCaseTest {
         // Then
         assertNotNull(result);
         assertEquals(1, result.total());
-        assertEquals(ServiceType.CRECHE, result.items().get(0).serviceType());
+        assertEquals(ServiceType.DAYCARE, result.items().get(0).serviceType());
 
         verify(appointmentGateway).findAll(query);
     }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetWise — API Reference</title>
+  <meta name="description" content="PetWise REST API interactive documentation powered by Redoc">
+  <style>
+    body { margin: 0; padding: 0; }
+  </style>
+</head>
+<body>
+  <div id="redoc-container"></div>
+  <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+  <script>
+    Redoc.init(
+      './openapi.yaml',
+      {
+        scrollYOffset: 0,
+        hideDownloadButton: false,
+        expandResponses: '200',
+        theme: {
+          colors:    { primary: { main: '#7253ed' } },
+          sidebar:   { width: '260px' },
+          rightPanel:{ width: '40%' }
+        }
+      },
+      document.getElementById('redoc-container')
+    );
+  </script>
+</body>
+</html>
+

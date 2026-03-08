@@ -12,6 +12,7 @@ dependencies {
 
     implementation(libs.bundles.spring.boot.starter)
     implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.oauth2.resource.server)
     implementation(libs.spring.boot.starter.undertow)
     implementation(libs.spring.boot.starter.web)
     { exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat") }
@@ -24,6 +25,7 @@ dependencies {
     runtimeOnly(libs.logstash.logback.encoder)
 
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.security.test)
     testRuntimeOnly(libs.h2)
 
 }

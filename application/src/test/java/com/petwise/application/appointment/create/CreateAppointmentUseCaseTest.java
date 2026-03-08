@@ -51,7 +51,7 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
     void givenValidCommand_whenExecute_thenCreateAppointment() {
         // given
         final var petId = PetID.unique().getValue();
-        final var serviceType = ServiceType.CRECHE;
+        final var serviceType = ServiceType.DAYCARE;
         final var startAt = Instant.parse("2025-11-28T08:00:00Z");
         final var endAt = Instant.parse("2025-11-28T18:00:00Z");
         final var notes = "First time at daycare";
@@ -108,7 +108,7 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
         final var command =
                 CreateAppointmentCommand.with(
                         PetID.unique().getValue(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T18:00:00Z"),
                         Instant.parse("2025-11-28T08:00:00Z"),
                         null);
@@ -125,7 +125,7 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
         final var command =
                 CreateAppointmentCommand.with(
                         null,
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);

@@ -28,7 +28,7 @@ class AppointmentSearchQueryTest {
                 new AppointmentSearchQuery(
                         date,
                         AppointmentStatus.ACTIVE,
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         0,
                         20,
                         "startAt",
@@ -36,7 +36,7 @@ class AppointmentSearchQueryTest {
 
         assertEquals(date, query.date());
         assertEquals(AppointmentStatus.ACTIVE, query.status());
-        assertEquals(ServiceType.CRECHE, query.serviceType());
+        assertEquals(ServiceType.DAYCARE, query.serviceType());
         assertEquals(0, query.page());
         assertEquals(20, query.perPage());
         assertEquals("startAt", query.sort());

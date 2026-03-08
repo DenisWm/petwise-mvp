@@ -27,7 +27,7 @@ class AppointmentValidatorTest extends UnitTest {
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -48,7 +48,7 @@ class AppointmentValidatorTest extends UnitTest {
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -81,7 +81,7 @@ class AppointmentValidatorTest extends UnitTest {
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T18:00:00Z"),
                         Instant.parse("2025-11-28T08:00:00Z"),
                         null);
@@ -103,7 +103,7 @@ class AppointmentValidatorTest extends UnitTest {
         // given
         final var time = Instant.parse("2025-11-28T08:00:00Z");
         final var appointment =
-                Appointment.newAppointment(PetID.unique(), ServiceType.CRECHE, time, time, null);
+                Appointment.newAppointment(PetID.unique(), ServiceType.DAYCARE, time, time, null);
         final var notification = Notification.create();
         final var validator = new AppointmentValidator(appointment, notification);
 
@@ -122,7 +122,7 @@ class AppointmentValidatorTest extends UnitTest {
         final var base =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -156,7 +156,7 @@ class AppointmentValidatorTest extends UnitTest {
         final var base =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -188,7 +188,7 @@ class AppointmentValidatorTest extends UnitTest {
         final var base =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -220,7 +220,7 @@ class AppointmentValidatorTest extends UnitTest {
         final var base =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);

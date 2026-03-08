@@ -360,7 +360,7 @@ paths:
         schema:
           type: string
           default: ""
-        example: CRECHE
+        example: DAYCARE
       - name: sort
         in: query
         description: Sort field
@@ -515,9 +515,9 @@ paths:
         schema:
           type: string
           enum:
-          - CRECHE
+          - DAYCARE
           - HOTEL
-        example: CRECHE
+        example: DAYCARE
       - name: page
         in: query
         description: Page number (0-based)
@@ -623,7 +623,7 @@ components:
         service_type:
           type: string
           enum:
-          - CRECHE
+          - DAYCARE
           - HOTEL
         start_at:
           type: string
@@ -726,7 +726,7 @@ components:
         service_type:
           type: string
           enum:
-          - CRECHE
+          - DAYCARE
           - HOTEL
         status:
           type: string

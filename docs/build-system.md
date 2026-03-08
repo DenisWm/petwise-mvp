@@ -1,13 +1,13 @@
 ---
 layout: default
 title: Build System
-nav_order: 6
+nav_order: 5
 ---
 
-# Build System Guide
+# Build System
 {: .no_toc }
 
-PetWise's Gradle build system, convention plugins, and how to maintain and extend the build configuration.
+How PetWise's Gradle build is organized and how to extend it.
 {: .fs-6 .fw-300 }
 
 ## Table of contents
@@ -18,365 +18,87 @@ PetWise's Gradle build system, convention plugins, and how to maintain and exten
 
 ---
 
-## Overview
+## Why Convention Plugins?
 
-PetWise uses **Gradle 8.14+** with the **Kotlin DSL** and a **custom convention plugin** architecture.
-
-### Why This Approach?
-
-**Problem:** Traditional multi-module projects repeat the same configuration in every `build.gradle.kts`
-
-**Solution:** PetWise uses **convention plugins** to centralize this configuration.
-
----
-
-## Project Structure
+Multi-module Gradle projects tend to repeat the same configuration in every `build.gradle.kts`.
+PetWise solves this with **convention plugins** inside a **composite build** (`build-logic/`), so
+each module's build file stays minimal while sharing a single set of rules.
 
 ```
-petwise/
-├── build-logic/                   # Convention plugins (composite build)
-│   ├── build.gradle.kts
-│   ├── settings.gradle.kts
-│   └── src/main/kotlin/
-│       ├── petwise.java-library-conventions.gradle.kts
-│       ├── petwise.spring-boot-app-conventions.gradle.kts
-│       ├── petwise.lint-conventions.gradle.kts
-│       └── petwise.jacoco-conventions.gradle.kts
-│
-├── domain/                        # Uses java-library-conventions
-├── application/                   # Uses java-library-conventions
-├── infrastructure/                # Uses spring-boot-app-conventions
-│
-├── gradle/
-│   └── libs.versions.toml        # Version catalog
-│
-└── settings.gradle.kts
+infrastructure → application → domain
+     │                │           │
+     └── spring-boot  └── java-library ──┘
+         -app-conventions  -conventions
 ```
-
----
-
-## Version Catalog
-
-PetWise uses a **version catalog** (`gradle/libs.versions.toml`) to centralize dependency versions.
-
-### Structure
-
-```toml
-[versions]
-spring-boot = "3.5.7"
-junit = "5.10.2"
-
-[libraries]
-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
-
-[bundles]
-spring-boot-starter = ["spring-boot-starter-validation", "spring-boot-starter-data-jpa"]
-
-[plugins]
-spring-boot-app-convention = { id = "petwise.spring-boot-app-conventions" }
-java-library-convention = { id = "petwise.java-library-conventions" }
-```
-
-### Usage
-
-```kotlin
-dependencies {
-    // Single dependency
-    implementation(libs.spring.boot.starter.web)
-    
-    // Bundle
-    implementation(libs.bundles.spring.boot.starter)
-    
-    // Test dependency
-    testImplementation(libs.junit.jupiter)
-}
-
-plugins {
-    alias(libs.plugins.java.library.convention)
-}
-```
-
-{: .highlight }
-> **Benefits:** Single source of truth, type-safe references, easy updates, prevents conflicts
 
 ---
 
 ## Convention Plugins
 
-### 1. java-library-conventions
+| Plugin | Purpose | Used by |
+|:-------|:--------|:--------|
+| `petwise.java-library-conventions` | Java 21 toolchain, JUnit 5, Spotless, JaCoCo | `domain`, `application` |
+| `petwise.spring-boot-app-conventions` | Spring Boot + all above, custom JAR name | `infrastructure` |
+| `petwise.lint-conventions` | Google Java Format via Spotless | (applied transitively) |
+| `petwise.jacoco-conventions` | Code coverage reporting | (applied transitively) |
+| `petwise.owasp-dependency-check-conventions` | CVE scanning of dependencies | (applied transitively) |
 
-**Purpose:** Base configuration for Java library modules (domain, application)
-
-**Includes:**
-- Java 21 toolchain
-- JUnit 5
-- Spotless (formatting)
-- JaCoCo (coverage)
-
-**Used by:** `domain`, `application`
-
-### 2. spring-boot-app-conventions
-
-**Purpose:** Spring Boot application module configuration
-
-**Includes:**
-- Spring Boot plugin
-- Spring Dependency Management
-- Java 21 toolchain
-- Lint and JaCoCo conventions
-- Custom JAR name: `petwise-application.jar`
-
-**Used by:** `infrastructure`
-
-### 3. lint-conventions
-
-**Purpose:** Code formatting with Spotless
-
-**Configuration:**
-- Google Java Format
-- Trim trailing whitespace
-- End with newline
-
-**Commands:**
-```bash
-./gradlew spotlessCheck    # Check formatting
-./gradlew spotlessApply    # Apply formatting
-```
-
-### 4. jacoco-conventions
-
-**Purpose:** Code coverage reporting
-
-**Commands:**
-```bash
-./gradlew test jacocoTestReport
-# Report: build/reports/jacoco/test/html/index.html
-```
+All plugin sources live in `build-logic/src/main/kotlin/`.
 
 ---
 
-## Module Build Files
+## Version Catalog
 
-With convention plugins, module build files are minimal:
-
-### Domain Module
-
-```kotlin
-plugins {
-    alias(libs.plugins.java.library.convention)
-}
-
-dependencies {
-    testImplementation(libs.assertj.core)
-}
-```
-
-The convention plugin provides Java 21, JUnit 5, Spotless, and JaCoCo. Only test-specific dependencies are declared explicitly.
-
-### Infrastructure Module
-
-```kotlin
-plugins {
-    alias(libs.plugins.spring.boot.app.convention)
-    alias(libs.plugins.springdoc.openapi)
-}
-
-dependencies {
-    implementation(project(":application"))
-    implementation(project(":domain"))
-
-    implementation(libs.bundles.spring.boot.starter)
-    implementation(libs.spring.boot.starter.undertow)
-    implementation(libs.spring.boot.starter.web)
-    { exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat") }
-    implementation(libs.springdoc.openapi.starter.webmvc.ui)
-
-    runtimeOnly(libs.postgresql)
-
-    testImplementation(libs.spring.boot.starter.test)
-    testRuntimeOnly(libs.h2)
-}
-
-openApi {
-    apiDocsUrl.set("http://localhost:8080/api/v3/api-docs.yaml")
-    outputDir.set(layout.projectDirectory.dir("../docs/api"))
-    outputFileName.set("openapi.yaml")
-    forkProperties.set("-Dspring.profiles.active=test-integration")
-}
-```
+Dependency versions are centralized in `gradle/libs.versions.toml`. Modules reference dependencies
+by type-safe alias (e.g., `libs.spring.boot.starter.web`) instead of raw coordinates.
 
 ---
 
-## Common Gradle Tasks
-
-### Build
+## Common Tasks
 
 ```bash
-# Build all modules
-./gradlew build
-
-# Build specific module
-./gradlew :domain:build
+./gradlew build                              # Build all modules
+./gradlew test                               # Run all tests
+./gradlew test jacocoTestReport              # Tests + coverage report
+./gradlew spotlessApply                      # Auto-format code
+./gradlew dependencyCheckAnalyze             # CVE scan
+./gradlew :infrastructure:bootRun            # Run the application
+./gradlew :infrastructure:generateOpenApiDocs # Regenerate OpenAPI spec
 ```
-
-### Test
-
-```bash
-# Run all tests
-./gradlew test
-
-# Run tests for specific module
-./gradlew :domain:test
-
-# With coverage
-./gradlew test jacocoTestReport
-```
-
-### Clean
-
-```bash
-./gradlew clean
-```
-
-### Run Application
-
-```bash
-./gradlew :infrastructure:bootRun
-```
-
-### Code Formatting
-
-```bash
-./gradlew spotlessCheck
-./gradlew spotlessApply
-```
-
-### Generate OpenAPI Specification
-
-```bash
-./gradlew :infrastructure:generateOpenApiDocs
-```
-
-Starts the application with H2 (test-integration profile), fetches the spec from Springdoc, and writes it to `docs/api/openapi.yaml`. Do not edit that file by hand — update the `@Operation` / `@Parameter` annotations on the API interfaces instead.
 
 ---
 
 ## Adding a New Module
 
-### Step 1: Create Directory
+1. Create the directory and source layout:
 
-```bash
-mkdir new-module
-mkdir -p new-module/src/main/java
-mkdir -p new-module/src/test/java
-```
+   ```bash
+   mkdir -p new-module/src/main/java new-module/src/test/java
+   ```
 
-### Step 2: Create build.gradle.kts
+2. Create `new-module/build.gradle.kts`:
 
-```kotlin
-plugins {
-    alias(libs.plugins.java.library.convention)
-}
+   ```kotlin
+   plugins {
+       alias(libs.plugins.java.library.convention)
+   }
+   dependencies {
+       implementation(project(":domain"))
+   }
+   ```
 
-dependencies {
-    implementation(project(":domain"))
-}
-```
+3. Register in `settings.gradle.kts`:
 
-### Step 3: Register in settings.gradle.kts
+   ```kotlin
+   include("new-module")
+   ```
 
-```kotlin
-include("domain")
-include("application")
-include("infrastructure")
-include("new-module")  // Add this
-```
-
-### Step 4: Build
-
-```bash
-./gradlew :new-module:build
-```
-
----
-
-## Composite Build (build-logic)
-
-The `build-logic/` folder is a **composite build** – a separate Gradle project that provides plugins.
-
-### Benefits
-
-- ✅ Convention plugins built before main project
-- ✅ Type-safe plugin references
-- ✅ Can be versioned independently
-- ✅ IDE support (autocomplete, refactoring)
-
----
-
-## Best Practices
-
-### 1. Use Version Catalog
-
-❌ **Don't:**
-```kotlin
-implementation("org.springframework.boot:spring-boot-starter-web:3.5.7")
-```
-
-✅ **Do:**
-```kotlin
-implementation(libs.spring.boot.starter.web)
-```
-
-### 2. Keep Build Files Minimal
-
-Let convention plugins handle common configuration.
-
-### 3. Apply Formatting
-
-```bash
-./gradlew spotlessApply
-```
-
-### 4. Test Changes
-
-```bash
-./gradlew clean build
-```
-
----
-
-## Troubleshooting
-
-### Plugin Not Found
-
-**Solution:**
-1. Ensure `build-logic` is included in `settings.gradle.kts`
-2. Rebuild: `./gradlew clean build`
-
-### Version Catalog Not Resolved
-
-**Solution:**
-1. Check `gradle/libs.versions.toml` exists
-2. Sync: `./gradlew --refresh-dependencies`
-
----
-
-## Summary
-
-PetWise's build system demonstrates:
-
-✅ **Convention Plugins** – DRY build configuration  
-✅ **Version Catalog** – Centralized dependency management  
-✅ **Composite Build** – Type-safe, IDE-friendly plugins  
-✅ **Code Quality** – Automated formatting and coverage  
-✅ **Multi-Module** – Clear separation of concerns
+4. Build: `./gradlew :new-module:build`
 
 ---
 
 ## Further Reading
 
-- [Gradle Version Catalogs](https://docs.gradle.org/current/userguide/platforms.html)
 - [Gradle Convention Plugins](https://docs.gradle.org/current/samples/sample_convention_plugins.html)
+- [Gradle Version Catalogs](https://docs.gradle.org/current/userguide/platforms.html)
 - [Gradle Composite Builds](https://docs.gradle.org/current/userguide/composite_builds.html)
-

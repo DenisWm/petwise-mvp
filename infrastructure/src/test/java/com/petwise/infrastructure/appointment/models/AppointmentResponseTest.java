@@ -38,7 +38,7 @@ class AppointmentResponseTest {
                 new AppointmentResponse(
                         "appt-123",
                         "pet-456",
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         AppointmentStatus.PENDING,
                         startAt,
                         endAt,
@@ -52,7 +52,7 @@ class AppointmentResponseTest {
         // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.id").isEqualTo("appt-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.pet_id").isEqualTo("pet-456");
-        assertThat(jsonContent).extractingJsonPathStringValue("$.service_type").isEqualTo("CRECHE");
+        assertThat(jsonContent).extractingJsonPathStringValue("$.service_type").isEqualTo("DAYCARE");
         assertThat(jsonContent).extractingJsonPathStringValue("$.status").isEqualTo("PENDING");
         assertThat(jsonContent)
                 .extractingJsonPathStringValue("$.start_at")
@@ -77,7 +77,7 @@ class AppointmentResponseTest {
                 {
                     "id": "appt-123",
                     "pet_id": "pet-456",
-                    "service_type": "CRECHE",
+                    "service_type": "DAYCARE",
                     "status": "PENDING",
                     "start_at": "2025-11-28T08:00:00Z",
                     "end_at": "2025-11-28T18:00:00Z",
@@ -93,7 +93,7 @@ class AppointmentResponseTest {
         // then
         assertThat(response.id()).isEqualTo("appt-123");
         assertThat(response.petId()).isEqualTo("pet-456");
-        assertThat(response.serviceType()).isEqualTo(ServiceType.CRECHE);
+        assertThat(response.serviceType()).isEqualTo(ServiceType.DAYCARE);
         assertThat(response.status()).isEqualTo(AppointmentStatus.PENDING);
         assertThat(response.startAt()).isEqualTo(Instant.parse("2025-11-28T08:00:00Z"));
         assertThat(response.endAt()).isEqualTo(Instant.parse("2025-11-28T18:00:00Z"));

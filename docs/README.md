@@ -1,76 +1,44 @@
 # PetWise Documentation
 
-This directory contains the canonical documentation and Jekyll site for the PetWise project.
-
-## Project overview
-
-PetWise is an MVP application that manages tutors, pets, and appointments for a pet daycare and hotel service. The documentation includes:
-
-- Getting started and developer onboarding
-- API reference and OpenAPI specification
-- Use cases with portable spec files
-- Architecture (C4) diagrams, domain model, and ADRs
-- Build system and contribution guidance
-
-Refer to the repository root `README.md` for a high-level project summary.
+This directory contains the project documentation and Jekyll site.
 
 ## Local preview
 
-The documentation site is Jekyll-based and can be run locally using Docker Compose.
-
-### Prerequisites
-- Docker and Docker Compose
-
-### Run the site locally
-
 ```bash
 cd docs
-docker-compose up
-# The site will be available at http://localhost:4000
+docker compose up
+# Site available at http://localhost:4000
 ```
 
-## Documentation structure
+## Structure
 
 ```
 docs/
 ├─ _config.yml
-├─ index.md
-├─ getting-started.md
-├─ architecture.md
-├─ use-cases.md
-├─ build-system.md
-├─ api-reference.md
-├─ contributing.md
-├─ faq.md
-├─ architecture/
-│  ├─ overview.md
-│  ├─ decisions.md
-│  ├─ domain.md
-│  ├─ diagrams.md
-│  ├─ c4/           (PlantUML sources)
-│  ├─ domain/       (business-rules, glossary, ERD)
-│  └─ sequences/    (PlantUML sources)
-├─ use-cases/
-│  ├─ uc-01-register-tutor.md      (Jekyll pages)
-│  ├─ ...
-│  └─ specs/                        (portable specs)
-│     ├─ uc-template.md
-│     ├─ uc-01-register-tutor.md
-│     └─ ...
-├─ api/
-│  ├─ guidelines.md
-│  └─ openapi.yaml
-└─ assets/
+├─ index.md                        Home
+├─ getting-started.md              Setup and build
+├─ architecture.md                 Architecture (parent)
+│  ├─ overview.md                  Layers, modules, patterns
+│  ├─ decisions.md                 ADRs
+│  ├─ domain.md                    Entity model + ERD
+│  │  └─ business-rules.md         Rules, glossary, DDD mapping
+│  └─ diagrams.md                  C4 + sequence diagram index
+├─ use-cases.md                    Use cases (parent)
+│  ├─ uc-01 … uc-06.md            Self-contained use case pages
+├─ build-system.md                 Gradle convention plugins
+├─ api-reference.md                Auth, error format, Swagger/Redoc links
+├─ operations.md                   Logging, actuator, debugging
+├─ contributing.md                 Contribution guide
+└─ api/
+   ├─ guidelines.md                REST conventions
+   ├─ openapi.yaml                 Auto-generated spec
+   └─ redoc.html                   Interactive API viewer
 ```
 
-## Rendering diagrams
+## Maintenance
 
-```bash
-make diagrams
-```
-
-## Maintenance notes
-
-- Keep ADRs and the domain model up to date when architectural changes occur
-- Update use case specs in `use-cases/specs/` (the authoritative source); Jekyll pages are thin wrappers
-- Regenerate `.puml` diagrams with `make diagrams` when sources change
+- Use case pages are self-contained — no external spec files.
+- Business rules and glossary live in a single file: `architecture/domain/business-rules.md`.
+- OpenAPI spec is auto-generated: `./gradlew :infrastructure:generateOpenApiDocs`.
+- ERD is auto-generated from the live DB: `make erd` (requires `make infra-up`).
+- Diagrams: `make diagrams publish`.

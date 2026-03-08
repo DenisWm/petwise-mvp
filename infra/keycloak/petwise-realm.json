@@ -1,0 +1,209 @@
+{
+  "id": "petwise",
+  "realm": "petwise",
+  "displayName": "PetWise Pet Daycare & Hotel Platform",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "waitIncrementSeconds": 60,
+  "quickLoginCheckMilliSeconds": 1000,
+  "maxDeltaTimeSeconds": 43200,
+  "failureFactor": 5,
+  "accessTokenLifespan": 300,
+  "accessTokenLifespanForImplicitFlow": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "offlineSessionIdleTimeout": 2592000,
+  "offlineSessionMaxLifespan": 5184000,
+  "accessCodeLifespan": 60,
+  "accessCodeLifespanUserAction": 300,
+  "accessCodeLifespanLogin": 1800,
+  "actionTokenGeneratedByAdminLifespan": 43200,
+  "actionTokenGeneratedByUserLifespan": 300,
+  "roles": {
+    "realm": [
+      {
+        "name": "ROLE_ADMIN",
+        "description": "Full platform access — manage tutors, pets, appointments, and system settings",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "ROLE_ATTENDANT",
+            "ROLE_TUTOR"
+          ]
+        }
+      },
+      {
+        "name": "ROLE_ATTENDANT",
+        "description": "Front-desk operations — register tutors and pets, create and manage appointments (UC-01 to UC-06)",
+        "composite": false
+      },
+      {
+        "name": "ROLE_TUTOR",
+        "description": "Pet owner self-service — view own pets and appointment history",
+        "composite": false
+      }
+    ]
+  },
+  "defaultRoles": [
+    "offline_access",
+    "uma_authorization"
+  ],
+  "clients": [
+    {
+      "clientId": "petwise-api",
+      "name": "PetWise API",
+      "description": "Backend REST API client for PetWise daycare & hotel platform",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "petwise-dev-secret",
+      "redirectUris": [
+        "http://localhost:8080/*"
+      ],
+      "webOrigins": [
+        "+"
+      ],
+      "publicClient": false,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": false,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ],
+      "protocolMappers": [
+        {
+          "name": "realm-roles-mapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "petwise-swagger",
+      "name": "PetWise Swagger UI",
+      "description": "Public client used by Swagger UI to obtain tokens via Resource Owner Password flow",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": false,
+      "fullScopeAllowed": true,
+      "redirectUris": [
+        "http://localhost:8080/*"
+      ],
+      "webOrigins": [
+        "+"
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "email": "admin@petwise.local",
+      "firstName": "PetWise",
+      "lastName": "Admin",
+      "enabled": true,
+      "emailVerified": true,
+      "requiredActions": [],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ROLE_ADMIN"
+      ]
+    },
+    {
+      "username": "attendant",
+      "email": "attendant@petwise.local",
+      "firstName": "Maria",
+      "lastName": "Santos",
+      "enabled": true,
+      "emailVerified": true,
+      "requiredActions": [],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "attendant123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ROLE_ATTENDANT"
+      ]
+    },
+    {
+      "username": "tutor",
+      "email": "tutor@petwise.local",
+      "firstName": "Ana",
+      "lastName": "Lima",
+      "enabled": true,
+      "emailVerified": true,
+      "requiredActions": [],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "tutor123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ROLE_TUTOR"
+      ]
+    }
+  ],
+  "scopeMappings": [],
+  "clientScopeMappings": {},
+  "smtpServer": {},
+  "browserFlow": "browser",
+  "registrationFlow": "registration",
+  "directGrantFlow": "direct grant",
+  "resetCredentialsFlow": "reset credentials",
+  "clientAuthenticationFlow": "clients"
+}
+
+

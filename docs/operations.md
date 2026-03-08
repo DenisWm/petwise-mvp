@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Operations Guide
-nav_order: 8
+nav_order: 7
 description: "Runtime observability, logging, and management for PetWise"
 ---
 

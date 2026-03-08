@@ -93,7 +93,7 @@ class AppointmentAPITest {
         final var request =
                 new CreateAppointmentRequest(
                         "pet-id",
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         "Some notes");
@@ -110,7 +110,7 @@ class AppointmentAPITest {
                 .andExpect(header().string("Location", "/appointments/" + expectedId));
 
         verify(createAppointmentUseCase, times(1))
-                .execute(argThat(cmd -> ServiceType.CRECHE.equals(cmd.serviceType())));
+                .execute(argThat(cmd -> ServiceType.DAYCARE.equals(cmd.serviceType())));
     }
 
     @Test
@@ -124,7 +124,7 @@ class AppointmentAPITest {
                 new AppointmentOutput(
                         expectedId,
                         "pet-id",
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         AppointmentStatus.PENDING,
                         startAt,
                         endAt,
@@ -138,7 +138,7 @@ class AppointmentAPITest {
         mockMvc.perform(get("/appointments/{id}", expectedId).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(expectedId)))
-                .andExpect(jsonPath("$.service_type", equalTo("CRECHE")))
+                .andExpect(jsonPath("$.service_type", equalTo("DAYCARE")))
                 .andExpect(jsonPath("$.status", equalTo("PENDING")));
 
         verify(getAppointmentByIdUseCase, times(1)).execute(expectedId);
@@ -178,7 +178,7 @@ class AppointmentAPITest {
                 new ViewDailyAgendaOutput(
                         "appointment-456",
                         "pet-id",
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         AppointmentStatus.ACTIVE,
                         Instant.parse("2026-02-26T08:00:00Z"),
                         Instant.parse("2026-02-26T18:00:00Z"),
@@ -197,7 +197,7 @@ class AppointmentAPITest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.total", equalTo(1)))
                 .andExpect(jsonPath("$.items", hasSize(1)))
-                .andExpect(jsonPath("$.items[0].service_type", equalTo("CRECHE")))
+                .andExpect(jsonPath("$.items[0].service_type", equalTo("DAYCARE")))
                 .andExpect(jsonPath("$.items[0].status", equalTo("ACTIVE")))
                 .andExpect(jsonPath("$.items[0].notes", equalTo("Daycare")));
 

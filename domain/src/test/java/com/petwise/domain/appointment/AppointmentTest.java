@@ -29,7 +29,7 @@ class AppointmentTest extends UnitTest {
     void givenValidParams_whenCallsNewAppointment_thenShouldInstantiateAppointment() {
         // given
         final var expectedPetId = PetID.unique();
-        final var expectedServiceType = ServiceType.CRECHE;
+        final var expectedServiceType = ServiceType.DAYCARE;
         final var expectedStartAt = Instant.parse("2025-11-28T08:00:00Z");
         final var expectedEndAt = Instant.parse("2025-11-28T18:00:00Z");
         final var expectedNotes = "First time at daycare";
@@ -80,7 +80,7 @@ class AppointmentTest extends UnitTest {
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -98,7 +98,7 @@ class AppointmentTest extends UnitTest {
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -117,7 +117,7 @@ class AppointmentTest extends UnitTest {
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -135,7 +135,7 @@ class AppointmentTest extends UnitTest {
         // given
         final var expectedId = "123456789";
         final var expectedPetId = PetID.unique();
-        final var expectedServiceType = ServiceType.CRECHE;
+        final var expectedServiceType = ServiceType.DAYCARE;
         final var expectedStatus = AppointmentStatus.PENDING;
         final var expectedStartAt = Instant.parse("2025-11-28T08:00:00Z");
         final var expectedEndAt = Instant.parse("2025-11-28T18:00:00Z");
@@ -207,7 +207,7 @@ class AppointmentTest extends UnitTest {
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -224,7 +224,7 @@ class AppointmentTest extends UnitTest {
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         "Notes");
@@ -243,7 +243,7 @@ class AppointmentTest extends UnitTest {
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);

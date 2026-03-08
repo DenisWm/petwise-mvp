@@ -53,7 +53,7 @@ class ViewDailyAgendaUseCaseTest {
                 Appointment.with(
                         AppointmentID.unique(),
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         AppointmentStatus.ACTIVE,
                         Instant.parse("2026-02-26T08:00:00Z"),
                         Instant.parse("2026-02-26T18:00:00Z"),
@@ -72,7 +72,7 @@ class ViewDailyAgendaUseCaseTest {
         assertNotNull(result);
         assertEquals(1, result.total());
         assertEquals(1, result.items().size());
-        assertEquals(ServiceType.CRECHE, result.items().getFirst().serviceType());
+        assertEquals(ServiceType.DAYCARE, result.items().getFirst().serviceType());
         assertEquals(AppointmentStatus.ACTIVE, result.items().getFirst().status());
         assertEquals("Daycare session", result.items().getFirst().notes());
 

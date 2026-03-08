@@ -1,6 +1,15 @@
 version: '3.7'
 
 services:
+
+  # ---------------------------------------------------------------------------
+  # Shared PostgreSQL — hosts both "petwise" and "keycloak" databases
+  # ---------------------------------------------------------------------------
+  # The init script (docker-entrypoint-initdb.d) creates the keycloak DB on
+  # first start.  Both the app and Keycloak share this single Postgres instance
+  # but use separate databases, so their schemas never collide.
+  # In production you would typically run Keycloak on its own infra.
+  # ---------------------------------------------------------------------------
   db:
     container_name: petwise-postgresql
     image: postgres:latest
@@ -9,21 +18,83 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: petwise
     ports:
-      - 5432:5432
+      - "5432:5432"
+    volumes:
+      - ./infra/postgres/init-keycloak-db.sql:/docker-entrypoint-initdb.d/init-keycloak-db.sql:ro
     networks:
       - petwise_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Keycloak Identity Provider
+  # ---------------------------------------------------------------------------
+  # Admin console: http://localhost:9080
+  # Realm:         petwise (auto-imported on first start)
+  # Admin creds:   admin / admin  (Keycloak master realm)
+  # ---------------------------------------------------------------------------
+  keycloak:
+    container_name: petwise-keycloak
+    image: quay.io/keycloak/keycloak:26.0
+    command: start-dev --import-realm
+    environment:
+      # --- Admin bootstrap ---
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      # --- Database (same Postgres, different database) ---
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      # --- HTTP ---
+      KC_HTTP_PORT: 8080
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 9080
+      KC_HOSTNAME_STRICT: "false"
+      KC_PROXY_HEADERS: xforwarded
+      # --- Observability ---
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+    ports:
+      - "9080:8080"          # Keycloak UI & token endpoints
+    volumes:
+      - ./infra/keycloak/petwise-realm.json:/opt/keycloak/data/import/petwise-realm.json:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - petwise_network
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'"]
+      interval: 15s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # PetWise Spring Boot Application
+  # ---------------------------------------------------------------------------
   app:
     container_name: petwise-springboot-app
     image: ghcr.io/${GITHUB_REPOSITORY:-petwise/petwise}:${PETWISE_VERSION:-latest}
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/petwise
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
     restart: always
     networks:
       - petwise_network
+
 networks:
   petwise_network:

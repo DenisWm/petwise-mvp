@@ -189,16 +189,20 @@ Each use case has a detailed sequence diagram showing the flow through layers.
 
 ## Domain Model Diagram
 
-**Entity Relationship Diagram (ERD)** showing:
-- Entities: Tutor, Pet, Appointment
-- Relationships: Tutor → Pet → Appointment
-- Attributes and types
+The PlantUML ERD shows the conceptual model:
 
 <div style="text-align: center;">
   <img src="{{ site.baseurl }}/assets/diagrams/architecture/domain/erd.png" alt="Domain ERD" />
 </div>
 
 📄 [View PlantUML Source](https://github.com/deniswm/petwise-mvp/blob/master/docs/architecture/domain/erd.puml)
+
+For a **live ERD** derived from the actual database schema (with indexes, constraints, and data types), run:
+
+```bash
+make infra-up   # start PostgreSQL
+make erd         # generates docs/erd/index.html via SchemaSpy
+```
 
 ---
 

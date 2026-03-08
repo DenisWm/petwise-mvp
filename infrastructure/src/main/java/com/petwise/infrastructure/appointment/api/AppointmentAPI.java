@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -120,7 +121,7 @@ public interface AppointmentAPI {
             @Parameter(description = "Items per page", example = "10")
                     @RequestParam(name = "perPage", defaultValue = "10")
                     int perPage,
-            @Parameter(description = "Search terms", example = "CRECHE")
+            @Parameter(description = "Search terms", example = "DAYCARE")
                     @RequestParam(name = "search", defaultValue = "")
                     String search,
             @Parameter(description = "Sort field", example = "startAt")
@@ -153,6 +154,7 @@ public interface AppointmentAPI {
                 @ApiResponse(responseCode = "200", description = "Agenda retrieved successfully"),
                 @ApiResponse(responseCode = "400", description = "Invalid date format")
             })
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATTENDANT')")
     Pagination<AppointmentResponse> viewDailyAgenda(
             @Parameter(
                             description = "Date to view (ISO format)",
@@ -164,7 +166,7 @@ public interface AppointmentAPI {
             @Parameter(description = "Filter by status", example = "ACTIVE")
                     @RequestParam(name = "status", required = false)
                     AppointmentStatus status,
-            @Parameter(description = "Filter by service type", example = "CRECHE")
+            @Parameter(description = "Filter by service type", example = "DAYCARE")
                     @RequestParam(name = "serviceType", required = false)
                     ServiceType serviceType,
             @Parameter(description = "Page number (0-based)", example = "0")

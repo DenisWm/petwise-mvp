@@ -35,6 +35,15 @@ spring:
     baseline-on-migrate: true
     baseline-version: 0
 
+  # ---------------------------------------------------------------------------
+  # OAuth 2.0 Resource Server — validate Keycloak-issued JWTs
+  # ---------------------------------------------------------------------------
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.issuer-uri}
+
 
 server:
   port: 8080
@@ -48,6 +57,14 @@ server:
     threads:
       worker: 64 # Generally this should be reasonably high, at least 10 per CPU core: https://undertow.io/undertow-docs/undertow-docs-2.1.0/index.html#listeners-2
       io: 4 # One IO thread per CPU core is a reasonable default: https://undertow.io/undertow-docs/undertow-docs-2.1.0/index.html#listeners-2
+
+# ---------------------------------------------------------------------------
+# Springdoc / Swagger UI — pre-fill OAuth2 client for one-click auth
+# ---------------------------------------------------------------------------
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: petwise-swagger
 
 
 # ---------------------------------------------------------------------------
@@ -69,5 +86,4 @@ management:
       show-details: when-authorized    # hide internals from anonymous callers
     loggers:
       enabled: true                    # allows GET (read) and POST (change) at runtime
-
 

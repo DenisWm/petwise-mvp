@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -21,9 +23,11 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  *
  * <ul>
  *   <li>{@link NoResourceFoundException} → 404 (DEBUG) — missing static resources like favicon
- *   <li>{@link NotFoundException} → 404 (WARN)
- *   <li>{@link NotificationException} → 422 (WARN)
+ *   <li>{@link com.petwise.domain.exceptions.NotFoundException} → 404 (WARN)
+ *   <li>{@link com.petwise.domain.exceptions.NotificationException} → 422 (WARN)
  *   <li>{@link DomainException} → 400 (WARN)
+ *   <li>{@link AccessDeniedException} → re-thrown → 403 (handled by SecurityConfig)
+ *   <li>{@link AuthenticationException} → re-thrown → 401 (handled by SecurityConfig)
  *   <li>{@link Exception} → 500 (ERROR)
  * </ul>
  */
@@ -120,6 +124,51 @@ public class GlobalExceptionHandler {
                 .body(ApiError.from(HttpStatus.NOT_FOUND, exception.getMessage(), List.of()));
     }
 
+    // -----------------------------------------------------------------------
+    // Security exceptions — delegated here from DelegatingAuthenticationEntryPoint
+    // and DelegatingAccessDeniedHandler via HandlerExceptionResolver
+    // -----------------------------------------------------------------------
+
+    /**
+     * Handles {@link AccessDeniedException} — authenticated user lacks the
+     * required role / authority for the requested resource.
+     *
+     * @param exception the exception
+     * @return 403 response with error details
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDenied(final AccessDeniedException exception) {
+        if (LOG.isWarnEnabled()) {
+            LOG.warn("Access denied: {}", exception.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(
+                        ApiError.from(
+                                HttpStatus.FORBIDDEN,
+                                "Access denied — insufficient permissions",
+                                List.of()));
+    }
+
+    /**
+     * Handles {@link AuthenticationException} — request arrived without a
+     * valid Bearer token (missing, expired, malformed, bad signature).
+     *
+     * @param exception the exception
+     * @return 401 response with error details
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthentication(final AuthenticationException exception) {
+        if (LOG.isWarnEnabled()) {
+            LOG.warn("Authentication failed: {}", exception.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(
+                        ApiError.from(
+                                HttpStatus.UNAUTHORIZED,
+                                "Authentication required — provide a valid Bearer token",
+                                List.of()));
+    }
+
     /**
      * Catch-all for unexpected exceptions.
      *
@@ -161,7 +210,15 @@ public class GlobalExceptionHandler {
             this.errors = List.copyOf(errors);
         }
 
-        static ApiError from(
+        /**
+         * Creates an {@link ApiError} from the given HTTP status, message, and error list.
+         *
+         * @param httpStatus the HTTP status
+         * @param message a human-readable error summary
+         * @param errors the list of detailed domain errors (may be empty)
+         * @return the API error
+         */
+        public static ApiError from(
                 final HttpStatus httpStatus, final String message, final List<Error> errors) {
             return new ApiError(httpStatus.value(), message, errors);
         }

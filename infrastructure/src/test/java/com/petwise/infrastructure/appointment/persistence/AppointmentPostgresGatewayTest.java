@@ -59,7 +59,7 @@ class AppointmentPostgresGatewayTest {
     private static Appointment buildAppointment(final PetID petId) {
         return Appointment.newAppointment(
                 petId,
-                ServiceType.CRECHE,
+                ServiceType.DAYCARE,
                 Instant.parse("2025-11-28T08:00:00Z"),
                 Instant.parse("2025-11-28T18:00:00Z"),
                 "Test notes");
@@ -76,7 +76,7 @@ class AppointmentPostgresGatewayTest {
         // then
         assertThat(result).isNotNull();
         assertThat(result.getId()).isNotNull();
-        assertThat(result.getServiceType()).isEqualTo(ServiceType.CRECHE);
+        assertThat(result.getServiceType()).isEqualTo(ServiceType.DAYCARE);
         assertThat(result.getStatus()).isEqualTo(AppointmentStatus.PENDING);
         assertThat(result.getNotes()).isEqualTo("Test notes");
     }
@@ -92,7 +92,7 @@ class AppointmentPostgresGatewayTest {
         // then
         assertThat(result).isPresent();
         assertThat(result.get().getId()).isEqualTo(saved.getId());
-        assertThat(result.get().getServiceType()).isEqualTo(ServiceType.CRECHE);
+        assertThat(result.get().getServiceType()).isEqualTo(ServiceType.DAYCARE);
     }
 
     @Test
@@ -172,7 +172,7 @@ class AppointmentPostgresGatewayTest {
         final var petId = persistedPetId();
         appointmentGateway.save(buildAppointment(petId));
         appointmentGateway.save(buildAppointment(petId));
-        final var query = new SearchQuery(0, 10, "CRECHE", "startAt", "asc");
+        final var query = new SearchQuery(0, 10, "DAYCARE", "startAt", "asc");
 
         // when
         final var result = appointmentGateway.findAll(query);
@@ -244,7 +244,7 @@ class AppointmentPostgresGatewayTest {
                 new AppointmentSearchQuery(
                         LocalDate.parse("2025-11-28"),
                         null,
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         0,
                         10,
                         "startAt",
@@ -266,7 +266,7 @@ class AppointmentPostgresGatewayTest {
                 new AppointmentSearchQuery(
                         LocalDate.parse("2025-11-28"),
                         AppointmentStatus.PENDING,
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         0,
                         10,
                         "startAt",

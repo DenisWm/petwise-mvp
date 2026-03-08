@@ -56,11 +56,71 @@ openapi:
 	@./gradlew :infrastructure:generateOpenApiDocs
 	@echo "✅ docs/api/openapi.yaml updated"
 
+# ---------------------------------------------------------------------------
+# ERD – Auto-generated Entity-Relationship Diagram (SchemaSpy)
+# ---------------------------------------------------------------------------
+# Connects to the running PostgreSQL container and generates an interactive
+# HTML report with SVG diagrams.  Zero manual maintenance: the ERD always
+# reflects the actual database schema (Flyway migrations).
+#
+# Prerequisites: `make infra-up` (PostgreSQL must be running on localhost:5432)
+# ---------------------------------------------------------------------------
+ERD_OUTPUT := docs/erd
+
+.PHONY: erd
+erd:
+	@echo "🗄️  Generating ERD from live database (SchemaSpy)..."
+	@mkdir -p $(ERD_OUTPUT)
+	@docker run --rm --network host \
+		-v $(PWD)/$(ERD_OUTPUT):/output \
+		-e SCHEMASPY_OUTPUT=/output \
+		schemaspy/schemaspy:latest \
+		-t pgsql11 \
+		-host localhost -port 5432 \
+		-db petwise -u postgres -p postgres \
+		-s public \
+		-norows
+	@echo "✅ ERD generated at $(ERD_OUTPUT)/index.html"
+	@echo "   Open in browser: file://$(PWD)/$(ERD_OUTPUT)/index.html"
+
+.PHONY: erd-clean
+erd-clean:
+	@echo "🧹 Removing generated ERD..."
+	@rm -rf $(ERD_OUTPUT)
+
+# ---------------------------------------------------------------------------
+# Infrastructure (Docker Compose)
+# ---------------------------------------------------------------------------
+.PHONY: infra-up
+infra-up:
+	@echo "🐳 Starting infrastructure (PostgreSQL + Keycloak)..."
+	@docker compose up -d db keycloak
+	@echo "✅ Keycloak: http://localhost:9080 (admin/admin)"
+	@echo "   Realm:    petwise | Client: petwise-api"
+
+.PHONY: infra-down
+infra-down:
+	@echo "🛑 Stopping all Docker Compose services..."
+	@docker compose down
+
+.PHONY: infra-logs
+infra-logs:
+	@docker compose logs -f keycloak
+
+.PHONY: keycloak-export
+keycloak-export:
+	@echo "📤 Exporting Keycloak realm to infra/keycloak/..."
+	@docker compose exec keycloak /opt/keycloak/bin/kc.sh export \
+		--dir /opt/keycloak/data/export --realm petwise
+	@docker compose cp keycloak:/opt/keycloak/data/export/petwise-realm.json \
+		infra/keycloak/petwise-realm-export.json
+	@echo "✅ Exported to infra/keycloak/petwise-realm-export.json"
+
 # Help (default)
 .PHONY: help
 help:
 	@echo ""
-	@echo "🧠 PetWise Diagram Makefile"
+	@echo "🧠 PetWise Makefile"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make diagrams          Render all .puml diagrams under docs/ to .png"
@@ -69,6 +129,14 @@ help:
 	@echo "  make <path>.png        Render a single diagram (side-by-side)"
 	@echo "  make publish           Copy generated .png files into docs/assets/diagrams preserving subfolders"
 	@echo "  make openapi           Generate docs/api/openapi.yaml from annotated controllers"
+	@echo ""
+	@echo "  make erd               Generate ERD from live PostgreSQL (requires infra-up)"
+	@echo "  make erd-clean         Remove generated ERD"
+	@echo ""
+	@echo "  make infra-up          Start DB + Keycloak (docker compose)"
+	@echo "  make infra-down        Stop all Docker Compose services"
+	@echo "  make infra-logs        Follow Keycloak container logs"
+	@echo "  make keycloak-export   Export current Keycloak realm to infra/keycloak/"
 	@echo ""
 	@echo "Examples:"
 	@echo "  make diagrams"

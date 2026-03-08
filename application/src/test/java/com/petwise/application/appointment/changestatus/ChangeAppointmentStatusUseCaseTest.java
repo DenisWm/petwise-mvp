@@ -55,7 +55,7 @@ class ChangeAppointmentStatusUseCaseTest {
                 Appointment.with(
                         appointmentId,
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         AppointmentStatus.PENDING,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
