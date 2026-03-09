@@ -28,20 +28,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class ListPetsUseCaseTest {
-
-    /** Default constructor. */
     ListPetsUseCaseTest() {}
 
-    /** The mocked pet gateway. */
     @Mock private PetGateway petGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultListPetsUseCase useCase;
 
     @Test
     @DisplayName("Should return paginated list of pets")
     void shouldReturnPaginatedListOfPets() {
-        // Given
         final var query = new SearchQuery(0, 10, "", "name", "asc");
         final var pet =
                 Pet.with(
@@ -57,11 +51,7 @@ class ListPetsUseCaseTest {
 
         final var pagination = new Pagination<>(0, 10, 1, List.of(pet));
         when(petGateway.findAll(query)).thenReturn(pagination);
-
-        // When
         final var result = useCase.execute(query);
-
-        // Then
         assertNotNull(result);
         assertEquals(1, result.total());
         assertEquals("Fluffy", result.items().get(0).name());

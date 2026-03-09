@@ -28,23 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SuppressWarnings({"PMD.LongVariable", "PMD.ShortVariable"})
 public class PetController implements PetAPI {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(PetController.class);
-
-    /** Use case for creating a pet. */
     private final CreatePetUseCase createPetUseCase;
-
-    /** Use case for retrieving a pet by ID. */
     private final GetPetByIdUseCase getPetByIdUseCase;
-
-    /** Use case for listing pets. */
     private final ListPetsUseCase listPetsUseCase;
-
-    /** Use case for updating a pet. */
     private final UpdatePetUseCase updatePetUseCase;
-
-    /** Use case for deleting a pet. */
     private final DeletePetUseCase deletePetUseCase;
 
     /**

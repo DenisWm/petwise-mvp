@@ -16,8 +16,6 @@ import org.junit.jupiter.api.Test;
     "PMD.ShortVariable"
 })
 class DomainExceptionTest extends UnitTest {
-
-    /** Default constructor. */
     DomainExceptionTest() {}
 
     @Test

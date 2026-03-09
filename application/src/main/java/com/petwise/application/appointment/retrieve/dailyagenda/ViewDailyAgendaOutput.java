@@ -5,19 +5,7 @@ import com.petwise.domain.appointment.AppointmentStatus;
 import com.petwise.domain.appointment.ServiceType;
 import java.time.Instant;
 
-/**
- * Output DTO for a single appointment in the daily agenda results.
- *
- * @param id the appointment ID
- * @param petId the pet ID
- * @param serviceType the service type
- * @param status the appointment status
- * @param startAt the start timestamp
- * @param endAt the end timestamp
- * @param notes optional notes
- * @param createdAt the creation timestamp
- * @param updatedAt the last update timestamp
- */
+/** Output DTO for a single appointment in the daily agenda results. */
 @SuppressWarnings("PMD.ShortVariable")
 public record ViewDailyAgendaOutput(
         String id,
@@ -30,12 +18,6 @@ public record ViewDailyAgendaOutput(
         Instant createdAt,
         Instant updatedAt) {
 
-    /**
-     * Creates a {@code ViewDailyAgendaOutput} from a domain {@link Appointment}.
-     *
-     * @param appointment the appointment to map
-     * @return a new output instance
-     */
     public static ViewDailyAgendaOutput from(final Appointment appointment) {
         return new ViewDailyAgendaOutput(
                 appointment.getId().getValue(),

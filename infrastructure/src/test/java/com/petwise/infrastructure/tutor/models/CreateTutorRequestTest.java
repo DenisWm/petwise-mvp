@@ -17,22 +17,14 @@ import org.springframework.boot.test.json.JacksonTester;
     "PMD.AvoidDuplicateLiterals"
 })
 class CreateTutorRequestTest {
-
-    /** Default constructor. */
     CreateTutorRequestTest() {}
 
-    /** The Jackson tester for CreateTutorRequest. */
     @Autowired private JacksonTester<CreateTutorRequest> json;
 
     @Test
     void givenValidRequest_whenSerialize_thenShouldContainAllFields() throws Exception {
-        // given
         final var request = new CreateTutorRequest("John Doe", "john@example.com", "+1234567890");
-
-        // when
         final var jsonContent = this.json.write(request);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("John Doe");
         assertThat(jsonContent)
                 .extractingJsonPathStringValue("$.email")
@@ -42,7 +34,6 @@ class CreateTutorRequestTest {
 
     @Test
     void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -51,11 +42,7 @@ class CreateTutorRequestTest {
                     "phone": "+1234567890"
                 }
                 """;
-
-        // when
         final var request = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(request.name()).isEqualTo("John Doe");
         assertThat(request.email()).isEqualTo("john@example.com");
         assertThat(request.phone()).isEqualTo("+1234567890");
@@ -63,13 +50,8 @@ class CreateTutorRequestTest {
 
     @Test
     void givenRequestWithNullEmail_whenSerialize_thenShouldOmitEmail() throws Exception {
-        // given
         final var request = new CreateTutorRequest("John Doe", null, "+1234567890");
-
-        // when
         final var jsonContent = this.json.write(request);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("John Doe");
         assertThat(jsonContent).doesNotHaveJsonPath("$.email"); // null should not be rendered
         assertThat(jsonContent).extractingJsonPathStringValue("$.phone").isEqualTo("+1234567890");
@@ -77,7 +59,6 @@ class CreateTutorRequestTest {
 
     @Test
     void givenJsonWithoutEmail_whenDeserialize_thenShouldMapEmailAsNull() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -85,11 +66,7 @@ class CreateTutorRequestTest {
                     "phone": "+1234567890"
                 }
                 """;
-
-        // when
         final var request = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(request.name()).isEqualTo("John Doe");
         assertThat(request.email()).isNull();
         assertThat(request.phone()).isEqualTo("+1234567890");
@@ -98,7 +75,6 @@ class CreateTutorRequestTest {
     @Test
     void givenJsonWithExplicitNullEmail_whenDeserialize_thenShouldMapEmailAsNull()
             throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -107,11 +83,7 @@ class CreateTutorRequestTest {
                     "phone": "+1234567890"
                 }
                 """;
-
-        // when
         final var request = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(request.name()).isEqualTo("John Doe");
         assertThat(request.email()).isNull();
         assertThat(request.phone()).isEqualTo("+1234567890");
@@ -119,13 +91,8 @@ class CreateTutorRequestTest {
 
     @Test
     void givenRequestWithNullPhone_whenSerialize_thenShouldOmitPhone() throws Exception {
-        // given
         final var request = new CreateTutorRequest("John Doe", "john@example.com", null);
-
-        // when
         final var jsonContent = this.json.write(request);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("John Doe");
         assertThat(jsonContent)
                 .extractingJsonPathStringValue("$.email")
@@ -135,7 +102,6 @@ class CreateTutorRequestTest {
 
     @Test
     void givenJsonWithoutPhone_whenDeserialize_thenShouldMapPhoneAsNull() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -143,11 +109,7 @@ class CreateTutorRequestTest {
                     "email": "john@example.com"
                 }
                 """;
-
-        // when
         final var request = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(request.name()).isEqualTo("John Doe");
         assertThat(request.email()).isEqualTo("john@example.com");
         assertThat(request.phone()).isNull();

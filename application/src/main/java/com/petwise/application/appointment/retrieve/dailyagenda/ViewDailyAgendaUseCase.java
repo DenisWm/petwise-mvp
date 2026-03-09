@@ -10,7 +10,5 @@ import com.petwise.domain.pagination.Pagination;
 @SuppressWarnings("PMD.AbstractClassWithoutAnyMethod")
 public abstract class ViewDailyAgendaUseCase
         extends UseCase<ViewDailyAgendaCommand, Pagination<ViewDailyAgendaOutput>> {
-
-    /** Protected constructor for subclasses. */
     protected ViewDailyAgendaUseCase() {}
 }

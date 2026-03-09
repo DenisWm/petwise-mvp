@@ -138,11 +138,6 @@ public interface PetAPI {
             @Parameter(description = "Pet ID", required = true) @PathVariable("id") String petId,
             @RequestBody UpdatePetRequest request);
 
-    /**
-     * Deletes a pet by ID.
-     *
-     * @param petId the pet identifier
-     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a pet", description = "Deletes a pet by its ID")
     @ApiResponses(

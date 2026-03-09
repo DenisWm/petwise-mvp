@@ -32,20 +32,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.LongVariable"
 })
 class ViewDailyAgendaUseCaseTest {
-
-    /** Default constructor. */
     ViewDailyAgendaUseCaseTest() {}
 
-    /** The mocked appointment gateway. */
     @Mock private AppointmentGateway appointmentGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultViewDailyAgendaUseCase useCase;
 
     @Test
     @DisplayName("Should return paginated agenda for a given date")
     void givenValidDateCommand_whenExecute_thenShouldReturnPaginatedAgenda() {
-        // Given
         final var date = LocalDate.of(2026, 2, 26);
         final var command = ViewDailyAgendaCommand.with(date, null, null, 0, 20, "startAt", "asc");
 
@@ -64,11 +58,7 @@ class ViewDailyAgendaUseCaseTest {
         final var pagination = new Pagination<>(0, 20, 1, List.of(appointment));
         when(appointmentGateway.findDailyAgenda(any(AppointmentSearchQuery.class)))
                 .thenReturn(pagination);
-
-        // When
         final var result = useCase.execute(command);
-
-        // Then
         assertNotNull(result);
         assertEquals(1, result.total());
         assertEquals(1, result.items().size());
@@ -82,7 +72,6 @@ class ViewDailyAgendaUseCaseTest {
     @Test
     @DisplayName("Should pass status and serviceType filters to gateway")
     void givenCommandWithFilters_whenExecute_thenShouldPassFiltersToGateway() {
-        // Given
         final var date = LocalDate.of(2026, 2, 26);
         final var command =
                 ViewDailyAgendaCommand.with(
@@ -97,11 +86,7 @@ class ViewDailyAgendaUseCaseTest {
         final var pagination = new Pagination<Appointment>(0, 10, 0, List.of());
         when(appointmentGateway.findDailyAgenda(any(AppointmentSearchQuery.class)))
                 .thenReturn(pagination);
-
-        // When
         final var result = useCase.execute(command);
-
-        // Then
         assertNotNull(result);
         assertEquals(0, result.total());
 
@@ -117,18 +102,13 @@ class ViewDailyAgendaUseCaseTest {
     @Test
     @DisplayName("Should return empty page when no appointments for date")
     void givenNoAppointments_whenExecute_thenShouldReturnEmptyPage() {
-        // Given
         final var date = LocalDate.of(2026, 12, 25);
         final var command = ViewDailyAgendaCommand.with(date, null, null, 0, 20, "startAt", "asc");
 
         final var emptyPagination = new Pagination<Appointment>(0, 20, 0, List.of());
         when(appointmentGateway.findDailyAgenda(any(AppointmentSearchQuery.class)))
                 .thenReturn(emptyPagination);
-
-        // When
         final var result = useCase.execute(command);
-
-        // Then
         assertNotNull(result);
         assertEquals(0, result.total());
         assertTrue(result.items().isEmpty());

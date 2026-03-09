@@ -9,13 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 /**
- * Custom {@link AccessDeniedHandler} that delegates to the Spring MVC
- * {@link HandlerExceptionResolver} chain, so that security-related 403 errors
- * are handled by {@link com.petwise.infrastructure.api.GlobalExceptionHandler}
- * just like any other application exception.
+ * Custom {@link AccessDeniedHandler} that delegates to the Spring MVC {@link
+ * HandlerExceptionResolver} chain, so that security-related 403 errors are handled by {@link
+ * com.petwise.infrastructure.api.GlobalExceptionHandler} just like any other application exception.
  *
- * <p>This keeps all error-response formatting in a single place and avoids
- * duplicating JSON serialisation logic inside the security configuration.
+ * <p>This keeps all error-response formatting in a single place and avoids duplicating JSON
+ * serialisation logic inside the security configuration.
  */
 @Component
 public class DelegatingAccessDeniedHandler implements AccessDeniedHandler {
@@ -28,17 +27,16 @@ public class DelegatingAccessDeniedHandler implements AccessDeniedHandler {
      * @param resolver the Spring MVC exception resolver (the "handlerExceptionResolver" bean)
      */
     public DelegatingAccessDeniedHandler(
-            @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
+            @Qualifier("handlerExceptionResolver") final HandlerExceptionResolver resolver) {
         this.resolver = resolver;
     }
 
     @Override
     public void handle(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AccessDeniedException accessDeniedException) {
+            final HttpServletRequest request,
+            final HttpServletResponse response,
+            final AccessDeniedException accessDeniedException) {
 
         resolver.resolveException(request, response, null, accessDeniedException);
     }
 }
-

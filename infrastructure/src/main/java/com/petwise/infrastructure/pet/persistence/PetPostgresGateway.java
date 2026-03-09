@@ -23,11 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @SuppressWarnings({"PMD.ShortVariable", "PMD.LiteralsFirstInComparisons"})
 public class PetPostgresGateway implements PetGateway {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(PetPostgresGateway.class);
-
-    /** The underlying Spring Data JPA repository. */
     private final PetRepository repository;
 
     /**

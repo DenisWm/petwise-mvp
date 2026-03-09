@@ -4,22 +4,10 @@ import java.io.Serializable;
 import java.time.Instant;
 
 /**
- * Marker interface for all domain events.
- *
- * <p>A domain event represents something that happened in the domain that domain experts care
- * about. Events are immutable and should be named in past tense (e.g., {@code TutorRegistered}).
- *
- * <p>Implement this interface on records or final classes to ensure immutability.
- *
- * <p>Implement this interface on records or final classes to ensure immutability.
+ * Marker interface for domain events — immutable facts about something that happened. Name
+ * implementations in past tense (e.g., {@code TutorRegistered}). Prefer records or final classes.
  */
 @SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface DomainEvent extends Serializable {
-
-    /**
-     * Returns the instant at which this event occurred.
-     *
-     * @return the event timestamp; never {@code null}
-     */
     Instant occurredOn();
 }

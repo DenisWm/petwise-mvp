@@ -8,7 +8,5 @@ import com.petwise.application.UseCase;
  */
 @SuppressWarnings("PMD.AbstractClassWithoutAnyMethod")
 public abstract class UpdatePetUseCase extends UseCase<UpdatePetCommand, UpdatePetOutput> {
-
-    /** Protected constructor for subclasses. */
     protected UpdatePetUseCase() {}
 }

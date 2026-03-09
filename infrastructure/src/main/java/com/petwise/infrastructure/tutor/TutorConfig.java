@@ -20,8 +20,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @SuppressWarnings("PMD.LongVariable")
 public class TutorConfig {
-
-    /** Default constructor. */
     public TutorConfig() {}
 
     /**

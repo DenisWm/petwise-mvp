@@ -21,29 +21,26 @@ import org.springframework.context.annotation.Configuration;
  *
  * <p>An <em>OAuth 2.0 Password</em> (Resource Owner Password Credentials) security scheme is
  * registered globally so that the Swagger UI displays an <strong>Authorize</strong> dialog with
- * username / password fields. Clicking <em>Authorize</em> fetches a JWT from Keycloak
- * automatically — no curl or copy-paste required.
+ * username / password fields. Clicking <em>Authorize</em> fetches a JWT from Keycloak automatically
+ * — no curl or copy-paste required.
  */
 @Configuration
 public class OpenApiConfig {
-
-    /** Name used to reference the security scheme throughout the spec. */
     private static final String SECURITY_SCHEME_NAME = "keycloak-oauth";
 
-    /** Default constructor. */
     public OpenApiConfig() {}
 
     /**
      * Creates the global {@link OpenAPI} bean with PetWise metadata.
      *
-     * @param keycloakIssuerUri the Keycloak issuer URI (e.g. {@code http://localhost:9080/realms/petwise})
+     * @param keycloakIssuerUri the Keycloak issuer URI (e.g. {@code
+     *     http://localhost:9080/realms/petwise})
      * @return the OpenAPI metadata
      */
     @Bean
-    public OpenAPI petwiseOpenAPI(
-            @Value("${keycloak.issuer-uri}") String keycloakIssuerUri) {
+    public OpenAPI petwiseOpenAPI(@Value("${keycloak.issuer-uri}") final String keycloakIssuerUri) {
 
-        String tokenUrl = keycloakIssuerUri + "/protocol/openid-connect/token";
+        final String tokenUrl = keycloakIssuerUri + "/protocol/openid-connect/token";
 
         return new OpenAPI()
                 .info(
@@ -72,7 +69,8 @@ public class OpenApiConfig {
                                                         new OAuthFlows()
                                                                 .password(
                                                                         new OAuthFlow()
-                                                                                .tokenUrl(tokenUrl)))))
+                                                                                .tokenUrl(
+                                                                                        tokenUrl)))))
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME));
     }
 }

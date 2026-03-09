@@ -20,16 +20,12 @@ import org.springframework.data.domain.Sort;
     "PMD.TooManyMethods"
 })
 class TutorRepositoryTest {
-
-    /** Default constructor. */
     TutorRepositoryTest() {}
 
-    /** The repository under test. */
     @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidTutor_whenSave_thenShouldPersist() {
-        // given
         final var entity = new TutorJpaEntity();
         entity.setId("tutor-123");
         entity.setName("John Doe");
@@ -37,11 +33,7 @@ class TutorRepositoryTest {
         entity.setPhone("+1234567890");
         entity.setCreatedAt(Instant.now());
         entity.setUpdatedAt(Instant.now());
-
-        // when
         final var result = tutorRepository.save(entity);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo("tutor-123");
         assertThat(result.getName()).isEqualTo("John Doe");
@@ -51,7 +43,6 @@ class TutorRepositoryTest {
 
     @Test
     void givenExistingTutor_whenFindById_thenShouldReturnTutor() {
-        // given
         final var entity = new TutorJpaEntity();
         entity.setId("tutor-456");
         entity.setName("Jane Smith");
@@ -60,11 +51,7 @@ class TutorRepositoryTest {
         entity.setCreatedAt(Instant.now());
         entity.setUpdatedAt(Instant.now());
         tutorRepository.save(entity);
-
-        // when
         final var result = tutorRepository.findById("tutor-456");
-
-        // then
         assertThat(result).isPresent();
         assertThat(result.get().getId()).isEqualTo("tutor-456");
         assertThat(result.get().getName()).isEqualTo("Jane Smith");
@@ -73,16 +60,12 @@ class TutorRepositoryTest {
 
     @Test
     void givenNonExistingTutor_whenFindById_thenShouldReturnEmpty() {
-        // when
         final var result = tutorRepository.findById("non-existing-id");
-
-        // then
         assertThat(result).isEmpty();
     }
 
     @Test
     void givenMultipleTutors_whenFindAll_thenShouldReturnAllTutors() {
-        // given
         final var entity1 =
                 createTutorEntity("tutor-1", "Alice Brown", "alice@example.com", "+1111111111");
         final var entity2 =
@@ -93,11 +76,7 @@ class TutorRepositoryTest {
         tutorRepository.save(entity1);
         tutorRepository.save(entity2);
         tutorRepository.save(entity3);
-
-        // when
         final var result = tutorRepository.findAll();
-
-        // then
         assertThat(result).hasSize(3);
         assertThat(result)
                 .extracting(TutorJpaEntity::getName)
@@ -106,22 +85,16 @@ class TutorRepositoryTest {
 
     @Test
     void givenExistingTutor_whenDelete_thenShouldRemoveTutor() {
-        // given
         final var entity =
                 createTutorEntity("tutor-delete", "Delete Me", "delete@example.com", "+9999999999");
         tutorRepository.save(entity);
-
-        // when
         tutorRepository.deleteById("tutor-delete");
-
-        // then
         final var result = tutorRepository.findById("tutor-delete");
         assertThat(result).isEmpty();
     }
 
     @Test
     void givenTutorsWithMatchingName_whenFindBySearchTerms_thenShouldReturnMatchingTutors() {
-        // given
         final var entity1 =
                 createTutorEntity("tutor-1", "Maria Silva", "maria@example.com", "+1111111111");
         final var entity2 =
@@ -134,11 +107,7 @@ class TutorRepositoryTest {
         tutorRepository.save(entity3);
 
         final var pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "name"));
-
-        // when
         final var result = tutorRepository.findBySearchTerms("Silva", pageable);
-
-        // then
         assertThat(result.getContent()).hasSize(2);
         assertThat(result.getContent())
                 .extracting(TutorJpaEntity::getName)
@@ -148,7 +117,6 @@ class TutorRepositoryTest {
 
     @Test
     void givenTutorsWithMatchingEmail_whenFindBySearchTerms_thenShouldReturnMatchingTutors() {
-        // given
         final var entity1 =
                 createTutorEntity("tutor-1", "User One", "test@gmail.com", "+1111111111");
         final var entity2 =
@@ -161,11 +129,7 @@ class TutorRepositoryTest {
         tutorRepository.save(entity3);
 
         final var pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "name"));
-
-        // when
         final var result = tutorRepository.findBySearchTerms("test@", pageable);
-
-        // then
         assertThat(result.getContent()).hasSize(2);
         assertThat(result.getContent())
                 .extracting(TutorJpaEntity::getEmail)
@@ -174,7 +138,6 @@ class TutorRepositoryTest {
 
     @Test
     void givenTutors_whenFindBySearchTermsWithPagination_thenShouldRespectPagination() {
-        // given
         for (int i = 0; i < 15; i++) {
             final var entity =
                     createTutorEntity(
@@ -186,11 +149,7 @@ class TutorRepositoryTest {
         }
 
         final var pageable = PageRequest.of(1, 5, Sort.by(Sort.Direction.ASC, "name"));
-
-        // when
         final var result = tutorRepository.findBySearchTerms("Tutor", pageable);
-
-        // then
         assertThat(result.getContent()).hasSize(5);
         assertThat(result.getTotalElements()).isEqualTo(15);
         assertThat(result.getTotalPages()).isEqualTo(3);
@@ -199,7 +158,6 @@ class TutorRepositoryTest {
 
     @Test
     void givenTutors_whenFindBySearchTermsCaseInsensitive_thenShouldMatchRegardlessOfCase() {
-        // given
         final var entity1 =
                 createTutorEntity(
                         "tutor-1", "UPPERCASE NAME", "uppercase@example.com", "+1111111111");
@@ -214,11 +172,7 @@ class TutorRepositoryTest {
         tutorRepository.save(entity3);
 
         final var pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "name"));
-
-        // when
         final var result = tutorRepository.findBySearchTerms("name", pageable);
-
-        // then
         assertThat(result.getContent()).hasSize(3);
         assertThat(result.getContent())
                 .extracting(TutorJpaEntity::getName)
@@ -227,7 +181,6 @@ class TutorRepositoryTest {
 
     @Test
     void givenTutors_whenFindBySearchTermsWithEmptyString_thenShouldNotMatch() {
-        // given
         final var entity1 =
                 createTutorEntity("tutor-1", "John Doe", "john@example.com", "+1111111111");
         final var entity2 =
@@ -237,18 +190,13 @@ class TutorRepositoryTest {
         tutorRepository.save(entity2);
 
         final var pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "name"));
-
-        // when
         final var result = tutorRepository.findBySearchTerms("", pageable);
-
-        // then
         // Empty string will match all due to LIKE '%%'
         assertThat(result.getContent()).hasSize(2);
     }
 
     @Test
     void givenTutors_whenFindBySearchTermsWithNoMatch_thenShouldReturnEmpty() {
-        // given
         final var entity1 =
                 createTutorEntity("tutor-1", "John Doe", "john@example.com", "+1111111111");
         final var entity2 =
@@ -258,18 +206,13 @@ class TutorRepositoryTest {
         tutorRepository.save(entity2);
 
         final var pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "name"));
-
-        // when
         final var result = tutorRepository.findBySearchTerms("NonExistingTerm", pageable);
-
-        // then
         assertThat(result.getContent()).isEmpty();
         assertThat(result.getTotalElements()).isEqualTo(0);
     }
 
     @Test
     void givenTutorWithNullEmail_whenSave_thenShouldPersist() {
-        // given
         final var entity = new TutorJpaEntity();
         entity.setId("tutor-no-email");
         entity.setName("No Email User");
@@ -277,11 +220,7 @@ class TutorRepositoryTest {
         entity.setPhone("+1234567890");
         entity.setCreatedAt(Instant.now());
         entity.setUpdatedAt(Instant.now());
-
-        // when
         final var result = tutorRepository.save(entity);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo("tutor-no-email");
         assertThat(result.getName()).isEqualTo("No Email User");
@@ -290,7 +229,6 @@ class TutorRepositoryTest {
 
     @Test
     void givenTutorWithNullPhone_whenSave_thenShouldPersist() {
-        // given
         final var entity = new TutorJpaEntity();
         entity.setId("tutor-no-phone");
         entity.setName("No Phone User");
@@ -298,11 +236,7 @@ class TutorRepositoryTest {
         entity.setPhone(null);
         entity.setCreatedAt(Instant.now());
         entity.setUpdatedAt(Instant.now());
-
-        // when
         final var result = tutorRepository.save(entity);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo("tutor-no-phone");
         assertThat(result.getName()).isEqualTo("No Phone User");
@@ -311,20 +245,15 @@ class TutorRepositoryTest {
 
     @Test
     void givenExistingTutor_whenUpdate_thenShouldUpdateFields() {
-        // given
         final var entity =
                 createTutorEntity(
                         "tutor-update", "Original Name", "original@example.com", "+1111111111");
         tutorRepository.save(entity);
-
-        // when
         entity.setName("Updated Name");
         entity.setEmail("updated@example.com");
         entity.setPhone("+9999999999");
         entity.setUpdatedAt(Instant.now());
         tutorRepository.save(entity);
-
-        // then
         final var result = tutorRepository.findById("tutor-update");
         assertThat(result).isPresent();
         assertThat(result.get().getName()).isEqualTo("Updated Name");
@@ -334,7 +263,6 @@ class TutorRepositoryTest {
 
     @Test
     void givenTutors_whenFindBySearchTermsWithSorting_thenShouldReturnSortedResults() {
-        // given
         final var entity1 =
                 createTutorEntity("tutor-1", "Charlie", "charlie@example.com", "+1111111111");
         final var entity2 =
@@ -347,12 +275,8 @@ class TutorRepositoryTest {
 
         final var pageableAsc = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "name"));
         final var pageableDesc = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "name"));
-
-        // when
         final var resultAsc = tutorRepository.findBySearchTerms("", pageableAsc);
         final var resultDesc = tutorRepository.findBySearchTerms("", pageableDesc);
-
-        // then
         assertThat(resultAsc.getContent())
                 .extracting(TutorJpaEntity::getName)
                 .containsExactly("Alice", "Bob", "Charlie");

@@ -18,8 +18,6 @@ import org.junit.jupiter.api.Test;
     "PMD.AvoidDuplicateLiterals"
 })
 class PetJpaEntityTest {
-
-    /** Default constructor. */
     PetJpaEntityTest() {}
 
     @Test

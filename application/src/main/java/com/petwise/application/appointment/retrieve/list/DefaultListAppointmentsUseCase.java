@@ -15,29 +15,15 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultListAppointmentsUseCase extends ListAppointmentsUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultListAppointmentsUseCase.class);
-
-    /** The gateway used to query appointments. */
     private final AppointmentGateway appointmentGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param anAppointmentGateway the appointment persistence gateway; must not be {@code null}
-     */
     public DefaultListAppointmentsUseCase(final AppointmentGateway anAppointmentGateway) {
         super();
         this.appointmentGateway =
                 Objects.requireNonNull(anAppointmentGateway, "AppointmentGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override to customise pagination behaviour.
-     */
     @Override
     public Pagination<ListAppointmentsOutput> execute(final SearchQuery query) {
         Objects.requireNonNull(query, "SearchQuery cannot be null");

@@ -19,19 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class DeleteTutorUseCaseIT {
-
-    /** Default constructor. */
     DeleteTutorUseCaseIT() {}
 
-    /** The use case under test. */
     @Autowired private DeleteTutorUseCase useCase;
-
-    /** The tutor repository. */
     @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidId_whenCallsDeleteTutor_thenShouldDeleteTutor() {
-        // given
         final var tutor = Tutor.newTutor("John Doe", "john@example.com", "+1234567890");
         tutorRepository.save(
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
@@ -40,20 +34,13 @@ class DeleteTutorUseCaseIT {
 
         // Verify tutor exists
         assertThat(tutorRepository.findById(tutorId)).isPresent();
-
-        // when
         useCase.execute(tutorId);
-
-        // then
         assertThat(tutorRepository.findById(tutorId)).isEmpty();
     }
 
     @Test
     void givenNonExistingId_whenCallsDeleteTutor_thenShouldThrowNotFoundException() {
-        // given
         final var nonExistingId = "non-existing-id";
-
-        // when & then
         assertThatThrownBy(() -> useCase.execute(nonExistingId))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining("Tutor with ID non-existing-id was not found");
@@ -64,7 +51,6 @@ class DeleteTutorUseCaseIT {
 
     @Test
     void givenNullId_whenCallsDeleteTutor_thenShouldThrowNullPointerException() {
-        // when & then
         assertThatThrownBy(() -> useCase.execute(null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("Tutor ID cannot be null");
@@ -72,7 +58,6 @@ class DeleteTutorUseCaseIT {
 
     @Test
     void givenMultipleTutors_whenCallsDeleteOne_thenShouldDeleteOnlyTargetTutor() {
-        // given
         final var tutor1 = Tutor.newTutor("Tutor 1", "tutor1@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("Tutor 2", "tutor2@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Tutor 3", "tutor3@example.com", "+3333333333");
@@ -85,11 +70,7 @@ class DeleteTutorUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         assertThat(tutorRepository.count()).isEqualTo(3);
-
-        // when
         useCase.execute(tutor2.getId().getValue());
-
-        // then
         assertThat(tutorRepository.count()).isEqualTo(2);
         assertThat(tutorRepository.findById(tutor1.getId().getValue())).isPresent();
         assertThat(tutorRepository.findById(tutor2.getId().getValue())).isEmpty();
@@ -98,7 +79,6 @@ class DeleteTutorUseCaseIT {
 
     @Test
     void givenValidId_whenCallsDeleteTutorTwice_thenShouldThrowNotFoundExceptionOnSecondCall() {
-        // given
         final var tutor = Tutor.newTutor("Test User", "test@example.com", "+1234567890");
         tutorRepository.save(
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));

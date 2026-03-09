@@ -20,16 +20,12 @@ import org.springframework.boot.test.json.JacksonTester;
     "PMD.AvoidDuplicateLiterals"
 })
 class AppointmentResponseTest {
-
-    /** Default constructor. */
     AppointmentResponseTest() {}
 
-    /** The Jackson tester for AppointmentResponse. */
     @Autowired private JacksonTester<AppointmentResponse> json;
 
     @Test
     void givenValidResponse_whenSerialize_thenShouldContainAllFields() throws Exception {
-        // given
         final var startAt = Instant.parse("2025-11-28T08:00:00Z");
         final var endAt = Instant.parse("2025-11-28T18:00:00Z");
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
@@ -45,14 +41,12 @@ class AppointmentResponseTest {
                         "Test notes",
                         createdAt,
                         updatedAt);
-
-        // when
         final var jsonContent = this.json.write(response);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.id").isEqualTo("appt-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.pet_id").isEqualTo("pet-456");
-        assertThat(jsonContent).extractingJsonPathStringValue("$.service_type").isEqualTo("DAYCARE");
+        assertThat(jsonContent)
+                .extractingJsonPathStringValue("$.service_type")
+                .isEqualTo("DAYCARE");
         assertThat(jsonContent).extractingJsonPathStringValue("$.status").isEqualTo("PENDING");
         assertThat(jsonContent)
                 .extractingJsonPathStringValue("$.start_at")
@@ -71,7 +65,6 @@ class AppointmentResponseTest {
 
     @Test
     void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -86,11 +79,7 @@ class AppointmentResponseTest {
                     "updated_at": "2024-01-15T11:45:00Z"
                 }
                 """;
-
-        // when
         final var response = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(response.id()).isEqualTo("appt-123");
         assertThat(response.petId()).isEqualTo("pet-456");
         assertThat(response.serviceType()).isEqualTo(ServiceType.DAYCARE);
@@ -104,7 +93,6 @@ class AppointmentResponseTest {
 
     @Test
     void givenResponseWithNullNotes_whenSerialize_thenShouldOmitNotes() throws Exception {
-        // given
         final var startAt = Instant.parse("2025-12-01T10:00:00Z");
         final var endAt = Instant.parse("2025-12-03T10:00:00Z");
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
@@ -120,11 +108,7 @@ class AppointmentResponseTest {
                         null,
                         createdAt,
                         updatedAt);
-
-        // when
         final var jsonContent = this.json.write(response);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.service_type").isEqualTo("HOTEL");
         assertThat(jsonContent).extractingJsonPathStringValue("$.status").isEqualTo("ACTIVE");
         assertThat(jsonContent).doesNotHaveJsonPath("$.notes");
@@ -132,7 +116,6 @@ class AppointmentResponseTest {
 
     @Test
     void givenJsonWithoutNotes_whenDeserialize_thenShouldMapNotesAsNull() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -146,11 +129,7 @@ class AppointmentResponseTest {
                     "updated_at": "2024-01-15T11:45:00Z"
                 }
                 """;
-
-        // when
         final var response = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(response.serviceType()).isEqualTo(ServiceType.HOTEL);
         assertThat(response.status()).isEqualTo(AppointmentStatus.COMPLETED);
         assertThat(response.notes()).isNull();

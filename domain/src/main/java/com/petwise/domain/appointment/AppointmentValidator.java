@@ -8,26 +8,13 @@ import java.time.Instant;
 /** Validator for Appointment aggregate. */
 @SuppressWarnings("PMD.OnlyOneReturn")
 public final class AppointmentValidator extends Validator {
-
-    /** The appointment being validated. */
     private final Appointment appointment;
 
-    /**
-     * Constructs an AppointmentValidator for the given appointment and handler.
-     *
-     * @param anAppointment the appointment to validate
-     * @param handler the handler to collect errors
-     */
     public AppointmentValidator(final Appointment anAppointment, final ValidationHandler handler) {
         super(handler);
         this.appointment = anAppointment;
     }
 
-    /**
-     * Validates the appointment aggregate invariants.
-     *
-     * <p>Subclasses may override to add additional validation rules.
-     */
     @Override
     public void validate() {
         checkRequiredFields();

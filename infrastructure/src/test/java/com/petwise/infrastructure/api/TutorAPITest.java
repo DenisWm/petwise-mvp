@@ -54,8 +54,6 @@ import org.springframework.test.web.servlet.MockMvc;
     "PMD.ExcessiveImports"
 })
 class TutorAPITest {
-
-    /** Default constructor. */
     TutorAPITest() {}
 
     /** MockMvc for performing HTTP requests. */
@@ -81,7 +79,6 @@ class TutorAPITest {
 
     @Test
     void givenValidRequest_whenCreateTutor_thenShouldReturnCreatedWithLocation() throws Exception {
-        // given
         final var expectedId = "tutor-123";
         final var expectedName = "John Doe";
         final var expectedEmail = "john@example.com";
@@ -90,8 +87,6 @@ class TutorAPITest {
         final var request = new CreateTutorRequest(expectedName, expectedEmail, expectedPhone);
 
         when(createTutorUseCase.execute(any())).thenReturn(new CreateTutorOutput(expectedId));
-
-        // when & then
         mockMvc.perform(
                         post("/tutors")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,7 +105,6 @@ class TutorAPITest {
 
     @Test
     void givenValidId_whenGetTutorById_thenShouldReturnTutor() throws Exception {
-        // given
         final var expectedId = "tutor-123";
         final var expectedName = "John Doe";
         final var expectedEmail = "john@example.com";
@@ -128,8 +122,6 @@ class TutorAPITest {
                         expectedUpdatedAt);
 
         when(getTutorByIdUseCase.execute(expectedId)).thenReturn(output);
-
-        // when & then
         mockMvc.perform(get("/tutors/{id}", expectedId).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(expectedId)))
@@ -142,7 +134,6 @@ class TutorAPITest {
 
     @Test
     void givenValidParams_whenListTutors_thenShouldReturnPaginatedList() throws Exception {
-        // given
         final var expectedPage = 0;
         final var expectedPerPage = 10;
         final var expectedSearch = "John";
@@ -163,8 +154,6 @@ class TutorAPITest {
                 new Pagination<>(expectedPage, expectedPerPage, expectedTotal, List.of(tutor));
 
         when(listTutorsUseCase.execute(any())).thenReturn(expectedPagination);
-
-        // when & then
         mockMvc.perform(
                         get("/tutors")
                                 .param("page", String.valueOf(expectedPage))
@@ -194,12 +183,9 @@ class TutorAPITest {
 
     @Test
     void givenDefaultParams_whenListTutors_thenShouldUseDefaults() throws Exception {
-        // given
         final var expectedPagination = new Pagination<ListTutorsOutput>(0, 10, 0L, List.of());
 
         when(listTutorsUseCase.execute(any())).thenReturn(expectedPagination);
-
-        // when & then
         mockMvc.perform(get("/tutors").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -216,7 +202,6 @@ class TutorAPITest {
 
     @Test
     void givenValidRequest_whenUpdateTutor_thenShouldReturnOkWithLocation() throws Exception {
-        // given
         final var expectedId = "tutor-123";
         final var expectedName = "John Updated";
         final var expectedEmail = "john.updated@example.com";
@@ -225,8 +210,6 @@ class TutorAPITest {
         final var request = new UpdateTutorRequest(expectedName, expectedEmail, expectedPhone);
 
         when(updateTutorUseCase.execute(any())).thenReturn(new UpdateTutorOutput(expectedId));
-
-        // when & then
         mockMvc.perform(
                         put("/tutors/{id}", expectedId)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -246,12 +229,9 @@ class TutorAPITest {
 
     @Test
     void givenValidId_whenDeleteTutor_thenShouldReturnNoContent() throws Exception {
-        // given
         final var expectedId = "tutor-123";
 
         doNothing().when(deleteTutorUseCase).execute(expectedId);
-
-        // when & then
         mockMvc.perform(delete("/tutors/{id}", expectedId)).andExpect(status().isNoContent());
 
         verify(deleteTutorUseCase, times(1)).execute(expectedId);
@@ -259,7 +239,6 @@ class TutorAPITest {
 
     @Test
     void givenNullEmail_whenCreateTutor_thenShouldStillWork() throws Exception {
-        // given
         final var expectedId = "tutor-123";
         final var expectedName = "John Doe";
         final var expectedPhone = "+1234567890";
@@ -267,8 +246,6 @@ class TutorAPITest {
         final var request = new CreateTutorRequest(expectedName, null, expectedPhone);
 
         when(createTutorUseCase.execute(any())).thenReturn(new CreateTutorOutput(expectedId));
-
-        // when & then
         mockMvc.perform(
                         post("/tutors")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -287,7 +264,6 @@ class TutorAPITest {
 
     @Test
     void givenTutorWithNullEmail_whenGetTutorById_thenShouldNotRenderEmailField() throws Exception {
-        // given
         final var expectedId = "tutor-123";
         final var expectedName = "John Doe";
         final var expectedPhone = "+1234567890";
@@ -302,8 +278,6 @@ class TutorAPITest {
                         Instant.now());
 
         when(getTutorByIdUseCase.execute(expectedId)).thenReturn(output);
-
-        // when & then
         mockMvc.perform(get("/tutors/{id}", expectedId).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(expectedId)))

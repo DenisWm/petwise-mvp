@@ -19,19 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class GetTutorByIdUseCaseIT {
-
-    /** Default constructor. */
     GetTutorByIdUseCaseIT() {}
 
-    /** The use case under test. */
     @Autowired private GetTutorByIdUseCase useCase;
-
-    /** The tutor repository. */
     @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidId_whenCallsGetTutorById_thenShouldReturnTutor() {
-        // given
         final var expectedName = "John Doe";
         final var expectedEmail = "john@example.com";
         final var expectedPhone = "+1234567890";
@@ -41,11 +35,7 @@ class GetTutorByIdUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
-
-        // when
         final var output = useCase.execute(tutorId);
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isEqualTo(tutorId);
         assertThat(output.name()).isEqualTo(expectedName);
@@ -57,7 +47,6 @@ class GetTutorByIdUseCaseIT {
 
     @Test
     void givenValidIdWithNullEmail_whenCallsGetTutorById_thenShouldReturnTutor() {
-        // given
         final var expectedName = "Jane Smith";
         final String expectedEmail = null;
         final var expectedPhone = "+9876543210";
@@ -67,11 +56,7 @@ class GetTutorByIdUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
-
-        // when
         final var output = useCase.execute(tutorId);
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isEqualTo(tutorId);
         assertThat(output.name()).isEqualTo(expectedName);
@@ -81,7 +66,6 @@ class GetTutorByIdUseCaseIT {
 
     @Test
     void givenValidIdWithNullPhone_whenCallsGetTutorById_thenShouldReturnTutor() {
-        // given
         final var expectedName = "Bob Johnson";
         final var expectedEmail = "bob@example.com";
         final String expectedPhone = null;
@@ -91,11 +75,7 @@ class GetTutorByIdUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
-
-        // when
         final var output = useCase.execute(tutorId);
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isEqualTo(tutorId);
         assertThat(output.name()).isEqualTo(expectedName);
@@ -105,10 +85,7 @@ class GetTutorByIdUseCaseIT {
 
     @Test
     void givenNonExistingId_whenCallsGetTutorById_thenShouldThrowNotFoundException() {
-        // given
         final var nonExistingId = "non-existing-id";
-
-        // when & then
         assertThatThrownBy(() -> useCase.execute(nonExistingId))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining("Tutor with ID non-existing-id was not found");
@@ -116,7 +93,6 @@ class GetTutorByIdUseCaseIT {
 
     @Test
     void givenNullId_whenCallsGetTutorById_thenShouldThrowNullPointerException() {
-        // when & then
         assertThatThrownBy(() -> useCase.execute(null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("Tutor ID cannot be null");
@@ -124,7 +100,6 @@ class GetTutorByIdUseCaseIT {
 
     @Test
     void givenMultipleTutors_whenCallsGetTutorById_thenShouldReturnCorrectTutor() {
-        // given
         final var tutor1 = Tutor.newTutor("Tutor 1", "tutor1@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("Tutor 2", "tutor2@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Tutor 3", "tutor3@example.com", "+3333333333");
@@ -135,11 +110,7 @@ class GetTutorByIdUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
         tutorRepository.save(
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
-
-        // when
         final var output = useCase.execute(tutor2.getId().getValue());
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isEqualTo(tutor2.getId().getValue());
         assertThat(output.name()).isEqualTo("Tutor 2");
@@ -149,19 +120,14 @@ class GetTutorByIdUseCaseIT {
 
     @Test
     void givenValidId_whenCallsGetTutorByIdMultipleTimes_thenShouldAlwaysReturnSameTutor() {
-        // given
         final var tutor = Tutor.newTutor("Test User", "test@example.com", "+1234567890");
         tutorRepository.save(
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var tutorId = tutor.getId().getValue();
-
-        // when
         final var output1 = useCase.execute(tutorId);
         final var output2 = useCase.execute(tutorId);
         final var output3 = useCase.execute(tutorId);
-
-        // then
         assertThat(output1).isNotNull();
         assertThat(output2).isNotNull();
         assertThat(output3).isNotNull();

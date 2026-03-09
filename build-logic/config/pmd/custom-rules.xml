@@ -39,6 +39,9 @@
         <!-- Javadoc blocks for records and complex types exceed the
              default 5-line / 80-char limits; suppress globally -->
         <exclude name="CommentSize"/>
+        <!-- Clean code: self-documenting methods and constructors should
+             not need mandatory boilerplate Javadoc comments -->
+        <exclude name="CommentRequired"/>
     </rule>
     <rule ref="category/java/errorprone.xml"/>
     <rule ref="category/java/multithreading.xml"/>

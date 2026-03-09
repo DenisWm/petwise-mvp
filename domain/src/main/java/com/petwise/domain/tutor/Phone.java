@@ -16,30 +16,15 @@ import java.util.regex.Pattern;
     "PMD.LocalVariableCouldBeFinal"
 })
 public final class Phone extends ValueObject {
-
-    /** Regex pattern string for phone validation. */
     private static final String PHONE_REGEX = "^[\\d\\s()+-]{8,20}$";
-
-    /** Compiled pattern for phone validation. */
     private static final Pattern PHONE_PATTERN = Pattern.compile(PHONE_REGEX);
-
-    /** The raw phone string. */
     private final String value;
 
-    /** Private constructor — use {@link #from(String)} instead. */
     private Phone(final String aValue) {
         super();
         this.value = aValue;
     }
 
-    /**
-     * Creates a new Phone instance with validation. Phone is optional - null and blank values are
-     * allowed. Empty or blank strings are treated as null.
-     *
-     * @param phone the phone string to validate (can be null or blank)
-     * @return a new Phone instance, or null if phone is null or blank
-     * @throws DomainException if the phone format is invalid
-     */
     public static Phone from(final String phone) {
         if (phone == null || phone.isBlank()) {
             return null;
@@ -55,11 +40,6 @@ public final class Phone extends ValueObject {
         }
     }
 
-    /**
-     * Returns the raw phone string.
-     *
-     * @return the phone value; never {@code null}
-     */
     public String getValue() {
         return value;
     }

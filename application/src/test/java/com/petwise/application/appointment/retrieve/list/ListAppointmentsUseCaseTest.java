@@ -31,20 +31,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.LongVariable"
 })
 class ListAppointmentsUseCaseTest {
-
-    /** Default constructor. */
     ListAppointmentsUseCaseTest() {}
 
-    /** The mocked appointment gateway. */
     @Mock private AppointmentGateway appointmentGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultListAppointmentsUseCase useCase;
 
     @Test
     @DisplayName("Should return paginated list of appointments")
     void givenExistingAppointments_whenExecute_thenShouldReturnPaginatedList() {
-        // Given
         final var query = new SearchQuery(0, 10, "", "startAt", "asc");
         final var appointment =
                 Appointment.with(
@@ -60,11 +54,7 @@ class ListAppointmentsUseCaseTest {
 
         final var pagination = new Pagination<>(0, 10, 1, List.of(appointment));
         when(appointmentGateway.findAll(query)).thenReturn(pagination);
-
-        // When
         final var result = useCase.execute(query);
-
-        // Then
         assertNotNull(result);
         assertEquals(1, result.total());
         assertEquals(ServiceType.DAYCARE, result.items().get(0).serviceType());

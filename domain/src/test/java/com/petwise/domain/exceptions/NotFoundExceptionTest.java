@@ -18,8 +18,6 @@ import org.junit.jupiter.api.Test;
     "PMD.ShortVariable"
 })
 class NotFoundExceptionTest extends UnitTest {
-
-    /** Default constructor. */
     NotFoundExceptionTest() {}
 
     @Test

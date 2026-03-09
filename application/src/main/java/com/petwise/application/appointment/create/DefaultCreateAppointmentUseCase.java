@@ -18,31 +18,16 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultCreateAppointmentUseCase extends CreateAppointmentUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG =
             LoggerFactory.getLogger(DefaultCreateAppointmentUseCase.class);
-
-    /** The gateway used to persist the appointment. */
     private final AppointmentGateway appointmentGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param anAppointmentGateway the appointment persistence gateway; must not be {@code null}
-     */
     public DefaultCreateAppointmentUseCase(final AppointmentGateway anAppointmentGateway) {
         super();
         this.appointmentGateway =
                 Objects.requireNonNull(anAppointmentGateway, "AppointmentGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Validates invariants and persists the new appointment. Throws {@link
-     * NotificationException} if validation fails.
-     */
     @Override
     public CreateAppointmentOutput execute(final CreateAppointmentCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");

@@ -207,11 +207,6 @@ public interface AppointmentAPI {
                     String appointmentId,
             @RequestBody ChangeAppointmentStatusRequest request);
 
-    /**
-     * Deletes an appointment by ID.
-     *
-     * @param appointmentId the appointment identifier
-     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete an appointment", description = "Deletes an appointment by its ID")
     @ApiResponses(

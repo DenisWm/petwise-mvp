@@ -26,16 +26,12 @@ import org.junit.jupiter.api.Test;
     "PMD.AbstractClassWithoutAbstractMethod"
 })
 class EntityTest extends UnitTest {
-
-    /** Default constructor. */
     EntityTest() {}
 
     /** Tests for entity construction and initialisation. */
     @Nested
     @DisplayName("Construction")
     class ConstructionTest {
-
-        /** Default constructor. */
         ConstructionTest() {}
 
         @Test
@@ -66,8 +62,6 @@ class EntityTest extends UnitTest {
     @Nested
     @DisplayName("Domain Events")
     class DomainEventsTest {
-
-        /** Default constructor. */
         DomainEventsTest() {}
 
         @Test
@@ -112,11 +106,7 @@ class EntityTest extends UnitTest {
         void shouldBeNoOp_whenPublishDomainEventsCalledWithNullPublisher() {
             final var anEntity = new DummyEntity(new DummyID(), new ArrayList<>());
             anEntity.registerEvent(Instant::now);
-
-            // must not throw
             anEntity.publishDomainEvents(null);
-
-            // events should still be present since publish did nothing
             assertEquals(1, anEntity.getDomainEvents().size());
         }
 
@@ -133,8 +123,6 @@ class EntityTest extends UnitTest {
     @Nested
     @DisplayName("Equality")
     class EqualityTest {
-
-        /** Default constructor. */
         EqualityTest() {}
 
         @Test
@@ -180,8 +168,6 @@ class EntityTest extends UnitTest {
     /** Dummy identifier for testing. */
     @SuppressWarnings({"PMD.ShortVariable", "PMD.CallSuperInConstructor"})
     static class DummyID extends Identifier<String> {
-
-        /** The raw ID value. */
         private final String id;
 
         /** Creates a new DummyID with a random UUID. */

@@ -20,21 +20,16 @@ import org.junit.jupiter.api.Test;
     "PMD.TooManyMethods"
 })
 class PetTest extends UnitTest {
-
-    /** Default constructor. */
     PetTest() {}
 
     @Test
     void givenValidParams_whenCallsNewPet_thenShouldInstantiatePet() {
-        // given
         final var expectedTutorId = TutorID.unique();
         final var expectedName = "Fluffy";
         final var expectedSpecies = "Cat";
         final var expectedBreed = "Persian";
         final var expectedBirthDate = LocalDate.of(2020, 3, 15);
         final var expectedNotes = "Allergic to chicken";
-
-        // when
         final var actualPet =
                 Pet.newPet(
                         expectedTutorId,
@@ -43,8 +38,6 @@ class PetTest extends UnitTest {
                         expectedBreed,
                         expectedBirthDate,
                         expectedNotes);
-
-        // then
         assertThat(actualPet).isNotNull();
         assertThat(actualPet.getId()).isNotNull();
         assertThat(actualPet.getTutorId()).isEqualTo(expectedTutorId);
@@ -59,14 +52,9 @@ class PetTest extends UnitTest {
 
     @Test
     void givenValidParamsWithoutOptionals_whenCallsNewPet_thenShouldInstantiatePet() {
-        // given
         final var expectedTutorId = TutorID.unique();
         final var expectedName = "Buddy";
-
-        // when
         final var actualPet = Pet.newPet(expectedTutorId, expectedName, null, null, null, null);
-
-        // then
         assertThat(actualPet).isNotNull();
         assertThat(actualPet.getId()).isNotNull();
         assertThat(actualPet.getTutorId()).isEqualTo(expectedTutorId);
@@ -81,17 +69,12 @@ class PetTest extends UnitTest {
 
     @Test
     void givenNullName_whenCallsNewPetAndValidate_thenShouldReceiveError() {
-        // given
         final var expectedTutorId = TutorID.unique();
         final String invalidName = null;
         final var expectedErrorMessage = "'name' should not be null";
-
-        // when
         final var actualPet = Pet.newPet(expectedTutorId, invalidName, null, null, null, null);
         final var notification = Notification.create();
         actualPet.validate(notification);
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(notification.getErrors()).hasSize(1);
         assertThat(notification.firstError().message()).isEqualTo(expectedErrorMessage);
@@ -99,17 +82,12 @@ class PetTest extends UnitTest {
 
     @Test
     void givenEmptyName_whenCallsNewPetAndValidate_thenShouldReceiveError() {
-        // given
         final var expectedTutorId = TutorID.unique();
         final var invalidName = "  ";
         final var expectedErrorMessage = "'name' should not be empty";
-
-        // when
         final var actualPet = Pet.newPet(expectedTutorId, invalidName, null, null, null, null);
         final var notification = Notification.create();
         actualPet.validate(notification);
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(notification.getErrors()).hasSize(1);
         assertThat(notification.firstError().message()).isEqualTo(expectedErrorMessage);
@@ -117,15 +95,10 @@ class PetTest extends UnitTest {
 
     @Test
     void givenNullTutorId_whenCallsNewPetAndValidate_thenShouldReceiveError() {
-        // given
         final var expectedErrorMessage = "'tutorId' should not be null";
-
-        // when
         final var actualPet = Pet.newPet(null, "Name", null, null, null, null);
         final var notification = Notification.create();
         actualPet.validate(notification);
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(notification.getErrors()).hasSize(1);
         assertThat(notification.firstError().message()).isEqualTo(expectedErrorMessage);
@@ -133,18 +106,13 @@ class PetTest extends UnitTest {
 
     @Test
     void givenFutureBirthDate_whenCallsNewPetAndValidate_thenShouldReceiveError() {
-        // given
         final var expectedTutorId = TutorID.unique();
         final var invalidBirthDate = LocalDate.now().plusDays(1);
         final var expectedErrorMessage = "'birthDate' must not be in the future";
-
-        // when
         final var actualPet =
                 Pet.newPet(expectedTutorId, "Name", null, null, invalidBirthDate, null);
         final var notification = Notification.create();
         actualPet.validate(notification);
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(notification.getErrors()).hasSize(1);
         assertThat(notification.firstError().message()).isEqualTo(expectedErrorMessage);
@@ -152,7 +120,6 @@ class PetTest extends UnitTest {
 
     @Test
     void givenValidPet_whenCallsUpdate_thenShouldReturnUpdatedPet() {
-        // given
         final var pet = Pet.newPet(TutorID.unique(), "Fluffy", null, null, null, null);
         final var createdAt = pet.getCreatedAt();
         final var expectedName = "Fluffy Updated";
@@ -160,8 +127,6 @@ class PetTest extends UnitTest {
         final var expectedBreed = "Beagle";
         final var expectedBirthDate = LocalDate.of(2019, 1, 1);
         final var expectedNotes = "Friendly";
-
-        // when
         final var updatedPet =
                 pet.update(
                         expectedName,
@@ -169,8 +134,6 @@ class PetTest extends UnitTest {
                         expectedBreed,
                         expectedBirthDate,
                         expectedNotes);
-
-        // then
         assertThat(updatedPet).isNotNull();
         assertThat(updatedPet.getName()).isEqualTo(expectedName);
         assertThat(updatedPet.getSpecies()).isEqualTo(expectedSpecies);
@@ -183,7 +146,6 @@ class PetTest extends UnitTest {
 
     @Test
     void givenValidParams_whenCallsWithTypedIds_thenShouldInstantiatePet() {
-        // given
         final var expectedId = PetID.from("pet-typed-id");
         final var expectedTutorId = TutorID.unique();
         final var expectedName = "Typed";
@@ -193,8 +155,6 @@ class PetTest extends UnitTest {
         final var expectedNotes = "Typed notes";
         final var expectedCreatedAt = java.time.Instant.now();
         final var expectedUpdatedAt = java.time.Instant.now();
-
-        // when
         final var actualPet =
                 Pet.with(
                         expectedId,
@@ -206,8 +166,6 @@ class PetTest extends UnitTest {
                         expectedNotes,
                         expectedCreatedAt,
                         expectedUpdatedAt);
-
-        // then
         assertThat(actualPet).isNotNull();
         assertThat(actualPet.getId()).isEqualTo(expectedId);
         assertThat(actualPet.getTutorId()).isEqualTo(expectedTutorId);
@@ -222,7 +180,6 @@ class PetTest extends UnitTest {
 
     @Test
     void givenValidParams_whenCallsWith_thenShouldInstantiatePet() {
-        // given
         final var expectedId = "123456789";
         final var expectedTutorId = TutorID.unique();
         final var expectedName = "Fluffy";
@@ -232,8 +189,6 @@ class PetTest extends UnitTest {
         final var expectedNotes = "Notes";
         final var expectedCreatedAt = java.time.Instant.now();
         final var expectedUpdatedAt = java.time.Instant.now();
-
-        // when
         final var actualPet =
                 Pet.with(
                         expectedId,
@@ -245,8 +200,6 @@ class PetTest extends UnitTest {
                         expectedNotes,
                         expectedCreatedAt,
                         expectedUpdatedAt);
-
-        // then
         assertThat(actualPet).isNotNull();
         assertThat(actualPet.getId().getValue()).isEqualTo(expectedId);
         assertThat(actualPet.getTutorId()).isEqualTo(expectedTutorId);

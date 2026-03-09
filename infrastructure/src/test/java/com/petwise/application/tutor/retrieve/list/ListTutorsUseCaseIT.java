@@ -21,19 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
     "PMD.TooManyMethods"
 })
 class ListTutorsUseCaseIT {
-
-    /** Default constructor. */
     ListTutorsUseCaseIT() {}
 
-    /** The use case under test. */
     @Autowired private ListTutorsUseCase useCase;
-
-    /** The tutor repository. */
     @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidQuery_whenCallsListTutors_thenShouldReturnPaginatedTutors() {
-        // given
         final var tutor1 = Tutor.newTutor("Alice Brown", "alice@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("Bob Green", "bob@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Charlie White", "charlie@example.com", "+3333333333");
@@ -46,11 +40,7 @@ class ListTutorsUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "", "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.currentPage()).isZero();
         assertThat(result.perPage()).isEqualTo(10);
@@ -63,7 +53,6 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenValidQueryWithPagination_whenCallsListTutors_thenShouldReturnCorrectPage() {
-        // given
         for (int i = 0; i < 15; i++) {
             final var tutor =
                     Tutor.newTutor(
@@ -75,11 +64,7 @@ class ListTutorsUseCaseIT {
         }
 
         final var query = new SearchQuery(1, 5, "", "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.currentPage()).isEqualTo(1);
         assertThat(result.perPage()).isEqualTo(5);
@@ -89,7 +74,6 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenValidQueryWithSearchTerms_whenCallsListTutors_thenShouldReturnFilteredTutors() {
-        // given
         final var tutor1 = Tutor.newTutor("Maria Silva", "maria@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("João Silva", "joao@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Pedro Santos", "pedro@example.com", "+3333333333");
@@ -102,11 +86,7 @@ class ListTutorsUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "Silva", "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.total()).isEqualTo(2);
         assertThat(result.items()).hasSize(2);
@@ -117,7 +97,6 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenValidQueryWithEmailSearch_whenCallsListTutors_thenShouldReturnFilteredTutors() {
-        // given
         final var tutor1 = Tutor.newTutor("User One", "test@gmail.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("User Two", "test@yahoo.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("User Three", "user@example.com", "+3333333333");
@@ -130,11 +109,7 @@ class ListTutorsUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "test@", "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.total()).isEqualTo(2);
         assertThat(result.items()).hasSize(2);
@@ -145,7 +120,6 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenValidQueryWithAscSorting_whenCallsListTutors_thenShouldReturnSortedTutors() {
-        // given
         final var tutor1 = Tutor.newTutor("Charlie", "charlie@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("Alice", "alice@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Bob", "bob@example.com", "+3333333333");
@@ -158,11 +132,7 @@ class ListTutorsUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "", "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result.items())
                 .extracting(ListTutorsOutput::name)
                 .containsExactly("Alice", "Bob", "Charlie");
@@ -170,7 +140,6 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenValidQueryWithDescSorting_whenCallsListTutors_thenShouldReturnSortedTutors() {
-        // given
         final var tutor1 = Tutor.newTutor("Charlie", "charlie@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("Alice", "alice@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("Bob", "bob@example.com", "+3333333333");
@@ -183,11 +152,7 @@ class ListTutorsUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "", "name", "desc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result.items())
                 .extracting(ListTutorsOutput::name)
                 .containsExactly("Charlie", "Bob", "Alice");
@@ -195,13 +160,8 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenEmptyDatabase_whenCallsListTutors_thenShouldReturnEmptyPagination() {
-        // given
         final var query = new SearchQuery(0, 10, "", "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.currentPage()).isZero();
         assertThat(result.perPage()).isEqualTo(10);
@@ -211,17 +171,12 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenValidQueryWithNoMatch_whenCallsListTutors_thenShouldReturnEmptyPagination() {
-        // given
         final var tutor = Tutor.newTutor("John Doe", "john@example.com", "+1234567890");
         tutorRepository.save(
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var query = new SearchQuery(0, 10, "NonExistingTerm", "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.total()).isZero();
         assertThat(result.items()).isEmpty();
@@ -229,7 +184,6 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenNullQuery_whenCallsListTutors_thenShouldThrowNullPointerException() {
-        // when & then
         assertThatThrownBy(() -> useCase.execute(null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("SearchQuery cannot be null");
@@ -237,7 +191,6 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenValidQueryWithNullTerms_whenCallsListTutors_thenShouldReturnAllTutors() {
-        // given
         final var tutor1 = Tutor.newTutor("Tutor 1", "tutor1@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("Tutor 2", "tutor2@example.com", "+2222222222");
 
@@ -247,11 +200,7 @@ class ListTutorsUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor2));
 
         final var query = new SearchQuery(0, 10, null, "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.total()).isEqualTo(2);
         assertThat(result.items()).hasSize(2);
@@ -260,7 +209,6 @@ class ListTutorsUseCaseIT {
     @Test
     void
             givenValidQueryWithCaseInsensitiveSearch_whenCallsListTutors_thenShouldReturnMatchingTutors() {
-        // given
         final var tutor1 = Tutor.newTutor("UPPERCASE NAME", "uppercase@example.com", "+1111111111");
         final var tutor2 = Tutor.newTutor("lowercase name", "lowercase@example.com", "+2222222222");
         final var tutor3 = Tutor.newTutor("MiXeD CaSe NaMe", "mixed@example.com", "+3333333333");
@@ -273,11 +221,7 @@ class ListTutorsUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor3));
 
         final var query = new SearchQuery(0, 10, "name", "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result).isNotNull();
         assertThat(result.total()).isEqualTo(3);
         assertThat(result.items()).hasSize(3);
@@ -285,7 +229,6 @@ class ListTutorsUseCaseIT {
 
     @Test
     void givenValidQuery_whenCallsListTutors_thenShouldMapAllFieldsCorrectly() {
-        // given
         final var expectedName = "Test User";
         final var expectedEmail = "test@example.com";
         final var expectedPhone = "+1234567890";
@@ -295,11 +238,7 @@ class ListTutorsUseCaseIT {
                 com.petwise.infrastructure.tutor.persistence.TutorJpaEntity.from(tutor));
 
         final var query = new SearchQuery(0, 10, "", "name", "asc");
-
-        // when
         final var result = useCase.execute(query);
-
-        // then
         assertThat(result.items()).hasSize(1);
         final var output = result.items().get(0);
         assertThat(output.id()).isEqualTo(tutor.getId().getValue());

@@ -9,7 +9,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan("com.petwise")
 @EnableJpaRepositories(basePackages = "com.petwise.infrastructure")
 public class WebServerConfig {
-
-    /** Default constructor. */
     public WebServerConfig() {}
 }

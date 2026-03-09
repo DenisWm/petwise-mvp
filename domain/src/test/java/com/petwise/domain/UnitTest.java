@@ -12,7 +12,5 @@ import org.junit.jupiter.api.Tag;
 @Tag("unitTest")
 @SuppressWarnings("PMD.TestClassWithoutTestCases")
 public class UnitTest {
-
-    /** Default constructor. */
     protected UnitTest() {}
 }

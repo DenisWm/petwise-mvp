@@ -15,18 +15,9 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultViewDailyAgendaUseCase extends ViewDailyAgendaUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultViewDailyAgendaUseCase.class);
-
-    /** The gateway used to query appointments. */
     private final AppointmentGateway appointmentGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param anAppointmentGateway the appointment persistence gateway; must not be {@code null}
-     */
     public DefaultViewDailyAgendaUseCase(final AppointmentGateway anAppointmentGateway) {
         super();
         this.appointmentGateway =

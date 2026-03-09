@@ -14,28 +14,14 @@ import org.slf4j.LoggerFactory;
  * result to a {@link ListPetsOutput} DTO.
  */
 public final class DefaultListPetsUseCase extends ListPetsUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultListPetsUseCase.class);
-
-    /** The gateway used to query pets. */
     private final PetGateway petGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aPetGateway the pet persistence gateway; must not be {@code null}
-     */
     public DefaultListPetsUseCase(final PetGateway aPetGateway) {
         super();
         this.petGateway = Objects.requireNonNull(aPetGateway, "PetGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override to customise pagination behaviour.
-     */
     @Override
     public Pagination<ListPetsOutput> execute(final SearchQuery query) {
         Objects.requireNonNull(query, "SearchQuery cannot be null");

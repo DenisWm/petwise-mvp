@@ -14,8 +14,6 @@ import org.junit.jupiter.api.Test;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class PaginationTest extends UnitTest {
-
-    /** Default constructor. */
     PaginationTest() {}
 
     @Test

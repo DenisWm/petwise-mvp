@@ -34,11 +34,8 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestControllerAdvice
 @SuppressWarnings("PMD.ShortVariable")
 public class GlobalExceptionHandler {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    /** Default constructor. */
     public GlobalExceptionHandler() {}
 
     /**
@@ -124,14 +121,9 @@ public class GlobalExceptionHandler {
                 .body(ApiError.from(HttpStatus.NOT_FOUND, exception.getMessage(), List.of()));
     }
 
-    // -----------------------------------------------------------------------
-    // Security exceptions — delegated here from DelegatingAuthenticationEntryPoint
-    // and DelegatingAccessDeniedHandler via HandlerExceptionResolver
-    // -----------------------------------------------------------------------
-
     /**
-     * Handles {@link AccessDeniedException} — authenticated user lacks the
-     * required role / authority for the requested resource.
+     * Handles {@link AccessDeniedException} — authenticated user lacks the required role /
+     * authority for the requested resource.
      *
      * @param exception the exception
      * @return 403 response with error details
@@ -150,8 +142,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handles {@link AuthenticationException} — request arrived without a
-     * valid Bearer token (missing, expired, malformed, bad signature).
+     * Handles {@link AuthenticationException} — request arrived without a valid Bearer token
+     * (missing, expired, malformed, bad signature).
      *
      * @param exception the exception
      * @return 401 response with error details

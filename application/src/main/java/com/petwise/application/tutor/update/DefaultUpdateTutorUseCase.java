@@ -18,29 +18,14 @@ import org.slf4j.LoggerFactory;
  * persists the result via the {@link TutorGateway}.
  */
 public final class DefaultUpdateTutorUseCase extends UpdateTutorUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultUpdateTutorUseCase.class);
-
-    /** The gateway used to find and persist tutors. */
     private final TutorGateway tutorGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aTutorGateway the tutor persistence gateway; must not be {@code null}
-     */
     public DefaultUpdateTutorUseCase(final TutorGateway aTutorGateway) {
         super();
         this.tutorGateway = Objects.requireNonNull(aTutorGateway, "TutorGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Loads the tutor, applies updates, validates, and persists. Throws {@link
-     * NotificationException} if validation fails.
-     */
     @Override
     public UpdateTutorOutput execute(final UpdateTutorCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");

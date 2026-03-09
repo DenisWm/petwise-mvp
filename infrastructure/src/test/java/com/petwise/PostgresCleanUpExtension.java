@@ -20,8 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * the project.
  */
 class PostgresCleanUpExtension implements BeforeEachCallback {
-
-    /** Default constructor. */
     PostgresCleanUpExtension() {}
 
     @Override

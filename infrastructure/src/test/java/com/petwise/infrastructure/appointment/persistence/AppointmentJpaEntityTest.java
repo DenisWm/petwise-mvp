@@ -18,8 +18,6 @@ import org.junit.jupiter.api.Test;
     "PMD.TooManyMethods"
 })
 class AppointmentJpaEntityTest {
-
-    /** Default constructor. */
     AppointmentJpaEntityTest() {}
 
     @Test

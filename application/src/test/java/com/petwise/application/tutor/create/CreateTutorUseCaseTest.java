@@ -27,14 +27,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.AvoidDuplicateLiterals"
 })
 class CreateTutorUseCaseTest extends UseCaseTest {
-
-    /** The mocked tutor gateway. */
     @Mock private TutorGateway tutorGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultCreateTutorUseCase useCase;
 
-    /** Default constructor. */
     CreateTutorUseCaseTest() {}
 
     @Override
@@ -44,7 +39,6 @@ class CreateTutorUseCaseTest extends UseCaseTest {
 
     @Test
     void givenValidCommand_whenExecute_thenCreateTutor() {
-        // given
         final var expectedName = "John Doe";
         final var expectedEmail = "john.doe@example.com";
         final var expectedPhone = "+1 (555) 123-4567";
@@ -53,15 +47,9 @@ class CreateTutorUseCaseTest extends UseCaseTest {
 
         when(tutorGateway.save(any(Tutor.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertNotNull(output);
         assertNotNull(output.id());
-
-        // Verify tutor was saved with correct properties
         verify(tutorGateway, times(1))
                 .save(
                         argThat(
@@ -76,21 +64,14 @@ class CreateTutorUseCaseTest extends UseCaseTest {
 
     @Test
     void givenValidCommandWithoutOptionals_whenExecute_thenCreateTutor() {
-        // given
         final var expectedName = "Jane Smith";
         final var command = CreateTutorCommand.with(expectedName, null, null);
 
         when(tutorGateway.save(any(Tutor.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertNotNull(output);
         assertNotNull(output.id());
-
-        // Verify tutor was saved with correct properties
         verify(tutorGateway, times(1))
                 .save(
                         argThat(
@@ -102,10 +83,7 @@ class CreateTutorUseCaseTest extends UseCaseTest {
 
     @Test
     void givenInvalidNullName_whenExecute_thenThrowDomainException() {
-        // given
         final var command = CreateTutorCommand.with(null, "test@example.com", "555-1234");
-
-        // when & then
         final var exception = assertThrows(DomainException.class, () -> useCase.execute(command));
 
         assertTrue(
@@ -116,10 +94,7 @@ class CreateTutorUseCaseTest extends UseCaseTest {
 
     @Test
     void givenInvalidEmptyName_whenExecute_thenThrowDomainException() {
-        // given
         final var command = CreateTutorCommand.with("  ", "test@example.com", "555-1234");
-
-        // when & then
         final var exception = assertThrows(DomainException.class, () -> useCase.execute(command));
 
         assertTrue(
@@ -130,10 +105,7 @@ class CreateTutorUseCaseTest extends UseCaseTest {
 
     @Test
     void givenInvalidEmail_whenExecute_thenThrowDomainException() {
-        // given
         final var command = CreateTutorCommand.with("John Doe", "invalid-email", null);
-
-        // when & then
         final var exception = assertThrows(DomainException.class, () -> useCase.execute(command));
 
         assertTrue(exception.getMessage().contains("email"));
@@ -143,10 +115,7 @@ class CreateTutorUseCaseTest extends UseCaseTest {
 
     @Test
     void givenInvalidPhone_whenExecute_thenThrowDomainException() {
-        // given
         final var command = CreateTutorCommand.with("John Doe", null, "abc");
-
-        // when & then
         final var exception = assertThrows(DomainException.class, () -> useCase.execute(command));
 
         assertTrue(exception.getMessage().contains("phone"));
@@ -156,7 +125,6 @@ class CreateTutorUseCaseTest extends UseCaseTest {
 
     @Test
     void givenNullCommand_whenExecute_thenThrowNullPointerException() {
-        // when & then
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
 
         verify(tutorGateway, never()).save(any());
@@ -164,7 +132,6 @@ class CreateTutorUseCaseTest extends UseCaseTest {
 
     @Test
     void givenNullGateway_whenInstantiate_thenThrowNullPointerException() {
-        // when & then
         assertThrows(NullPointerException.class, () -> new DefaultCreateTutorUseCase(null));
     }
 }

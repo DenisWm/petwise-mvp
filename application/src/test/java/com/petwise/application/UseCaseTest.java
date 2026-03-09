@@ -31,8 +31,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @Tag("unitTest")
 public abstract class UseCaseTest implements BeforeEachCallback {
-
-    /** Default constructor. */
     protected UseCaseTest() {}
 
     @Override

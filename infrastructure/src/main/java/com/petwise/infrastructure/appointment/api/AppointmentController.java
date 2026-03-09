@@ -33,17 +33,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SuppressWarnings({"PMD.LongVariable", "PMD.ShortVariable"})
 public class AppointmentController implements AppointmentAPI {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(AppointmentController.class);
-
-    /** Use case for creating an appointment. */
     private final CreateAppointmentUseCase createAppointmentUseCase;
-
-    /** Use case for retrieving an appointment by ID. */
     private final GetAppointmentByIdUseCase getAppointmentByIdUseCase;
-
-    /** Use case for listing appointments. */
     private final ListAppointmentsUseCase listAppointmentsUseCase;
 
     /** Use case for viewing the daily agenda. */
@@ -52,7 +44,6 @@ public class AppointmentController implements AppointmentAPI {
     /** Use case for changing appointment status. */
     private final ChangeAppointmentStatusUseCase changeAppointmentStatusUseCase;
 
-    /** Use case for deleting an appointment. */
     private final DeleteAppointmentUseCase deleteAppointmentUseCase;
 
     /**

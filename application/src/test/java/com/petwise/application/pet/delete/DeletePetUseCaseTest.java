@@ -29,20 +29,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class DeletePetUseCaseTest {
-
-    /** Default constructor. */
     DeletePetUseCaseTest() {}
 
-    /** The mocked pet gateway. */
     @Mock private PetGateway petGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultDeletePetUseCase useCase;
-
-    /** The pet ID used across tests. */
     private PetID petId;
-
-    /** The pet used across tests. */
     private Pet pet;
 
     @BeforeEach
@@ -64,15 +55,10 @@ class DeletePetUseCaseTest {
     @Test
     @DisplayName("Should delete pet successfully")
     void shouldDeletePetSuccessfully() {
-        // Given
         final var petIdValue = petId.getValue();
         when(petGateway.findById(petId)).thenReturn(Optional.of(pet));
         doNothing().when(petGateway).deleteById(petId);
-
-        // When
         assertDoesNotThrow(() -> useCase.execute(petIdValue));
-
-        // Then
         verify(petGateway).findById(petId);
         verify(petGateway).deleteById(petId);
     }
@@ -80,11 +66,8 @@ class DeletePetUseCaseTest {
     @Test
     @DisplayName("Should throw NotFoundException when pet does not exist")
     void shouldThrowNotFoundExceptionWhenPetDoesNotExist() {
-        // Given
         final var petIdValue = petId.getValue();
         when(petGateway.findById(petId)).thenReturn(Optional.empty());
-
-        // When & Then
         assertThrows(NotFoundException.class, () -> useCase.execute(petIdValue));
 
         verify(petGateway).findById(petId);

@@ -6,7 +6,5 @@ import com.petwise.application.UseCase;
 @SuppressWarnings("PMD.AbstractClassWithoutAnyMethod")
 public abstract class CreateAppointmentUseCase
         extends UseCase<CreateAppointmentCommand, CreateAppointmentOutput> {
-
-    /** Protected constructor for subclasses. */
     protected CreateAppointmentUseCase() {}
 }

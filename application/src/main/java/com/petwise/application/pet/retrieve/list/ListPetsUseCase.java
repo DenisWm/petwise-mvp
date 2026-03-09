@@ -7,7 +7,5 @@ import com.petwise.domain.pagination.SearchQuery;
 /** Abstract use case for listing all pets with pagination and search. */
 @SuppressWarnings("PMD.AbstractClassWithoutAnyMethod")
 public abstract class ListPetsUseCase extends UseCase<SearchQuery, Pagination<ListPetsOutput>> {
-
-    /** Protected constructor for subclasses. */
     protected ListPetsUseCase() {}
 }

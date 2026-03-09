@@ -15,28 +15,14 @@ import org.slf4j.LoggerFactory;
  * {@link NotFoundException} when no tutor with the given ID exists.
  */
 public final class DefaultGetTutorByIdUseCase extends GetTutorByIdUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGetTutorByIdUseCase.class);
-
-    /** The gateway used to look up tutors. */
     private final TutorGateway tutorGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aTutorGateway the tutor persistence gateway; must not be {@code null}
-     */
     public DefaultGetTutorByIdUseCase(final TutorGateway aTutorGateway) {
         super();
         this.tutorGateway = Objects.requireNonNull(aTutorGateway, "TutorGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Throws {@link NotFoundException} if no tutor with the given ID is found.
-     */
     @Override
     public TutorOutput execute(final String anId) {
         Objects.requireNonNull(anId, "Tutor ID cannot be null");

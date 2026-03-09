@@ -19,16 +19,12 @@ import org.springframework.boot.test.json.JacksonTester;
     "PMD.AvoidDuplicateLiterals"
 })
 class PetResponseTest {
-
-    /** Default constructor. */
     PetResponseTest() {}
 
-    /** The Jackson tester for PetResponse. */
     @Autowired private JacksonTester<PetResponse> json;
 
     @Test
     void givenValidResponse_whenSerialize_thenShouldContainAllFields() throws Exception {
-        // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
         final var response =
@@ -42,11 +38,7 @@ class PetResponseTest {
                         "Some notes",
                         createdAt,
                         updatedAt);
-
-        // when
         final var jsonContent = this.json.write(response);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.id").isEqualTo("pet-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.tutor_id").isEqualTo("tutor-456");
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("Fluffy");
@@ -66,7 +58,6 @@ class PetResponseTest {
 
     @Test
     void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -81,11 +72,7 @@ class PetResponseTest {
                     "updated_at": "2024-01-15T11:45:00Z"
                 }
                 """;
-
-        // when
         final var response = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(response.id()).isEqualTo("pet-123");
         assertThat(response.tutorId()).isEqualTo("tutor-456");
         assertThat(response.name()).isEqualTo("Fluffy");
@@ -99,7 +86,6 @@ class PetResponseTest {
 
     @Test
     void givenResponseWithNullOptionals_whenSerialize_thenShouldOmitOptionals() throws Exception {
-        // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
         final var response =
@@ -113,11 +99,7 @@ class PetResponseTest {
                         null,
                         createdAt,
                         updatedAt);
-
-        // when
         final var jsonContent = this.json.write(response);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.id").isEqualTo("pet-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("Buddy");
         assertThat(jsonContent).doesNotHaveJsonPath("$.species");
@@ -128,7 +110,6 @@ class PetResponseTest {
 
     @Test
     void givenJsonWithoutOptionals_whenDeserialize_thenShouldMapOptionalsAsNull() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -139,11 +120,7 @@ class PetResponseTest {
                     "updated_at": "2024-01-15T11:45:00Z"
                 }
                 """;
-
-        // when
         final var response = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(response.id()).isEqualTo("pet-123");
         assertThat(response.name()).isEqualTo("Buddy");
         assertThat(response.species()).isNull();

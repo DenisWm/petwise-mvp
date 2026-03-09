@@ -16,8 +16,6 @@ import org.junit.jupiter.api.Test;
     "PMD.AvoidDuplicateLiterals"
 })
 class NotificationTest extends UnitTest {
-
-    /** Default constructor. */
     NotificationTest() {}
 
     @Test

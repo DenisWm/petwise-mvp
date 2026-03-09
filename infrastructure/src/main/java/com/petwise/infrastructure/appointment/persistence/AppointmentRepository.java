@@ -16,14 +16,6 @@ import org.springframework.data.repository.query.Param;
  * service type, search terms, and date range (daily agenda).
  */
 public interface AppointmentRepository extends JpaRepository<AppointmentJpaEntity, String> {
-
-    /**
-     * Finds appointments whose pet ID or service type contains the given terms (case-insensitive).
-     *
-     * @param terms the search string; must not be {@code null}
-     * @param pageable pagination parameters
-     * @return a page of matching entities
-     */
     @Query(
             """
             SELECT a FROM AppointmentJpaEntity a
@@ -32,60 +24,17 @@ public interface AppointmentRepository extends JpaRepository<AppointmentJpaEntit
             """)
     Page<AppointmentJpaEntity> findBySearchTerms(@Param("terms") String terms, Pageable pageable);
 
-    /**
-     * Finds all appointments with a given status.
-     *
-     * @param status the appointment status filter
-     * @param pageable pagination parameters
-     * @return a page of matching entities
-     */
     Page<AppointmentJpaEntity> findByStatus(AppointmentStatus status, Pageable pageable);
 
-    /**
-     * Finds appointments whose start time falls within the given range.
-     *
-     * @param startOfDay the start of the day (inclusive)
-     * @param endOfDay the end of the day (exclusive)
-     * @param pageable pagination parameters
-     * @return a page of matching entities
-     */
     Page<AppointmentJpaEntity> findByStartAtGreaterThanEqualAndStartAtLessThan(
             Instant startOfDay, Instant endOfDay, Pageable pageable);
 
-    /**
-     * Finds appointments by date range and status.
-     *
-     * @param startOfDay the start of the day (inclusive)
-     * @param endOfDay the end of the day (exclusive)
-     * @param status the status filter
-     * @param pageable pagination parameters
-     * @return a page of matching entities
-     */
     Page<AppointmentJpaEntity> findByStartAtGreaterThanEqualAndStartAtLessThanAndStatus(
             Instant startOfDay, Instant endOfDay, AppointmentStatus status, Pageable pageable);
 
-    /**
-     * Finds appointments by date range and service type.
-     *
-     * @param startOfDay the start of the day (inclusive)
-     * @param endOfDay the end of the day (exclusive)
-     * @param serviceType the service type filter
-     * @param pageable pagination parameters
-     * @return a page of matching entities
-     */
     Page<AppointmentJpaEntity> findByStartAtGreaterThanEqualAndStartAtLessThanAndServiceType(
             Instant startOfDay, Instant endOfDay, ServiceType serviceType, Pageable pageable);
 
-    /**
-     * Finds appointments by date range, status, and service type.
-     *
-     * @param startOfDay the start of the day (inclusive)
-     * @param endOfDay the end of the day (exclusive)
-     * @param status the status filter
-     * @param serviceType the service type filter
-     * @param pageable pagination parameters
-     * @return a page of matching entities
-     */
     Page<AppointmentJpaEntity>
             findByStartAtGreaterThanEqualAndStartAtLessThanAndStatusAndServiceType(
                     Instant startOfDay,

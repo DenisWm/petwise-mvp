@@ -9,7 +9,5 @@ import com.petwise.application.UseCase;
 @SuppressWarnings("PMD.AbstractClassWithoutAnyMethod")
 public abstract class ChangeAppointmentStatusUseCase
         extends UseCase<ChangeAppointmentStatusCommand, ChangeAppointmentStatusOutput> {
-
-    /** Protected constructor for subclasses. */
     protected ChangeAppointmentStatusUseCase() {}
 }

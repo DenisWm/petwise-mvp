@@ -34,20 +34,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.LiteralsFirstInComparisons"
 })
 class UpdateTutorUseCaseTest {
-
-    /** Default constructor. */
     UpdateTutorUseCaseTest() {}
 
-    /** The mocked tutor gateway. */
     @Mock private TutorGateway tutorGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultUpdateTutorUseCase useCase;
-
-    /** The tutor ID used across tests. */
     private TutorID tutorId;
-
-    /** The existing tutor used across tests. */
     private Tutor existingTutor;
 
     @BeforeEach
@@ -66,7 +57,6 @@ class UpdateTutorUseCaseTest {
     @Test
     @DisplayName("Should update tutor successfully with all fields")
     void givenValidCommand_whenExecute_thenShouldUpdateTutor() {
-        // Given
         final var command =
                 UpdateTutorCommand.with(
                         tutorId.getValue(), "Jane Doe", "jane@example.com", "+5511912345678");
@@ -74,11 +64,7 @@ class UpdateTutorUseCaseTest {
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.of(existingTutor));
         when(tutorGateway.save(any(Tutor.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
-
-        // When
         final var output = useCase.execute(command);
-
-        // Then
         assertNotNull(output);
         assertEquals(tutorId.getValue(), output.id());
 
@@ -99,17 +85,12 @@ class UpdateTutorUseCaseTest {
     @Test
     @DisplayName("Should update tutor with optional fields as null")
     void givenCommandWithNullOptionalFields_whenExecute_thenShouldUpdateTutor() {
-        // Given
         final var command = UpdateTutorCommand.with(tutorId.getValue(), "Jane Doe", null, null);
 
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.of(existingTutor));
         when(tutorGateway.save(any(Tutor.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
-
-        // When
         final var output = useCase.execute(command);
-
-        // Then
         assertNotNull(output);
         assertEquals(tutorId.getValue(), output.id());
 
@@ -120,14 +101,11 @@ class UpdateTutorUseCaseTest {
     @Test
     @DisplayName("Should throw NotFoundException when tutor does not exist")
     void givenNonExistingTutor_whenExecute_thenShouldThrowNotFoundException() {
-        // Given
         final var command =
                 UpdateTutorCommand.with(
                         tutorId.getValue(), "Jane Doe", "jane@example.com", "+5511912345678");
 
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.empty());
-
-        // When & Then
         assertThrows(NotFoundException.class, () -> useCase.execute(command));
 
         verify(tutorGateway).findById(tutorId);
@@ -137,7 +115,6 @@ class UpdateTutorUseCaseTest {
     @Test
     @DisplayName("Should throw DomainException when validation fails")
     void givenInvalidName_whenExecute_thenShouldThrowDomainException() {
-        // Given
         final var command =
                 UpdateTutorCommand.with(
                         tutorId.getValue(),
@@ -146,8 +123,6 @@ class UpdateTutorUseCaseTest {
                         "+5511912345678");
 
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.of(existingTutor));
-
-        // When & Then
         assertThrows(DomainException.class, () -> useCase.execute(command));
 
         verify(tutorGateway).findById(tutorId);
@@ -157,7 +132,6 @@ class UpdateTutorUseCaseTest {
     @Test
     @DisplayName("Should throw NullPointerException when command is null")
     void givenNullCommand_whenExecute_thenShouldThrowNullPointerException() {
-        // When & Then
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
 
         verify(tutorGateway, never()).findById(any());
@@ -167,7 +141,6 @@ class UpdateTutorUseCaseTest {
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
     void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
-        // When & Then
         assertThrows(NullPointerException.class, () -> new DefaultUpdateTutorUseCase(null));
     }
 }

@@ -23,8 +23,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @SuppressWarnings("PMD.LongVariable")
 public class AppointmentConfig {
-
-    /** Default constructor. */
     public AppointmentConfig() {}
 
     /**

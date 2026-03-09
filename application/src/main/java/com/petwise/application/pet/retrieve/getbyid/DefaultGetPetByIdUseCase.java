@@ -15,28 +15,14 @@ import org.slf4j.LoggerFactory;
  * {@link NotFoundException} when no pet with the given ID exists.
  */
 public final class DefaultGetPetByIdUseCase extends GetPetByIdUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGetPetByIdUseCase.class);
-
-    /** The gateway used to look up pets. */
     private final PetGateway petGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aPetGateway the pet persistence gateway; must not be {@code null}
-     */
     public DefaultGetPetByIdUseCase(final PetGateway aPetGateway) {
         super();
         this.petGateway = Objects.requireNonNull(aPetGateway, "PetGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Throws {@link NotFoundException} if no pet with the given ID is found.
-     */
     @Override
     public PetOutput execute(final String anId) {
         Objects.requireNonNull(anId, "Pet ID cannot be null");

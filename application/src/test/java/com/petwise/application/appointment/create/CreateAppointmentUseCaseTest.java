@@ -31,14 +31,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.AvoidDuplicateLiterals"
 })
 class CreateAppointmentUseCaseTest extends UseCaseTest {
-
-    /** The mocked appointment gateway. */
     @Mock private AppointmentGateway appointmentGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultCreateAppointmentUseCase useCase;
 
-    /** Default constructor. */
     CreateAppointmentUseCaseTest() {}
 
     @Override
@@ -49,7 +44,6 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
     @Test
     @DisplayName("Should create appointment successfully")
     void givenValidCommand_whenExecute_thenCreateAppointment() {
-        // given
         final var petId = PetID.unique().getValue();
         final var serviceType = ServiceType.DAYCARE;
         final var startAt = Instant.parse("2025-11-28T08:00:00Z");
@@ -60,11 +54,7 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
                 CreateAppointmentCommand.with(petId, serviceType, startAt, endAt, notes);
 
         when(appointmentGateway.save(any(Appointment.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertNotNull(output);
         assertNotNull(output.id());
 
@@ -81,7 +71,6 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
     @Test
     @DisplayName("Should create appointment without notes")
     void givenCommandWithoutNotes_whenExecute_thenCreateAppointment() {
-        // given
         final var petId = PetID.unique().getValue();
         final var command =
                 CreateAppointmentCommand.with(
@@ -92,11 +81,7 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
                         null);
 
         when(appointmentGateway.save(any(Appointment.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertNotNull(output);
         verify(appointmentGateway, times(1)).save(any(Appointment.class));
     }
@@ -104,7 +89,6 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
     @Test
     @DisplayName("Should throw NotificationException when startAt is after endAt")
     void givenInvalidDateRange_whenExecute_thenThrowNotificationException() {
-        // given
         final var command =
                 CreateAppointmentCommand.with(
                         PetID.unique().getValue(),
@@ -112,8 +96,6 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
                         Instant.parse("2025-11-28T18:00:00Z"),
                         Instant.parse("2025-11-28T08:00:00Z"),
                         null);
-
-        // when & then
         assertThrows(NotificationException.class, () -> useCase.execute(command));
         verify(appointmentGateway, never()).save(any());
     }
@@ -121,7 +103,6 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
     @Test
     @DisplayName("Should throw NotificationException when petId is null")
     void givenNullPetId_whenExecute_thenThrowException() {
-        // given
         final var command =
                 CreateAppointmentCommand.with(
                         null,
@@ -129,8 +110,6 @@ class CreateAppointmentUseCaseTest extends UseCaseTest {
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
-
-        // when & then
         assertThrows(Exception.class, () -> useCase.execute(command));
         verify(appointmentGateway, never()).save(any());
     }

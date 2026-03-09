@@ -18,16 +18,12 @@ import org.springframework.boot.test.json.JacksonTester;
     "PMD.AvoidDuplicateLiterals"
 })
 class TutorResponseTest {
-
-    /** Default constructor. */
     TutorResponseTest() {}
 
-    /** The Jackson tester for TutorResponse. */
     @Autowired private JacksonTester<TutorResponse> json;
 
     @Test
     void givenValidResponse_whenSerialize_thenShouldContainAllFields() throws Exception {
-        // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
         final var response =
@@ -38,11 +34,7 @@ class TutorResponseTest {
                         "+1234567890",
                         createdAt,
                         updatedAt);
-
-        // when
         final var jsonContent = this.json.write(response);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.id").isEqualTo("tutor-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("John Doe");
         assertThat(jsonContent)
@@ -59,7 +51,6 @@ class TutorResponseTest {
 
     @Test
     void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -71,11 +62,7 @@ class TutorResponseTest {
                     "updated_at": "2024-01-15T11:45:00Z"
                 }
                 """;
-
-        // when
         final var response = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(response.id()).isEqualTo("tutor-123");
         assertThat(response.name()).isEqualTo("John Doe");
         assertThat(response.email()).isEqualTo("john@example.com");
@@ -86,17 +73,12 @@ class TutorResponseTest {
 
     @Test
     void givenResponseWithNullEmail_whenSerialize_thenShouldOmitEmail() throws Exception {
-        // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
         final var response =
                 new TutorResponse(
                         "tutor-123", "John Doe", null, "+1234567890", createdAt, updatedAt);
-
-        // when
         final var jsonContent = this.json.write(response);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.id").isEqualTo("tutor-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("John Doe");
         assertThat(jsonContent).doesNotHaveJsonPath("$.email"); // null should not be rendered
@@ -111,7 +93,6 @@ class TutorResponseTest {
 
     @Test
     void givenJsonWithoutEmail_whenDeserialize_thenShouldMapEmailAsNull() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -122,11 +103,7 @@ class TutorResponseTest {
                     "updated_at": "2024-01-15T11:45:00Z"
                 }
                 """;
-
-        // when
         final var response = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(response.id()).isEqualTo("tutor-123");
         assertThat(response.name()).isEqualTo("John Doe");
         assertThat(response.email()).isNull();
@@ -137,17 +114,12 @@ class TutorResponseTest {
 
     @Test
     void givenResponseWithNullPhone_whenSerialize_thenShouldOmitPhone() throws Exception {
-        // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
         final var response =
                 new TutorResponse(
                         "tutor-123", "John Doe", "john@example.com", null, createdAt, updatedAt);
-
-        // when
         final var jsonContent = this.json.write(response);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.id").isEqualTo("tutor-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("John Doe");
         assertThat(jsonContent)
@@ -164,7 +136,6 @@ class TutorResponseTest {
 
     @Test
     void givenJsonWithoutPhone_whenDeserialize_thenShouldMapPhoneAsNull() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -175,11 +146,7 @@ class TutorResponseTest {
                     "updated_at": "2024-01-15T11:45:00Z"
                 }
                 """;
-
-        // when
         final var response = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(response.id()).isEqualTo("tutor-123");
         assertThat(response.name()).isEqualTo("John Doe");
         assertThat(response.email()).isEqualTo("john@example.com");
@@ -190,16 +157,11 @@ class TutorResponseTest {
 
     @Test
     void givenResponseWithNullEmailAndPhone_whenSerialize_thenShouldOmitBoth() throws Exception {
-        // given
         final var createdAt = Instant.parse("2024-01-15T10:30:00Z");
         final var updatedAt = Instant.parse("2024-01-15T11:45:00Z");
         final var response =
                 new TutorResponse("tutor-123", "John Doe", null, null, createdAt, updatedAt);
-
-        // when
         final var jsonContent = this.json.write(response);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.id").isEqualTo("tutor-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("John Doe");
         assertThat(jsonContent).doesNotHaveJsonPath("$.email");

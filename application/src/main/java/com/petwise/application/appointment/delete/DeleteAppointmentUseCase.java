@@ -8,7 +8,5 @@ import com.petwise.application.UnitUseCase;
  */
 @SuppressWarnings("PMD.AbstractClassWithoutAnyMethod")
 public abstract class DeleteAppointmentUseCase extends UnitUseCase<String> {
-
-    /** Protected constructor for subclasses. */
     protected DeleteAppointmentUseCase() {}
 }

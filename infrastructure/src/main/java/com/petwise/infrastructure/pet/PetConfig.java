@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @SuppressWarnings("PMD.LongVariable")
 public class PetConfig {
-
-    /** Default constructor. */
     public PetConfig() {}
 
     /**

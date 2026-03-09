@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Test;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class SearchQueryTest extends UnitTest {
-
-    /** Default constructor. */
     SearchQueryTest() {}
 
     @Test
