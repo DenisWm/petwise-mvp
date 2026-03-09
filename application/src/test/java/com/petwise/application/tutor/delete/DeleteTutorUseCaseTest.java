@@ -30,20 +30,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class DeleteTutorUseCaseTest {
-
-    /** Default constructor. */
     DeleteTutorUseCaseTest() {}
 
-    /** The mocked tutor gateway. */
     @Mock private TutorGateway tutorGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultDeleteTutorUseCase useCase;
-
-    /** The tutor ID used across tests. */
     private TutorID tutorId;
-
-    /** The tutor used across tests. */
     private Tutor tutor;
 
     @BeforeEach
@@ -62,16 +53,11 @@ class DeleteTutorUseCaseTest {
     @Test
     @DisplayName("Should delete tutor successfully")
     void givenExistingTutor_whenExecute_thenShouldDeleteTutor() {
-        // Given
         final var tutorIdValue = tutorId.getValue();
 
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.of(tutor));
         doNothing().when(tutorGateway).deleteById(tutorId);
-
-        // When
         assertDoesNotThrow(() -> useCase.execute(tutorIdValue));
-
-        // Then
         verify(tutorGateway).findById(tutorId);
         verify(tutorGateway).deleteById(tutorId);
     }
@@ -79,12 +65,9 @@ class DeleteTutorUseCaseTest {
     @Test
     @DisplayName("Should throw NotFoundException when tutor does not exist")
     void givenNonExistingTutor_whenExecute_thenShouldThrowNotFoundException() {
-        // Given
         final var tutorIdValue = tutorId.getValue();
 
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.empty());
-
-        // When & Then
         assertThrows(NotFoundException.class, () -> useCase.execute(tutorIdValue));
 
         verify(tutorGateway).findById(tutorId);
@@ -94,7 +77,6 @@ class DeleteTutorUseCaseTest {
     @Test
     @DisplayName("Should throw NullPointerException when ID is null")
     void givenNullId_whenExecute_thenShouldThrowNullPointerException() {
-        // When & Then
         assertThrows(NullPointerException.class, () -> useCase.execute(null));
 
         verify(tutorGateway, never()).findById(any());
@@ -104,20 +86,16 @@ class DeleteTutorUseCaseTest {
     @Test
     @DisplayName("Should throw NullPointerException when gateway is null")
     void givenNullGateway_whenConstruct_thenShouldThrowNullPointerException() {
-        // When & Then
         assertThrows(NullPointerException.class, () -> new DefaultDeleteTutorUseCase(null));
     }
 
     @Test
     @DisplayName("Should verify tutor exists before deletion")
     void givenExistingTutor_whenExecute_thenShouldCallFindBeforeDelete() {
-        // Given
         final var tutorIdValue = tutorId.getValue();
 
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.of(tutor));
         doNothing().when(tutorGateway).deleteById(tutorId);
-
-        // When
         useCase.execute(tutorIdValue);
 
         // Then - verify findById was called before deleteById

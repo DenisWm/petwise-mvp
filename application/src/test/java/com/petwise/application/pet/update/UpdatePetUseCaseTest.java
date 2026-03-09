@@ -33,20 +33,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.AvoidDuplicateLiterals"
 })
 class UpdatePetUseCaseTest {
-
-    /** Default constructor. */
     UpdatePetUseCaseTest() {}
 
-    /** The mocked pet gateway. */
     @Mock private PetGateway petGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultUpdatePetUseCase useCase;
-
-    /** The pet ID used across tests. */
     private PetID petId;
-
-    /** The existing pet used across tests. */
     private Pet existingPet;
 
     @BeforeEach
@@ -68,7 +59,6 @@ class UpdatePetUseCaseTest {
     @Test
     @DisplayName("Should update pet successfully with all fields")
     void shouldUpdatePetSuccessfully() {
-        // Given
         final var command =
                 UpdatePetCommand.with(
                         petId.getValue(),
@@ -80,11 +70,7 @@ class UpdatePetUseCaseTest {
 
         when(petGateway.findById(petId)).thenReturn(Optional.of(existingPet));
         when(petGateway.save(any(Pet.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        // When
         final var output = useCase.execute(command);
-
-        // Then
         assertNotNull(output);
         assertEquals(petId.getValue(), output.id());
 
@@ -96,11 +82,8 @@ class UpdatePetUseCaseTest {
     @Test
     @DisplayName("Should throw NotFoundException when pet does not exist")
     void shouldThrowNotFoundExceptionWhenPetDoesNotExist() {
-        // Given
         final var command = UpdatePetCommand.with(petId.getValue(), "Max", null, null, null, null);
         when(petGateway.findById(petId)).thenReturn(Optional.empty());
-
-        // When & Then
         assertThrows(NotFoundException.class, () -> useCase.execute(command));
 
         verify(petGateway).findById(petId);
@@ -110,11 +93,8 @@ class UpdatePetUseCaseTest {
     @Test
     @DisplayName("Should throw NotificationException when name is blank")
     void shouldThrowNotificationExceptionWhenNameIsBlank() {
-        // Given
         final var command = UpdatePetCommand.with(petId.getValue(), "  ", null, null, null, null);
         when(petGateway.findById(petId)).thenReturn(Optional.of(existingPet));
-
-        // When & Then
         assertThrows(NotificationException.class, () -> useCase.execute(command));
         verify(petGateway, never()).save(any());
     }

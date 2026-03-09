@@ -9,12 +9,11 @@ has_children: true
 
 PetWise implements six core use cases covering tutor management, pet registration, and appointment scheduling.
 
-Each use case is documented with:
-- Goal and primary actors
-- Main flow and alternative flows
-- Preconditions and postconditions
-- Application layer mapping
-- Related artifacts (API endpoints, business rules)
+Each use case documents:
+- Goal, actors, preconditions and postconditions
+- Main and alternative flows
+- Application layer mapping (use case class, command, output, gateway)
+- API endpoint and business rules
 
 ---
 
@@ -58,11 +57,6 @@ graph LR
 
 ---
 
-## Use Case Template
-
-A [use case template](use-cases/specs/uc-template) is available for documenting new use cases.
-
----
 
 ## Implementation Status
 

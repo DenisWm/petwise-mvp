@@ -18,16 +18,12 @@ import org.springframework.boot.test.json.JacksonTester;
     "PMD.AvoidDuplicateLiterals"
 })
 class CreatePetRequestTest {
-
-    /** Default constructor. */
     CreatePetRequestTest() {}
 
-    /** The Jackson tester for CreatePetRequest. */
     @Autowired private JacksonTester<CreatePetRequest> json;
 
     @Test
     void givenValidRequest_whenSerialize_thenShouldContainAllFields() throws Exception {
-        // given
         final var request =
                 new CreatePetRequest(
                         "tutor-123",
@@ -36,11 +32,7 @@ class CreatePetRequestTest {
                         "Persian",
                         LocalDate.of(2020, 3, 15),
                         "Some notes");
-
-        // when
         final var jsonContent = this.json.write(request);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.tutor_id").isEqualTo("tutor-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("Fluffy");
         assertThat(jsonContent).extractingJsonPathStringValue("$.species").isEqualTo("Cat");
@@ -53,7 +45,6 @@ class CreatePetRequestTest {
 
     @Test
     void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -65,11 +56,7 @@ class CreatePetRequestTest {
                     "notes": "Some notes"
                 }
                 """;
-
-        // when
         final var request = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(request.tutorId()).isEqualTo("tutor-123");
         assertThat(request.name()).isEqualTo("Fluffy");
         assertThat(request.species()).isEqualTo("Cat");
@@ -80,13 +67,8 @@ class CreatePetRequestTest {
 
     @Test
     void givenRequestWithNullOptionals_whenSerialize_thenShouldOmitOptionals() throws Exception {
-        // given
         final var request = new CreatePetRequest("tutor-123", "Buddy", null, null, null, null);
-
-        // when
         final var jsonContent = this.json.write(request);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.tutor_id").isEqualTo("tutor-123");
         assertThat(jsonContent).extractingJsonPathStringValue("$.name").isEqualTo("Buddy");
         assertThat(jsonContent).doesNotHaveJsonPath("$.species");
@@ -97,7 +79,6 @@ class CreatePetRequestTest {
 
     @Test
     void givenJsonWithoutOptionals_whenDeserialize_thenShouldMapOptionalsAsNull() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -105,11 +86,7 @@ class CreatePetRequestTest {
                     "name": "Buddy"
                 }
                 """;
-
-        // when
         final var request = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(request.tutorId()).isEqualTo("tutor-123");
         assertThat(request.name()).isEqualTo("Buddy");
         assertThat(request.species()).isNull();

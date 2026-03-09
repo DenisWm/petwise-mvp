@@ -21,29 +21,19 @@ import org.springframework.beans.factory.annotation.Autowired;
     "PMD.TooManyMethods"
 })
 class CreateTutorUseCaseIT {
-
-    /** Default constructor. */
     CreateTutorUseCaseIT() {}
 
-    /** The use case under test. */
     @Autowired private CreateTutorUseCase useCase;
-
-    /** The tutor repository. */
     @Autowired private TutorRepository tutorRepository;
 
     @Test
     void givenValidCommand_whenCallsCreateTutor_thenShouldReturnTutorId() {
-        // given
         final var expectedName = "John Doe";
         final var expectedEmail = "john.doe@example.com";
         final var expectedPhone = "+1234567890";
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isNotNull();
 
@@ -60,17 +50,12 @@ class CreateTutorUseCaseIT {
 
     @Test
     void givenValidCommandWithNullEmail_whenCallsCreateTutor_thenShouldReturnTutorId() {
-        // given
         final var expectedName = "Jane Smith";
         final String expectedEmail = null;
         final var expectedPhone = "+9876543210";
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isNotNull();
 
@@ -84,17 +69,12 @@ class CreateTutorUseCaseIT {
 
     @Test
     void givenValidCommandWithNullPhone_whenCallsCreateTutor_thenShouldReturnTutorId() {
-        // given
         final var expectedName = "Bob Johnson";
         final var expectedEmail = "bob.johnson@example.com";
         final String expectedPhone = null;
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isNotNull();
 
@@ -108,17 +88,12 @@ class CreateTutorUseCaseIT {
 
     @Test
     void givenValidCommandWithEmptyEmail_whenCallsCreateTutor_thenShouldReturnTutorId() {
-        // given
         final var expectedName = "Alice Brown";
         final var expectedEmail = "";
         final var expectedPhone = "+1111111111";
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isNotNull();
 
@@ -131,17 +106,12 @@ class CreateTutorUseCaseIT {
 
     @Test
     void givenValidCommandWithEmptyPhone_whenCallsCreateTutor_thenShouldReturnTutorId() {
-        // given
         final var expectedName = "Charlie Davis";
         final var expectedEmail = "charlie@example.com";
         final var expectedPhone = "";
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isNotNull();
 
@@ -154,17 +124,12 @@ class CreateTutorUseCaseIT {
 
     @Test
     void givenValidCommandWithBothNullEmailAndPhone_whenCallsCreateTutor_thenShouldReturnTutorId() {
-        // given
         final var expectedName = "Diana Evans";
         final String expectedEmail = null;
         final String expectedPhone = null;
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertThat(output).isNotNull();
         assertThat(output.id()).isNotNull();
 
@@ -179,14 +144,11 @@ class CreateTutorUseCaseIT {
     @Test
     void
             givenInvalidCommandWithNullName_whenCallsCreateTutor_thenShouldThrowNotificationException() {
-        // given
         final String expectedName = null;
         final var expectedEmail = "test@example.com";
         final var expectedPhone = "+1234567890";
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when & then
         assertThatThrownBy(() -> useCase.execute(command))
                 .isInstanceOf(NotificationException.class)
                 .hasMessageContaining("Could not create Aggregate Tutor");
@@ -198,14 +160,11 @@ class CreateTutorUseCaseIT {
     @Test
     void
             givenInvalidCommandWithEmptyName_whenCallsCreateTutor_thenShouldThrowNotificationException() {
-        // given
         final var expectedName = "";
         final var expectedEmail = "test@example.com";
         final var expectedPhone = "+1234567890";
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when & then
         assertThatThrownBy(() -> useCase.execute(command))
                 .isInstanceOf(NotificationException.class)
                 .hasMessageContaining("Could not create Aggregate Tutor");
@@ -217,14 +176,11 @@ class CreateTutorUseCaseIT {
     @Test
     void
             givenInvalidCommandWithBlankName_whenCallsCreateTutor_thenShouldThrowNotificationException() {
-        // given
         final var expectedName = "   ";
         final var expectedEmail = "test@example.com";
         final var expectedPhone = "+1234567890";
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when & then
         assertThatThrownBy(() -> useCase.execute(command))
                 .isInstanceOf(NotificationException.class)
                 .hasMessageContaining("Could not create Aggregate Tutor");
@@ -235,14 +191,11 @@ class CreateTutorUseCaseIT {
 
     @Test
     void givenInvalidCommandWithInvalidEmail_whenCallsCreateTutor_thenShouldThrowDomainException() {
-        // given
         final var expectedName = "Invalid Email User";
         final var expectedEmail = "invalid-email";
         final var expectedPhone = "+1234567890";
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when & then
         assertThatThrownBy(() -> useCase.execute(command))
                 .isInstanceOf(DomainException.class)
                 .hasMessageContaining("'email' is not a valid email address");
@@ -254,14 +207,11 @@ class CreateTutorUseCaseIT {
     @Test
     void
             givenInvalidCommandWithInvalidPhoneFormat_whenCallsCreateTutor_thenShouldThrowDomainException() {
-        // given
         final var expectedName = "Invalid Phone User";
         final var expectedEmail = "test@example.com";
         final var expectedPhone = "123"; // Too short
 
         final var command = CreateTutorCommand.with(expectedName, expectedEmail, expectedPhone);
-
-        // when & then
         assertThatThrownBy(() -> useCase.execute(command))
                 .isInstanceOf(DomainException.class)
                 .hasMessageContaining("'phone' is not a valid phone number");
@@ -272,7 +222,6 @@ class CreateTutorUseCaseIT {
 
     @Test
     void givenNullCommand_whenCallsCreateTutor_thenShouldThrowNullPointerException() {
-        // when & then
         assertThatThrownBy(() -> useCase.execute(null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("Command cannot be null");
@@ -280,13 +229,8 @@ class CreateTutorUseCaseIT {
 
     @Test
     void givenValidCommand_whenCallsCreateTutor_thenShouldSetTimestamps() {
-        // given
         final var command = CreateTutorCommand.with("Test User", "test@example.com", "+1234567890");
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         final var persistedTutor = tutorRepository.findById(output.id());
         assertThat(persistedTutor).isPresent();
         assertThat(persistedTutor.get().getCreatedAt()).isNotNull();
@@ -297,20 +241,15 @@ class CreateTutorUseCaseIT {
 
     @Test
     void givenMultipleValidCommands_whenCallsCreateTutor_thenShouldCreateMultipleTutors() {
-        // given
         final var command1 =
                 CreateTutorCommand.with("First User", "first@example.com", "+1111111111");
         final var command2 =
                 CreateTutorCommand.with("Second User", "second@example.com", "+2222222222");
         final var command3 =
                 CreateTutorCommand.with("Third User", "third@example.com", "+3333333333");
-
-        // when
         final var output1 = useCase.execute(command1);
         final var output2 = useCase.execute(command2);
         final var output3 = useCase.execute(command3);
-
-        // then
         assertThat(output1.id()).isNotNull();
         assertThat(output2.id()).isNotNull();
         assertThat(output3.id()).isNotNull();

@@ -1,27 +1,24 @@
 # Architecture Documentation
 
-This directory contains architecture-related documentation for PetWise.
+Source files for architecture diagrams and domain knowledge.
 
-## Folder Structure
-
-### /c4
+## /c4
 C4 architectural diagrams (PlantUML):
 - `c4-context.puml` — C1: System Context
 - `c4-container.puml` — C2: Containers
 - `c4-components.puml` — C3: Components
 
-### /domain
-Domain knowledge:
-- `business-rules.md` — Domain invariants and constraints
-- `glossary.md` — Domain vocabulary and definitions
+## /domain
+- `business-rules.md` — Domain invariants, glossary, and DDD mapping
 - `erd.puml` — Entity-Relationship Diagram
 
-### /sequences
+## /sequences
 Behavioral diagrams (PlantUML) for each use case:
 - `uc01-create-tutor.puml` through `uc06-edit-delete-records.puml`
 
-## Rendering Diagrams
+## Rendering
 
 ```bash
-make diagrams
+make diagrams   # Render .puml → .png
+make erd        # Generate live ERD from database (requires make infra-up)
 ```

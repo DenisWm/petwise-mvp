@@ -13,14 +13,6 @@ import org.springframework.data.repository.query.Param;
  * full-text search query.
  */
 public interface PetRepository extends JpaRepository<PetJpaEntity, String> {
-
-    /**
-     * Finds pets whose name or species contains the given terms (case-insensitive).
-     *
-     * @param terms the search string; must not be {@code null}
-     * @param pageable pagination parameters
-     * @return a page of matching entities
-     */
     @Query(
             """
             SELECT p FROM PetJpaEntity p

@@ -15,11 +15,7 @@ import java.util.Objects;
     "PMD.ClassWithOnlyPrivateConstructorsShouldBeFinal"
 })
 public final class Appointment extends AggregateRoot<AppointmentID> {
-
-    /** The pet ID. */
     private final PetID petId;
-
-    /** The service type. */
     private final ServiceType serviceType;
 
     /** Appointment status. */
@@ -34,10 +30,7 @@ public final class Appointment extends AggregateRoot<AppointmentID> {
     /** Optional notes. */
     private final String notes;
 
-    /** Timestamp of when this appointment was created. */
     private final Instant createdAt;
-
-    /** Timestamp of the last update to this appointment. */
     private Instant updatedAt;
 
     private Appointment(
@@ -61,16 +54,6 @@ public final class Appointment extends AggregateRoot<AppointmentID> {
         this.updatedAt = Objects.requireNonNull(anUpdatedAt, "'updatedAt' should not be null");
     }
 
-    /**
-     * Creates a new Appointment with a generated ID, current time, and initial status PENDING.
-     *
-     * @param aPetId the pet ID (required)
-     * @param aServiceType the service type (required)
-     * @param aStartAt the start timestamp (required)
-     * @param anEndAt the end timestamp (required)
-     * @param aNotes optional notes
-     * @return a new Appointment instance
-     */
     public static Appointment newAppointment(
             final PetID aPetId,
             final ServiceType aServiceType,
@@ -91,20 +74,7 @@ public final class Appointment extends AggregateRoot<AppointmentID> {
                 now);
     }
 
-    /**
-     * Creates an Appointment from typed objects (for persistence reconstruction).
-     *
-     * @param anId the appointment ID
-     * @param aPetId the pet ID
-     * @param aServiceType the service type
-     * @param aStatus the appointment status
-     * @param aStartAt the start timestamp
-     * @param anEndAt the end timestamp
-     * @param aNotes notes about the appointment
-     * @param aCreatedAt the creation timestamp
-     * @param anUpdatedAt the last update timestamp
-     * @return an Appointment instance
-     */
+    /** Reconstructs an Appointment from typed objects (persistence). */
     public static Appointment with(
             final AppointmentID anId,
             final PetID aPetId,
@@ -127,20 +97,7 @@ public final class Appointment extends AggregateRoot<AppointmentID> {
                 anUpdatedAt);
     }
 
-    /**
-     * Creates an Appointment from raw strings (for persistence reconstruction).
-     *
-     * @param anId the appointment ID
-     * @param aPetId the pet ID
-     * @param aServiceType the service type
-     * @param aStatus the appointment status
-     * @param aStartAt the start timestamp
-     * @param anEndAt the end timestamp
-     * @param aNotes notes about the appointment
-     * @param aCreatedAt the creation timestamp
-     * @param anUpdatedAt the last update timestamp
-     * @return an Appointment instance
-     */
+    /** Reconstructs an Appointment from raw strings (persistence). */
     public static Appointment with(
             final String anId,
             final String aPetId,
@@ -163,12 +120,6 @@ public final class Appointment extends AggregateRoot<AppointmentID> {
                 anUpdatedAt);
     }
 
-    /**
-     * Changes the appointment status if the transition is allowed.
-     *
-     * @param aStatus the next status
-     * @return the updated Appointment instance
-     */
     public Appointment changeStatus(final AppointmentStatus aStatus) {
         if (aStatus == null) {
             throw DomainException.with(new Error("'status' should not be null"));

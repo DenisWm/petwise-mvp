@@ -29,23 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SuppressWarnings({"PMD.LongVariable", "PMD.ShortVariable"})
 public class TutorController implements TutorAPI {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(TutorController.class);
-
-    /** Use case for creating a tutor. */
     private final CreateTutorUseCase createTutorUseCase;
-
-    /** Use case for retrieving a tutor by ID. */
     private final GetTutorByIdUseCase getTutorByIdUseCase;
-
-    /** Use case for listing tutors. */
     private final ListTutorsUseCase listTutorsUseCase;
-
-    /** Use case for updating a tutor. */
     private final UpdateTutorUseCase updateTutorUseCase;
-
-    /** Use case for deleting a tutor. */
     private final DeleteTutorUseCase deleteTutorUseCase;
 
     /**
@@ -70,11 +58,6 @@ public class TutorController implements TutorAPI {
         this.deleteTutorUseCase = aDeleteUseCase;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override to customise creation behaviour.
-     */
     @Override
     public ResponseEntity<Void> createTutor(final CreateTutorRequest request) {
         if (LOG.isDebugEnabled()) {
@@ -89,11 +72,6 @@ public class TutorController implements TutorAPI {
         return ResponseEntity.created(URI.create("/tutors/" + output.id())).build();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override to customise retrieval behaviour.
-     */
     @Override
     public TutorResponse getTutorById(final String tutorId) {
         if (LOG.isDebugEnabled()) {
@@ -103,11 +81,6 @@ public class TutorController implements TutorAPI {
         return TutorApiPresenter.present(output);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override to customise listing behaviour.
-     */
     @Override
     public Pagination<TutorResponse> listTutors(
             final int page,
@@ -123,11 +96,6 @@ public class TutorController implements TutorAPI {
         return output.map(TutorApiPresenter::present);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override to customise update behaviour.
-     */
     @Override
     public ResponseEntity<Void> updateTutor(
             final String tutorId, final UpdateTutorRequest request) {
@@ -143,11 +111,6 @@ public class TutorController implements TutorAPI {
         return ResponseEntity.ok().location(URI.create("/tutors/" + output.id())).build();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override to customise deletion behaviour.
-     */
     @Override
     public void deleteTutor(final String tutorId) {
         if (LOG.isDebugEnabled()) {

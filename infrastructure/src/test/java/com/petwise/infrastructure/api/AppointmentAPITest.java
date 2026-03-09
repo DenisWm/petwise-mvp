@@ -57,8 +57,6 @@ import org.springframework.test.web.servlet.MockMvc;
     "PMD.ExcessiveImports"
 })
 class AppointmentAPITest {
-
-    /** Default constructor. */
     AppointmentAPITest() {}
 
     /** MockMvc for performing HTTP requests. */
@@ -88,20 +86,17 @@ class AppointmentAPITest {
     @Test
     void givenValidRequest_whenCreateAppointment_thenShouldReturnCreatedWithLocation()
             throws Exception {
-        // given
         final var expectedId = "appointment-123";
         final var request =
                 new CreateAppointmentRequest(
                         "pet-id",
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         "Some notes");
 
         when(createAppointmentUseCase.execute(any()))
                 .thenReturn(new CreateAppointmentOutput(expectedId));
-
-        // when & then
         mockMvc.perform(
                         post("/appointments")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,12 +105,11 @@ class AppointmentAPITest {
                 .andExpect(header().string("Location", "/appointments/" + expectedId));
 
         verify(createAppointmentUseCase, times(1))
-                .execute(argThat(cmd -> ServiceType.CRECHE.equals(cmd.serviceType())));
+                .execute(argThat(cmd -> ServiceType.DAYCARE.equals(cmd.serviceType())));
     }
 
     @Test
     void givenValidId_whenGetAppointmentById_thenShouldReturnAppointment() throws Exception {
-        // given
         final var expectedId = "appointment-123";
         final var startAt = Instant.parse("2025-11-28T08:00:00Z");
         final var endAt = Instant.parse("2025-11-28T18:00:00Z");
@@ -124,7 +118,7 @@ class AppointmentAPITest {
                 new AppointmentOutput(
                         expectedId,
                         "pet-id",
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         AppointmentStatus.PENDING,
                         startAt,
                         endAt,
@@ -133,12 +127,10 @@ class AppointmentAPITest {
                         Instant.now());
 
         when(getAppointmentByIdUseCase.execute(expectedId)).thenReturn(output);
-
-        // when & then
         mockMvc.perform(get("/appointments/{id}", expectedId).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(expectedId)))
-                .andExpect(jsonPath("$.service_type", equalTo("CRECHE")))
+                .andExpect(jsonPath("$.service_type", equalTo("DAYCARE")))
                 .andExpect(jsonPath("$.status", equalTo("PENDING")));
 
         verify(getAppointmentByIdUseCase, times(1)).execute(expectedId);
@@ -146,7 +138,6 @@ class AppointmentAPITest {
 
     @Test
     void givenValidParams_whenListAppointments_thenShouldReturnPaginatedList() throws Exception {
-        // given
         final var appointment =
                 new ListAppointmentsOutput(
                         "appointment-123",
@@ -160,8 +151,6 @@ class AppointmentAPITest {
 
         final var expectedPagination = new Pagination<>(0, 10, 1L, List.of(appointment));
         when(listAppointmentsUseCase.execute(any())).thenReturn(expectedPagination);
-
-        // when & then
         mockMvc.perform(get("/appointments").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.total", equalTo(1)))
@@ -173,12 +162,11 @@ class AppointmentAPITest {
 
     @Test
     void givenValidDate_whenViewDailyAgenda_thenShouldReturnPaginatedList() throws Exception {
-        // given
         final var output =
                 new ViewDailyAgendaOutput(
                         "appointment-456",
                         "pet-id",
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         AppointmentStatus.ACTIVE,
                         Instant.parse("2026-02-26T08:00:00Z"),
                         Instant.parse("2026-02-26T18:00:00Z"),
@@ -188,8 +176,6 @@ class AppointmentAPITest {
 
         final var expectedPagination = new Pagination<>(0, 20, 1L, List.of(output));
         when(viewDailyAgendaUseCase.execute(any())).thenReturn(expectedPagination);
-
-        // when & then
         mockMvc.perform(
                         get("/appointments/agenda")
                                 .param("date", "2026-02-26")
@@ -197,7 +183,7 @@ class AppointmentAPITest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.total", equalTo(1)))
                 .andExpect(jsonPath("$.items", hasSize(1)))
-                .andExpect(jsonPath("$.items[0].service_type", equalTo("CRECHE")))
+                .andExpect(jsonPath("$.items[0].service_type", equalTo("DAYCARE")))
                 .andExpect(jsonPath("$.items[0].status", equalTo("ACTIVE")))
                 .andExpect(jsonPath("$.items[0].notes", equalTo("Daycare")));
 
@@ -206,11 +192,8 @@ class AppointmentAPITest {
 
     @Test
     void givenDateWithFilters_whenViewDailyAgenda_thenShouldPassFilters() throws Exception {
-        // given
         final var expectedPagination = new Pagination<ViewDailyAgendaOutput>(0, 20, 0L, List.of());
         when(viewDailyAgendaUseCase.execute(any())).thenReturn(expectedPagination);
-
-        // when & then
         mockMvc.perform(
                         get("/appointments/agenda")
                                 .param("date", "2026-02-26")
@@ -231,14 +214,11 @@ class AppointmentAPITest {
 
     @Test
     void givenValidRequest_whenChangeStatus_thenShouldReturnOkWithLocation() throws Exception {
-        // given
         final var expectedId = "appointment-123";
         final var request = new ChangeAppointmentStatusRequest(AppointmentStatus.ACTIVE);
 
         when(changeAppointmentStatusUseCase.execute(any()))
                 .thenReturn(new ChangeAppointmentStatusOutput(expectedId, "ACTIVE"));
-
-        // when & then
         mockMvc.perform(
                         patch("/appointments/{id}/status", expectedId)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -256,11 +236,8 @@ class AppointmentAPITest {
 
     @Test
     void givenValidId_whenDeleteAppointment_thenShouldReturnNoContent() throws Exception {
-        // given
         final var expectedId = "appointment-123";
         doNothing().when(deleteAppointmentUseCase).execute(expectedId);
-
-        // when & then
         mockMvc.perform(delete("/appointments/{id}", expectedId)).andExpect(status().isNoContent());
 
         verify(deleteAppointmentUseCase, times(1)).execute(expectedId);

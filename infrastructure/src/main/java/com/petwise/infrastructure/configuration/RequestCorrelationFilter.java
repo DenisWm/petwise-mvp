@@ -31,26 +31,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestCorrelationFilter implements Filter {
-
-    /** The MDC key used to store the request identifier. */
     private static final String REQUEST_ID_KEY = "requestId";
-
-    /** The MDC key used to store the HTTP method (GET, POST, …). */
     private static final String METHOD_KEY = "method";
-
-    /** The MDC key used to store the request URI. */
     private static final String URI_KEY = "uri";
-
-    /** The HTTP header from which a client-supplied request ID is read. */
     private static final String REQUEST_ID_HEADER = "X-Request-ID";
-
-    /** Length of the auto-generated short request ID (first N chars of a UUID). */
     private static final int SHORT_ID_LENGTH = 8;
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(RequestCorrelationFilter.class);
 
-    /** Default constructor. */
     public RequestCorrelationFilter() {}
 
     @Override

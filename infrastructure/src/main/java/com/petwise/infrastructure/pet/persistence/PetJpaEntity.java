@@ -18,35 +18,25 @@ import java.time.LocalDate;
 @Table(name = "pets")
 @SuppressWarnings({"PMD.ShortVariable", "PMD.DataClass"})
 public class PetJpaEntity {
-
-    /** Maximum length for UUID-based ID column. */
     private static final int ID_LENGTH = 36;
-
-    /** Maximum length for text columns. */
     private static final int TEXT_LENGTH = 255;
 
-    /** The unique pet identifier. */
     @Id
     @Column(name = "id", nullable = false, length = ID_LENGTH)
     private String id;
 
-    /** The owning tutor identifier. */
     @Column(name = "tutor_id", nullable = false, length = ID_LENGTH)
     private String tutorId;
 
-    /** The pet's name. */
     @Column(name = "name", nullable = false, length = TEXT_LENGTH)
     private String name;
 
-    /** The pet's species (optional). */
     @Column(name = "species", length = TEXT_LENGTH)
     private String species;
 
-    /** The pet's breed (optional). */
     @Column(name = "breed", length = TEXT_LENGTH)
     private String breed;
 
-    /** The pet's birth date (optional). */
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
@@ -54,11 +44,9 @@ public class PetJpaEntity {
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
-    /** Timestamp of when this pet was created. */
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    /** Timestamp of the last update to this pet. */
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 

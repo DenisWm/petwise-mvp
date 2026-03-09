@@ -15,7 +15,6 @@ import java.util.Objects;
 })
 public final class AppointmentID extends Identifier<String> {
 
-    /** The raw UUID string value. */
     private final String value;
 
     private AppointmentID(final String aValue) {
@@ -23,21 +22,10 @@ public final class AppointmentID extends Identifier<String> {
         this.value = aValue;
     }
 
-    /**
-     * Creates a new unique AppointmentID.
-     *
-     * @return a new AppointmentID backed by a random UUID
-     */
     public static AppointmentID unique() {
         return new AppointmentID(IDUtils.uuid());
     }
 
-    /**
-     * Creates an AppointmentID from an existing string value.
-     *
-     * @param anId the raw identifier string; must not be {@code null}
-     * @return an AppointmentID wrapping the given value
-     */
     @SuppressWarnings("PMD.ShortVariable")
     public static AppointmentID from(final String anId) {
         Objects.requireNonNull(anId, "'id' should not be null");

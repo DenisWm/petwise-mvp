@@ -8,7 +8,5 @@ import com.petwise.domain.pagination.SearchQuery;
 @SuppressWarnings("PMD.AbstractClassWithoutAnyMethod")
 public abstract class ListAppointmentsUseCase
         extends UseCase<SearchQuery, Pagination<ListAppointmentsOutput>> {
-
-    /** Protected constructor for subclasses. */
     protected ListAppointmentsUseCase() {}
 }

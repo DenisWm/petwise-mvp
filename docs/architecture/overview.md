@@ -21,11 +21,11 @@ PetWise demonstrates Clean Architecture and Domain-Driven Design principles in a
 
 ## Architectural Style
 
-PetWise implements a **Clean Architecture** approach inspired by:
+PetWise implements **Clean Architecture** drawing from:
 
-- **Robert C. Martin's Clean Architecture** — Dependency inversion, testability, framework independence
-- **Alistair Cockburn's Hexagonal Architecture** — Ports and adapters, isolation of business logic
-- **Domain-Driven Design (DDD)** — Ubiquitous language, aggregates, bounded contexts
+- **Robert C. Martin** — Dependency inversion, testability, framework independence
+- **Alistair Cockburn (Hexagonal)** — Ports and adapters, isolated business logic
+- **Domain-Driven Design** — Ubiquitous language, aggregates, bounded contexts
 
 ---
 
@@ -88,7 +88,7 @@ PetWise uses **tactical DDD patterns**:
 ### Value Objects
 
 - `Email`, `Phone` — Validated, immutable contact info
-- `ServiceType` — CRECHE, HOTEL
+- `ServiceType` — DAYCARE, HOTEL
 - `AppointmentStatus` — PENDING, ACTIVE, COMPLETED, CANCELED
 
 {: .note }

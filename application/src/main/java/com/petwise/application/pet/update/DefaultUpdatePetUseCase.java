@@ -18,29 +18,14 @@ import org.slf4j.LoggerFactory;
  * result via the {@link PetGateway}.
  */
 public final class DefaultUpdatePetUseCase extends UpdatePetUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultUpdatePetUseCase.class);
-
-    /** The gateway used to find and persist pets. */
     private final PetGateway petGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aPetGateway the pet persistence gateway; must not be {@code null}
-     */
     public DefaultUpdatePetUseCase(final PetGateway aPetGateway) {
         super();
         this.petGateway = Objects.requireNonNull(aPetGateway, "PetGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Loads the pet, applies updates, validates, and persists. Throws {@link
-     * NotificationException} if validation fails.
-     */
     @Override
     public UpdatePetOutput execute(final UpdatePetCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");

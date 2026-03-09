@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class CollectionUtilsTest extends UnitTest {
-    /** Default constructor. */
     CollectionUtilsTest() {}
 
     @Test

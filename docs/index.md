@@ -54,6 +54,7 @@ New to the project? Start here:
 - [Use Cases](use-cases/) — UC-01 through UC-06
 - [API Reference](api-reference) — REST endpoints and OpenAPI spec
 - [Build System](build-system) — Gradle convention plugins
+- [Operations Guide](operations) — Logging, actuator, runtime debugging
 
 </div>
 
@@ -62,7 +63,6 @@ New to the project? Start here:
 ### 🤝 Contributing
 
 - [**Contributing Guide**](contributing) — How to contribute
-- [**FAQ**](faq) — Common questions
 
 </div>
 
@@ -72,14 +72,15 @@ New to the project? Start here:
 
 | Layer | Technologies |
 |:------|:-------------|
-| **Backend** | Java 21, Spring Boot 3.5.7, Spring Data JPA |
+| **Backend** | Java 21, Spring Boot 3.5.7, Spring Data JPA, Spring Security (OAuth2 Resource Server) |
 | **Build** | Gradle 8.14 (Kotlin DSL), convention plugins |
-| **Database** | PostgreSQL (Docker Compose), H2 (tests) |
+| **Database** | PostgreSQL (Docker Compose), H2 (tests), Flyway migrations |
+| **Identity** | Keycloak 26.0 (Docker Compose) |
 | **Web Server** | Undertow |
 | **Testing** | JUnit 5, Mockito, AssertJ, Spring Boot Test, JaCoCo |
 | **Quality** | Spotless, SpotBugs, PMD, Checkstyle, OWASP Dependency-Check |
 | **Diagrams** | PlantUML, C4 Model |
-| **API** | REST, OpenAPI 3.0, Springdoc |
+| **API Docs** | OpenAPI 3.0, Springdoc, Swagger UI, Redoc |
 
 ---
 

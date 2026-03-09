@@ -1,4 +1,11 @@
 spring:
+  # Disable security entirely in tests — no Keycloak instance required
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
   datasource:
     driver-class-name: org.h2.Driver
     username: root
@@ -28,4 +35,12 @@ spring:
 management:
   server:
     port:                              # null = same port as the main server
+
+# Dummy value — no Keycloak in tests, but @Value("${keycloak.issuer-uri}") must resolve
+keycloak:
+  issuer-uri: http://localhost:9080/realms/petwise
+
+
+
+
 

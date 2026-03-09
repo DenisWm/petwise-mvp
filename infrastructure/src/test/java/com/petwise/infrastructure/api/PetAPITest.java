@@ -53,8 +53,6 @@ import org.springframework.test.web.servlet.MockMvc;
     "PMD.ExcessiveImports"
 })
 class PetAPITest {
-
-    /** Default constructor. */
     PetAPITest() {}
 
     /** MockMvc for performing HTTP requests. */
@@ -80,14 +78,11 @@ class PetAPITest {
 
     @Test
     void givenValidRequest_whenCreatePet_thenShouldReturnCreatedWithLocation() throws Exception {
-        // given
         final var expectedId = "pet-123";
         final var request =
                 new CreatePetRequest("tutor-id", "Fluffy", "Cat", "Persian", null, null);
 
         when(createPetUseCase.execute(any())).thenReturn(new CreatePetOutput(expectedId));
-
-        // when & then
         mockMvc.perform(
                         post("/pets")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -100,7 +95,6 @@ class PetAPITest {
 
     @Test
     void givenValidId_whenGetPetById_thenShouldReturnPet() throws Exception {
-        // given
         final var expectedId = "pet-123";
         final var output =
                 new PetOutput(
@@ -115,8 +109,6 @@ class PetAPITest {
                         Instant.now());
 
         when(getPetByIdUseCase.execute(expectedId)).thenReturn(output);
-
-        // when & then
         mockMvc.perform(get("/pets/{id}", expectedId).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(expectedId)))
@@ -128,7 +120,6 @@ class PetAPITest {
 
     @Test
     void givenValidParams_whenListPets_thenShouldReturnPaginatedList() throws Exception {
-        // given
         final var pet =
                 new ListPetsOutput(
                         "pet-123",
@@ -142,8 +133,6 @@ class PetAPITest {
 
         final var expectedPagination = new Pagination<>(0, 10, 1L, List.of(pet));
         when(listPetsUseCase.execute(any())).thenReturn(expectedPagination);
-
-        // when & then
         mockMvc.perform(get("/pets").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.total", equalTo(1)))
@@ -155,13 +144,10 @@ class PetAPITest {
 
     @Test
     void givenValidRequest_whenUpdatePet_thenShouldReturnOkWithLocation() throws Exception {
-        // given
         final var expectedId = "pet-123";
         final var request = new UpdatePetRequest("Max", "Dog", "Labrador", null, null);
 
         when(updatePetUseCase.execute(any())).thenReturn(new UpdatePetOutput(expectedId));
-
-        // when & then
         mockMvc.perform(
                         put("/pets/{id}", expectedId)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -175,11 +161,8 @@ class PetAPITest {
 
     @Test
     void givenValidId_whenDeletePet_thenShouldReturnNoContent() throws Exception {
-        // given
         final var expectedId = "pet-123";
         doNothing().when(deletePetUseCase).execute(expectedId);
-
-        // when & then
         mockMvc.perform(delete("/pets/{id}", expectedId)).andExpect(status().isNoContent());
 
         verify(deletePetUseCase, times(1)).execute(expectedId);

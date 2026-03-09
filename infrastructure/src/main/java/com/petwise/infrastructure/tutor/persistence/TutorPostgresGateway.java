@@ -23,11 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @SuppressWarnings({"PMD.ShortVariable", "PMD.LiteralsFirstInComparisons"})
 public class TutorPostgresGateway implements TutorGateway {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(TutorPostgresGateway.class);
-
-    /** The underlying Spring Data JPA repository. */
     private final TutorRepository repository;
 
     /**
@@ -39,11 +35,6 @@ public class TutorPostgresGateway implements TutorGateway {
         this.repository = aRepository;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override for alternative persistence strategy.
-     */
     @Override
     @Transactional
     public Tutor save(final Tutor tutor) {
@@ -53,11 +44,6 @@ public class TutorPostgresGateway implements TutorGateway {
         return this.repository.save(TutorJpaEntity.from(tutor)).toAggregate();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override for alternative lookup strategy.
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<Tutor> findById(final TutorID anId) {
@@ -67,22 +53,12 @@ public class TutorPostgresGateway implements TutorGateway {
         return this.repository.findById(anId.getValue()).map(TutorJpaEntity::toAggregate);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override for alternative retrieval strategy.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<Tutor> findAll() {
         return this.repository.findAll().stream().map(TutorJpaEntity::toAggregate).toList();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override for alternative pagination strategy.
-     */
     @Override
     @Transactional(readOnly = true)
     public Pagination<Tutor> findAll(final SearchQuery query) {
@@ -104,11 +80,6 @@ public class TutorPostgresGateway implements TutorGateway {
         return new Pagination<>(page.getNumber(), page.getSize(), page.getTotalElements(), tutors);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override for alternative deletion strategy.
-     */
     @Override
     @Transactional
     public void deleteById(final TutorID anId) {

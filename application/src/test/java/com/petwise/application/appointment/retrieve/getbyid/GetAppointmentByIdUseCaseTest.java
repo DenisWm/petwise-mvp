@@ -31,20 +31,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.LongVariable"
 })
 class GetAppointmentByIdUseCaseTest {
-
-    /** Default constructor. */
     GetAppointmentByIdUseCaseTest() {}
 
-    /** The mocked appointment gateway. */
     @Mock private AppointmentGateway appointmentGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultGetAppointmentByIdUseCase useCase;
-
-    /** The appointment ID used across tests. */
     private AppointmentID appointmentId;
-
-    /** The appointment used across tests. */
     private Appointment appointment;
 
     @BeforeEach
@@ -66,13 +57,8 @@ class GetAppointmentByIdUseCaseTest {
     @Test
     @DisplayName("Should return appointment output when appointment exists")
     void givenExistingAppointment_whenExecute_thenShouldReturnAppointmentOutput() {
-        // Given
         when(appointmentGateway.findById(appointmentId)).thenReturn(Optional.of(appointment));
-
-        // When
         final var output = useCase.execute(appointmentId.getValue());
-
-        // Then
         assertNotNull(output);
         assertEquals(appointmentId.getValue(), output.id());
         assertEquals(ServiceType.HOTEL, output.serviceType());
@@ -85,10 +71,7 @@ class GetAppointmentByIdUseCaseTest {
     @Test
     @DisplayName("Should throw NotFoundException when appointment does not exist")
     void givenNonExistingAppointment_whenExecute_thenShouldThrowNotFoundException() {
-        // Given
         when(appointmentGateway.findById(appointmentId)).thenReturn(Optional.empty());
-
-        // When & Then
         assertThrows(NotFoundException.class, () -> useCase.execute(appointmentId.getValue()));
         verify(appointmentGateway).findById(appointmentId);
     }

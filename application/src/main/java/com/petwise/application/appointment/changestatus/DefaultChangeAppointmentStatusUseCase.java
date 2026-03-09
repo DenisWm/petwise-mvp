@@ -17,32 +17,16 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultChangeAppointmentStatusUseCase extends ChangeAppointmentStatusUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG =
             LoggerFactory.getLogger(DefaultChangeAppointmentStatusUseCase.class);
-
-    /** The gateway used to find and persist appointments. */
     private final AppointmentGateway appointmentGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param anAppointmentGateway the appointment persistence gateway; must not be {@code null}
-     */
     public DefaultChangeAppointmentStatusUseCase(final AppointmentGateway anAppointmentGateway) {
         super();
         this.appointmentGateway =
                 Objects.requireNonNull(anAppointmentGateway, "AppointmentGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Loads the appointment, delegates the status transition to the domain, and persists the
-     * result. Throws {@link NotFoundException} if the appointment is not found, or a {@link
-     * com.petwise.domain.exceptions.DomainException} if the transition is invalid.
-     */
     @Override
     public ChangeAppointmentStatusOutput execute(final ChangeAppointmentStatusCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");

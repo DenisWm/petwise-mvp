@@ -16,28 +16,14 @@ import org.slf4j.LoggerFactory;
  * no-op.
  */
 public final class DefaultDeletePetUseCase extends DeletePetUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultDeletePetUseCase.class);
-
-    /** The gateway used to find and delete pets. */
     private final PetGateway petGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aPetGateway the pet persistence gateway; must not be {@code null}
-     */
     public DefaultDeletePetUseCase(final PetGateway aPetGateway) {
         super();
         this.petGateway = Objects.requireNonNull(aPetGateway, "PetGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Finds the pet by ID, throws {@link NotFoundException} if absent, then deletes it.
-     */
     @Override
     public void execute(final String anId) {
         Objects.requireNonNull(anId, "Pet ID cannot be null");

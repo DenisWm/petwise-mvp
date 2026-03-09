@@ -11,7 +11,5 @@ package com.petwise.domain;
  */
 @SuppressWarnings({"PMD.AbstractClassWithoutAnyMethod", "PMD.AbstractClassWithoutAbstractMethod"})
 public abstract class ValueObject {
-
-    /** Protected constructor for subclasses. */
     protected ValueObject() {}
 }

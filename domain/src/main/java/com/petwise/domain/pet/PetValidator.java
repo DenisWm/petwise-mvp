@@ -9,37 +9,18 @@ import java.time.LocalDate;
 @SuppressWarnings("PMD.OnlyOneReturn")
 public final class PetValidator extends Validator {
 
-    /** Maximum allowed length for pet name. */
     private static final int NAME_MAX_LENGTH = 255;
-
-    /** Maximum allowed length for species. */
     private static final int SPECIES_MAX_LENGTH = 255;
-
-    /** Maximum allowed length for breed. */
     private static final int BREED_MAX_LENGTH = 255;
-
-    /** Maximum allowed length for notes. */
     private static final int NOTES_MAX_LENGTH = 1000;
 
-    /** The pet being validated. */
     private final Pet pet;
 
-    /**
-     * Constructs a PetValidator for the given pet and handler.
-     *
-     * @param aPet the pet to validate
-     * @param handler the handler to collect errors
-     */
     public PetValidator(final Pet aPet, final ValidationHandler handler) {
         super(handler);
         this.pet = aPet;
     }
 
-    /**
-     * Validates the pet entity invariants.
-     *
-     * <p>Subclasses may override to add additional validation rules.
-     */
     @Override
     public void validate() {
         checkTutorIdConstraints();

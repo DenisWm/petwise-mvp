@@ -1,17 +1,15 @@
 ---
 layout: default
 title: API Reference
-nav_order: 7
+nav_order: 6
 ---
 
-# API Quick Reference
+# API Reference
 {: .no_toc }
 
-Quick reference for PetWise REST API endpoints.
+PetWise generates API documentation from OpenAPI annotations in the code.
+The interactive docs below are always in sync with the codebase.
 {: .fs-6 .fw-300 }
-
-{: .note }
-> **Complete Specification:** The [OpenAPI YAML](https://github.com/deniswm/petwise-mvp/blob/master/docs/api/openapi.yaml) is auto-generated from annotated controllers. Run `./gradlew :infrastructure:generateOpenApiDocs` to regenerate.
 
 ## Table of contents
 {: .no_toc .text-delta }
@@ -21,270 +19,60 @@ Quick reference for PetWise REST API endpoints.
 
 ---
 
-## Base URL
+## Interactive Documentation
 
-```
-http://localhost:8080/api
-```
+| Tool | URL (local) |
+|:-----|:------------|
+| **Swagger UI** | [`http://localhost:8080/api/swagger-ui.html`](http://localhost:8080/api/swagger-ui.html) |
+| **Redoc** (full-screen) | [Open Redoc ↗](api/redoc.html){: target="_blank" } |
+| **Raw spec** | [`docs/api/openapi.yaml`](https://github.com/deniswm/petwise-mvp/blob/master/docs/api/openapi.yaml) |
 
----
+Swagger UI supports **"Try it out"** for every endpoint. Use the OAuth2 button to authenticate with Keycloak (client: `petwise-swagger`).
 
-## Health
-
-### Health Check
-
-```http
-GET /actuator/health
-```
-
-**Response:** `200 OK`
-```json
-{
-  "status": "UP"
-}
-```
+{: .note }
+> The OpenAPI spec is **auto-generated**. Do not edit `openapi.yaml` by hand — update the `@Operation` / `@Parameter` annotations on the API interfaces, then run `./gradlew :infrastructure:generateOpenApiDocs`.
 
 ---
 
-## Tutors
+## Authentication
 
-### Create Tutor
+All endpoints (except health checks and docs) require a **Bearer JWT** from Keycloak.
 
-```http
-POST /api/tutors
-Content-Type: application/json
+```bash
+# Obtain a token (Resource Owner Password flow — dev only)
+TOKEN=$(curl -s -X POST http://localhost:9080/realms/petwise/protocol/openid-connect/token \
+  -d "client_id=petwise-api" \
+  -d "client_secret=petwise-dev-secret" \
+  -d "grant_type=password" \
+  -d "username=admin" \
+  -d "password=admin123" | jq -r '.access_token')
 
-{
-  "name": "Alice Smith",
-  "email": "alice@example.com",
-  "phone": "+1234567890"
-}
+# Use the token
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/api/tutors
 ```
 
-**Response:** `201 Created`
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "name": "Alice Smith",
-  "email": "alice@example.com",
-  "phone": "+1234567890",
-  "createdAt": "2025-11-27T10:00:00Z",
-  "updatedAt": "2025-11-27T10:00:00Z"
-}
-```
+### Roles
 
-### List Tutors
+| Role | Access |
+|:-----|:-------|
+| `ROLE_ADMIN` | Full platform access (ATTENDANT + TUTOR combined) |
+| `ROLE_ATTENDANT` | Manage tutors, pets, appointments, daily agenda |
+| `ROLE_TUTOR` | View own pets and appointment history |
 
-```http
-GET /api/tutors?page=0&size=20
-```
+### Public Endpoints (no auth)
 
-**Response:** `200 OK` (paginated)
-
-### Get Tutor by ID
-
-```http
-GET /api/tutors/{id}
-```
-
-**Response:** `200 OK` or `404 Not Found`
-
-### Update Tutor
-
-```http
-PUT /api/tutors/{id}
-Content-Type: application/json
-
-{
-  "name": "Alice Johnson",
-  "email": "alice.johnson@example.com",
-  "phone": "+1234567890"
-}
-```
-
-**Response:** `200 OK`
-
-### Delete Tutor
-
-```http
-DELETE /api/tutors/{id}
-```
-
-**Response:** `204 No Content` or `409 Conflict` (if has pets)
+| Path | Purpose |
+|:-----|:--------|
+| `GET /management/health/**` | Health & readiness probes (port 9090) |
+| `GET /management/info` | Application info (port 9090) |
+| `GET /api/v3/api-docs/**` | OpenAPI specification |
+| `GET /api/swagger-ui/**` | Swagger UI |
 
 ---
 
-## Pets
+## Error Format
 
-### Create Pet
-
-```http
-POST /api/pets
-Content-Type: application/json
-
-{
-  "tutorId": "550e8400-e29b-41d4-a716-446655440000",
-  "name": "Fluffy",
-  "species": "Cat",
-  "breed": "Persian",
-  "birthDate": "2020-03-15",
-  "notes": "Allergic to chicken"
-}
-```
-
-**Response:** `201 Created`
-
-### List Pets
-
-```http
-GET /api/pets?tutorId={tutorId}&page=0&size=20
-```
-
-**Query Parameters:**
-- `tutorId` (optional) - Filter by tutor
-- `page` (optional) - Page number (default: 0)
-- `size` (optional) - Page size (default: 20)
-
-**Response:** `200 OK` (paginated)
-
-### Get Pet by ID
-
-```http
-GET /api/pets/{id}
-```
-
-**Response:** `200 OK` or `404 Not Found`
-
-### Update Pet
-
-```http
-PUT /api/pets/{id}
-```
-
-**Response:** `200 OK`
-
-### Delete Pet
-
-```http
-DELETE /api/pets/{id}
-```
-
-**Response:** `204 No Content` or `409 Conflict` (if has active appointments)
-
----
-
-## Appointments
-
-### Create Appointment
-
-```http
-POST /api/appointments
-Content-Type: application/json
-
-{
-  "petId": "660e8400-e29b-41d4-a716-446655440001",
-  "serviceType": "CRECHE",
-  "startAt": "2025-11-28T08:00:00Z",
-  "endAt": "2025-11-28T18:00:00Z",
-  "notes": "First time at daycare"
-}
-```
-
-**Service Types:**
-- `CRECHE` - Daycare
-- `HOTEL` - Hotel/boarding
-
-**Response:** `201 Created`
-```json
-{
-  "id": "770e8400-e29b-41d4-a716-446655440002",
-  "petId": "660e8400-e29b-41d4-a716-446655440001",
-  "serviceType": "CRECHE",
-  "status": "PENDING",
-  "startAt": "2025-11-28T08:00:00Z",
-  "endAt": "2025-11-28T18:00:00Z",
-  "notes": "First time at daycare"
-}
-```
-
-**Errors:**
-- `404 Not Found` - Pet not found
-- `400 Bad Request` - Invalid date range (startAt >= endAt)
-- `409 Conflict` - Overlapping appointment for same pet
-
-### Change Appointment Status
-
-```http
-PATCH /api/appointments/{id}/status
-Content-Type: application/json
-
-{
-  "status": "ACTIVE"
-}
-```
-
-**Valid Status Transitions:**
-
-PENDING → ACTIVE
-{: .label .label-green }
-
-ACTIVE → COMPLETED
-{: .label .label-blue }
-
-PENDING → CANCELED
-{: .label .label-red }
-
-**Response:** `200 OK`
-
-**Errors:**
-- `404 Not Found` - Appointment not found
-- `409 Conflict` - Invalid status transition
-
-### Get Appointment by ID
-
-```http
-GET /api/appointments/{id}
-```
-
-**Response:** `200 OK` or `404 Not Found`
-
-### List Appointments
-
-```http
-GET /appointments?page=0&perPage=10&search=CRECHE&sort=startAt&direction=asc
-```
-
-**Query Parameters:**
-- `page` (optional, default: 0) — Page number (0-based)
-- `perPage` (optional, default: 10) — Items per page
-- `search` (optional) — Free-text search terms
-- `sort` (optional, default: startAt) — Sort field
-- `direction` (optional, default: asc) — Sort direction (asc/desc)
-
-**Response:** `200 OK` (paginated)
-
-### View Daily Agenda
-
-```http
-GET /appointments/agenda?date=2026-02-26&status=ACTIVE&serviceType=CRECHE
-```
-
-**Query Parameters:**
-- `date` (required) — Date in `YYYY-MM-DD` format
-- `status` (optional) — `PENDING`, `ACTIVE`, `COMPLETED`, `CANCELED`
-- `serviceType` (optional) — `CRECHE`, `HOTEL`
-- `page` (optional, default: 0) — Page number
-- `perPage` (optional, default: 20) — Page size
-- `sort` (optional, default: startAt) — Sort field
-- `direction` (optional, default: asc) — Sort direction
-
-**Response:** `200 OK` (paginated)
-
----
-
-## Error Responses
-
-All errors follow **RFC 7807 Problem Details** format:
+All errors follow **RFC 7807 Problem Details**:
 
 ```json
 {
@@ -292,50 +80,20 @@ All errors follow **RFC 7807 Problem Details** format:
   "title": "Resource Not Found",
   "status": 404,
   "detail": "Tutor with ID 550e8400-... not found",
-  "instance": "/api/tutors/550e8400-...",
-  "timestamp": "2025-11-27T10:15:00Z"
+  "instance": "/api/tutors/550e8400-..."
 }
 ```
 
-### Common Error Codes
-
-| Status | Description | When |
-|:-------|:------------|:-----|
-| `400 Bad Request` | Validation error | Invalid input, missing required fields |
-| `404 Not Found` | Resource not found | ID doesn't exist |
-| `409 Conflict` | Business rule violation | Cannot delete (has dependencies), overlapping appointment, invalid status transition |
-| `500 Internal Server Error` | Server error | Unexpected error |
-
----
-
-## Testing with curl
-
-```bash
-# Create a tutor
-curl -X POST http://localhost:8080/api/tutors \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Alice Smith","email":"alice@example.com"}'
-
-# List tutors
-curl http://localhost:8080/api/tutors
-
-# Create a pet (replace TUTOR_ID)
-curl -X POST http://localhost:8080/api/pets \
-  -H "Content-Type: application/json" \
-  -d '{"tutorId":"TUTOR_ID","name":"Fluffy","species":"Cat"}'
-
-# List appointments
-curl "http://localhost:8080/api/appointments?page=0&perPage=10&sort=startAt&direction=asc"
-
-# View daily agenda
-curl "http://localhost:8080/api/appointments/agenda?date=$(date +%Y-%m-%d)"
-```
+| Status | Meaning |
+|:-------|:--------|
+| `400` | Validation error (missing/invalid fields) |
+| `404` | Resource not found |
+| `409` | Business rule violation (dependencies, overlap, invalid transition) |
+| `500` | Unexpected server error |
 
 ---
 
 ## Further Reading
 
-- [API Guidelines](api/guidelines)
-- [OpenAPI Specification](https://github.com/deniswm/petwise-mvp/blob/master/docs/api/openapi.yaml)
-- [Use Cases](use-cases/)
-
+- [API Guidelines](api/guidelines) — REST conventions, pagination, date format
+- [Use Cases](use-cases/) — Business requirements behind each endpoint

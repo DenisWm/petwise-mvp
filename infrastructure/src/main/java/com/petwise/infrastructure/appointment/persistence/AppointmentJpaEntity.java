@@ -22,40 +22,28 @@ import java.time.Instant;
 @Table(name = "appointments")
 @SuppressWarnings({"PMD.ShortVariable", "PMD.DataClass"})
 public class AppointmentJpaEntity {
-
-    /** Maximum length for UUID-based ID column. */
     private static final int ID_LENGTH = 36;
-
-    /** Maximum length for enum columns. */
     private static final int ENUM_LENGTH = 50;
-
-    /** Maximum length for the status enum column. */
     private static final int STATUS_LENGTH = 20;
 
-    /** The unique appointment identifier. */
     @Id
     @Column(name = "id", nullable = false, length = ID_LENGTH)
     private String id;
 
-    /** The pet identifier. */
     @Column(name = "pet_id", nullable = false, length = ID_LENGTH)
     private String petId;
 
-    /** The service type. */
     @Enumerated(EnumType.STRING)
     @Column(name = "service_type", nullable = false, length = ENUM_LENGTH)
     private ServiceType serviceType;
 
-    /** The appointment status. */
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = STATUS_LENGTH)
     private AppointmentStatus status;
 
-    /** The start timestamp. */
     @Column(name = "start_at", nullable = false)
     private Instant startAt;
 
-    /** The end timestamp. */
     @Column(name = "end_at", nullable = false)
     private Instant endAt;
 
@@ -63,11 +51,9 @@ public class AppointmentJpaEntity {
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
-    /** Timestamp of when this appointment was created. */
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    /** Timestamp of the last update to this appointment. */
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 

@@ -49,7 +49,7 @@ entity "Appointment <<AggregateRoot>>" as Appointment {
 
 entity "ServiceType (enum)" as ServiceType {
   --
-  CRECHE
+  DAYCARE
   HOTEL
 }
 

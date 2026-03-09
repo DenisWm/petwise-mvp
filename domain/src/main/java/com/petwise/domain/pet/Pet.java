@@ -16,29 +16,16 @@ import java.util.Objects;
     "PMD.ShortClassName"
 })
 public final class Pet extends Entity<PetID> {
-
-    /** The pet's name. */
     private String name;
-
-    /** The pet's species (optional). */
     private String species;
-
-    /** The pet's breed (optional). */
     private String breed;
-
-    /** The pet's birth date (optional). */
     private LocalDate birthDate;
 
     /** Additional notes (optional). */
     private String notes;
 
-    /** The owning tutor ID. */
     private final TutorID tutorId;
-
-    /** Timestamp of when this pet was created. */
     private final Instant createdAt;
-
-    /** Timestamp of the last update to this pet. */
     private Instant updatedAt;
 
     private Pet(
@@ -62,17 +49,6 @@ public final class Pet extends Entity<PetID> {
         this.updatedAt = Objects.requireNonNull(anUpdatedAt, "'updatedAt' should not be null");
     }
 
-    /**
-     * Creates a new Pet with a generated ID and the current time.
-     *
-     * @param aTutorId the tutor ID (required)
-     * @param aName the pet name (required)
-     * @param aSpecies the pet species (optional)
-     * @param aBreed the pet breed (optional)
-     * @param aBirthDate the pet birth date (optional)
-     * @param aNotes notes about the pet (optional)
-     * @return a new Pet instance
-     */
     public static Pet newPet(
             final TutorID aTutorId,
             final String aName,
@@ -85,20 +61,7 @@ public final class Pet extends Entity<PetID> {
         return new Pet(anId, aTutorId, aName, aSpecies, aBreed, aBirthDate, aNotes, now, now);
     }
 
-    /**
-     * Creates a Pet from typed objects (for persistence reconstruction).
-     *
-     * @param anId the pet ID
-     * @param aTutorId the tutor ID
-     * @param aName the pet name
-     * @param aSpecies the pet species
-     * @param aBreed the pet breed
-     * @param aBirthDate the pet birth date
-     * @param aNotes notes about the pet
-     * @param aCreatedAt the creation timestamp
-     * @param anUpdatedAt the last update timestamp
-     * @return a Pet instance
-     */
+    /** Reconstructs a Pet from typed objects (persistence). */
     public static Pet with(
             final PetID anId,
             final TutorID aTutorId,
@@ -121,20 +84,7 @@ public final class Pet extends Entity<PetID> {
                 anUpdatedAt);
     }
 
-    /**
-     * Creates a Pet from raw strings (for persistence reconstruction).
-     *
-     * @param anId the pet ID
-     * @param aTutorId the tutor ID
-     * @param aName the pet name
-     * @param aSpecies the pet species
-     * @param aBreed the pet breed
-     * @param aBirthDate the pet birth date
-     * @param aNotes notes about the pet
-     * @param aCreatedAt the creation timestamp
-     * @param anUpdatedAt the last update timestamp
-     * @return a Pet instance
-     */
+    /** Reconstructs a Pet from raw strings (persistence). */
     public static Pet with(
             final String anId,
             final String aTutorId,
@@ -157,16 +107,6 @@ public final class Pet extends Entity<PetID> {
                 anUpdatedAt);
     }
 
-    /**
-     * Updates pet information.
-     *
-     * @param aName the new name
-     * @param aSpecies the new species
-     * @param aBreed the new breed
-     * @param aBirthDate the new birth date
-     * @param aNotes new notes
-     * @return the updated Pet instance
-     */
     public Pet update(
             final String aName,
             final String aSpecies,

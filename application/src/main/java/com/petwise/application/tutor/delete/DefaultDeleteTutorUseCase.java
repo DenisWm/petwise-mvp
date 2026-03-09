@@ -16,28 +16,14 @@ import org.slf4j.LoggerFactory;
  * no-op.
  */
 public final class DefaultDeleteTutorUseCase extends DeleteTutorUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultDeleteTutorUseCase.class);
-
-    /** The gateway used to find and delete tutors. */
     private final TutorGateway tutorGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aTutorGateway the tutor persistence gateway; must not be {@code null}
-     */
     public DefaultDeleteTutorUseCase(final TutorGateway aTutorGateway) {
         super();
         this.tutorGateway = Objects.requireNonNull(aTutorGateway, "TutorGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Finds the tutor by ID, throws {@link NotFoundException} if absent, then deletes it.
-     */
     @Override
     public void execute(final String anId) {
         Objects.requireNonNull(anId, "Tutor ID cannot be null");

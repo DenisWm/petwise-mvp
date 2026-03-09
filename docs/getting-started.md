@@ -21,18 +21,17 @@ This guide will help you set up, run, and understand the PetWise project.
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
-
-- **Java 21** (JDK) - [Download](https://adoptium.net/)
-- **Docker** (optional) - For PostgreSQL and diagram rendering
-- **Make** (optional) - For diagram generation
+| Tool | Required? | Notes |
+|:-----|:----------|:------|
+| **Java 21** (JDK) | Yes | [Download](https://adoptium.net/) |
+| **Docker** | Recommended | Runs PostgreSQL, Keycloak, and PlantUML |
+| **Make** | Optional | Diagram rendering shortcuts |
 
 ### Verify Installation
 
 ```bash
-java -version    # Should show Java 21
-git --version
-docker --version  # Optional
+java -version     # Should show Java 21
+docker --version  # 20.10+
 ```
 
 ---
@@ -69,11 +68,12 @@ This will:
 ### Docker Compose (recommended)
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 This starts:
 - **PostgreSQL** on port 5432
+- **Keycloak** on port 9080
 - **PetWise API** on port 8080
 
 ### Standalone Docker
@@ -90,16 +90,20 @@ docker run -p 8080:8080 petwise:latest
 ```
 
 {: .note }
-> Running locally requires a PostgreSQL instance. Use `docker-compose up db` to start only the database, then run the application with Gradle.
+> Running locally requires PostgreSQL and Keycloak. Use `docker compose up -d db keycloak` to start them, then run the application with Gradle.
 
 ---
 
 ## Exploring the API
 
+{: .note }
+> All endpoints require a Bearer JWT from Keycloak. See the [API Reference — Authentication](api-reference#authentication) section for how to obtain a token. The examples below assume a `$TOKEN` variable is set.
+
 ### Create a Tutor
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/tutors \
+curl -X POST http://localhost:8080/api/tutors \
+  -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Alice Smith",
@@ -111,7 +115,7 @@ curl -X POST http://localhost:8080/api/v1/tutors \
 ### List Tutors
 
 ```bash
-curl http://localhost:8080/api/v1/tutors
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/api/tutors
 ```
 
 {: .highlight }
@@ -176,12 +180,22 @@ PetWise uses **Spotless** with **Google Java Format** to ensure consistent code 
 
 ## Next Steps
 
-Now that you have the project running:
-
 1. [**Architecture Overview**](architecture/overview) — Understand the design
 2. [**Domain Model**](architecture/domain/) — Review entities and business rules
 3. [**API Reference**](api-reference) — Explore the REST API
-4. [**Contributing Guide**](contributing) — Learn how to contribute
+4. [**Operations Guide**](operations) — Logging, actuator, runtime debugging
+5. [**Contributing Guide**](contributing) — Learn how to contribute
+
+---
+
+## Ports Reference
+
+| Service | Port | Notes |
+|:--------|:-----|:------|
+| PetWise API | 8080 | REST endpoints (context-path `/api`) |
+| Keycloak | 9080 | Admin console + token endpoints |
+| PostgreSQL | 5432 | Shared by app and Keycloak (separate databases) |
+| Actuator | 9090 | Management endpoints (`/management/health`, `/management/loggers`) |
 
 ---
 
@@ -212,8 +226,8 @@ Or change the port in `infrastructure/src/main/resources/application.yml`
 
 ```bash
 # Reset Docker Compose
-docker-compose down -v
-docker-compose up --build
+docker compose down -v
+docker compose up --build
 ```
 
 ---
@@ -221,7 +235,6 @@ docker-compose up --build
 {: .note-title }
 > Need Help?
 >
-> - Check the [FAQ](faq)
 > - [Report an issue](https://github.com/deniswm/petwise-mvp/issues)
 > - [Start a discussion](https://github.com/deniswm/petwise-mvp/discussions)
 

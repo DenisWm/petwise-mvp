@@ -14,28 +14,14 @@ import org.slf4j.LoggerFactory;
  * result to a {@link ListTutorsOutput} DTO.
  */
 public final class DefaultListTutorsUseCase extends ListTutorsUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultListTutorsUseCase.class);
-
-    /** The gateway used to query tutors. */
     private final TutorGateway tutorGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aTutorGateway the tutor persistence gateway; must not be {@code null}
-     */
     public DefaultListTutorsUseCase(final TutorGateway aTutorGateway) {
         super();
         this.tutorGateway = Objects.requireNonNull(aTutorGateway, "TutorGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Subclasses may override to customise pagination behaviour.
-     */
     @Override
     public Pagination<ListTutorsOutput> execute(final SearchQuery query) {
         Objects.requireNonNull(query, "SearchQuery cannot be null");

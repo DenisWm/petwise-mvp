@@ -17,38 +17,30 @@ import org.junit.jupiter.api.Test;
     "PMD.AvoidDuplicateLiterals"
 })
 class AppointmentValidatorTest extends UnitTest {
-
-    /** Default constructor. */
     AppointmentValidatorTest() {}
 
     @Test
     void givenValidAppointment_whenValidate_thenShouldNotHaveErrors() {
-        // given
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
         final var notification = Notification.create();
         final var validator = new AppointmentValidator(appointment, notification);
-
-        // when
         validator.validate();
-
-        // then
         assertThat(notification.hasErrors()).isFalse();
         assertThat(notification.getErrors()).isEmpty();
     }
 
     @Test
     void givenNullPetId_whenValidate_thenShouldHaveError() {
-        // given
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -65,11 +57,7 @@ class AppointmentValidatorTest extends UnitTest {
                         appointment.getUpdatedAt());
         final var notification = Notification.create();
         final var validator = new AppointmentValidator(apptWithNullPetId, notification);
-
-        // when
         validator.validate();
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(notification.getErrors()).hasSize(1);
         assertThat(notification.firstError().message()).isEqualTo("'petId' should not be null");
@@ -77,21 +65,16 @@ class AppointmentValidatorTest extends UnitTest {
 
     @Test
     void givenInvalidDateRange_whenValidate_thenShouldHaveError() {
-        // given
         final var appointment =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T18:00:00Z"),
                         Instant.parse("2025-11-28T08:00:00Z"),
                         null);
         final var notification = Notification.create();
         final var validator = new AppointmentValidator(appointment, notification);
-
-        // when
         validator.validate();
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(notification.getErrors()).hasSize(1);
         assertThat(notification.firstError().message())
@@ -100,17 +83,12 @@ class AppointmentValidatorTest extends UnitTest {
 
     @Test
     void givenEqualStartAndEndTime_whenValidate_thenShouldHaveError() {
-        // given
         final var time = Instant.parse("2025-11-28T08:00:00Z");
         final var appointment =
-                Appointment.newAppointment(PetID.unique(), ServiceType.CRECHE, time, time, null);
+                Appointment.newAppointment(PetID.unique(), ServiceType.DAYCARE, time, time, null);
         final var notification = Notification.create();
         final var validator = new AppointmentValidator(appointment, notification);
-
-        // when
         validator.validate();
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(notification.firstError().message())
                 .isEqualTo("'startAt' must be before 'endAt'");
@@ -118,11 +96,10 @@ class AppointmentValidatorTest extends UnitTest {
 
     @Test
     void givenNullServiceType_whenValidate_thenShouldHaveError() {
-        // given
         final var base =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -138,11 +115,7 @@ class AppointmentValidatorTest extends UnitTest {
                         base.getCreatedAt(),
                         base.getUpdatedAt());
         final var notification = Notification.create();
-
-        // when
         new AppointmentValidator(appointment, notification).validate();
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(
                         notification.getErrors().stream()
@@ -152,11 +125,10 @@ class AppointmentValidatorTest extends UnitTest {
 
     @Test
     void givenNullStartAt_whenValidate_thenShouldHaveError() {
-        // given
         final var base =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -172,11 +144,7 @@ class AppointmentValidatorTest extends UnitTest {
                         base.getCreatedAt(),
                         base.getUpdatedAt());
         final var notification = Notification.create();
-
-        // when
         new AppointmentValidator(appointment, notification).validate();
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(notification.getErrors().stream().anyMatch(e -> e.message().contains("startAt")))
                 .isTrue();
@@ -184,11 +152,10 @@ class AppointmentValidatorTest extends UnitTest {
 
     @Test
     void givenNullEndAt_whenValidate_thenShouldHaveError() {
-        // given
         final var base =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -204,11 +171,7 @@ class AppointmentValidatorTest extends UnitTest {
                         base.getCreatedAt(),
                         base.getUpdatedAt());
         final var notification = Notification.create();
-
-        // when
         new AppointmentValidator(appointment, notification).validate();
-
-        // then
         assertThat(notification.hasErrors()).isTrue();
         assertThat(notification.getErrors().stream().anyMatch(e -> e.message().contains("endAt")))
                 .isTrue();
@@ -220,7 +183,7 @@ class AppointmentValidatorTest extends UnitTest {
         final var base =
                 Appointment.newAppointment(
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
                         null);
@@ -236,8 +199,6 @@ class AppointmentValidatorTest extends UnitTest {
                         base.getCreatedAt(),
                         base.getUpdatedAt());
         final var notification = Notification.create();
-
-        // when
         new AppointmentValidator(appointment, notification).validate();
 
         // then — only startAt and endAt null errors, no date-range error

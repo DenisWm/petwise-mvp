@@ -17,8 +17,6 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 /** Jackson ObjectMapper configuration for the PetWise API. */
 @Configuration
 public class JsonConfig {
-
-    /** Default constructor. */
     public JsonConfig() {}
 
     /**

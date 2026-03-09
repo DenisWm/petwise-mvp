@@ -4,19 +4,11 @@ import com.petwise.application.pet.retrieve.getbyid.PetOutput;
 import com.petwise.application.pet.retrieve.list.ListPetsOutput;
 import com.petwise.infrastructure.pet.models.PetResponse;
 
-/** Presenter for converting pet use-case outputs to API responses. */
+/** Converts pet use-case outputs to API responses. */
 public final class PetApiPresenter {
 
-    private PetApiPresenter() {
-        // Utility class
-    }
+    private PetApiPresenter() {}
 
-    /**
-     * Converts a {@link PetOutput} to a {@link PetResponse}.
-     *
-     * @param output the use case output
-     * @return the API response
-     */
     public static PetResponse present(final PetOutput output) {
         return new PetResponse(
                 output.id(),
@@ -30,12 +22,6 @@ public final class PetApiPresenter {
                 output.updatedAt());
     }
 
-    /**
-     * Converts a {@link ListPetsOutput} to a {@link PetResponse}.
-     *
-     * @param output the use case output
-     * @return the API response
-     */
     public static PetResponse present(final ListPetsOutput output) {
         return new PetResponse(
                 output.id(),

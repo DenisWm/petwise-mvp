@@ -29,20 +29,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class GetPetByIdUseCaseTest {
-
-    /** Default constructor. */
     GetPetByIdUseCaseTest() {}
 
-    /** The mocked pet gateway. */
     @Mock private PetGateway petGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultGetPetByIdUseCase useCase;
-
-    /** The pet ID used across tests. */
     private PetID petId;
-
-    /** The pet used across tests. */
     private Pet pet;
 
     @BeforeEach
@@ -64,13 +55,8 @@ class GetPetByIdUseCaseTest {
     @Test
     @DisplayName("Should return pet output when pet exists")
     void givenExistingPet_whenExecute_thenShouldReturnPetOutput() {
-        // Given
         when(petGateway.findById(petId)).thenReturn(Optional.of(pet));
-
-        // When
         final var output = useCase.execute(petId.getValue());
-
-        // Then
         assertNotNull(output);
         assertEquals(petId.getValue(), output.id());
         assertEquals("Fluffy", output.name());
@@ -83,10 +69,7 @@ class GetPetByIdUseCaseTest {
     @Test
     @DisplayName("Should throw NotFoundException when pet does not exist")
     void givenNonExistingPet_whenExecute_thenShouldThrowNotFoundException() {
-        // Given
         when(petGateway.findById(petId)).thenReturn(Optional.empty());
-
-        // When & Then
         assertThrows(NotFoundException.class, () -> useCase.execute(petId.getValue()));
 
         verify(petGateway).findById(petId);

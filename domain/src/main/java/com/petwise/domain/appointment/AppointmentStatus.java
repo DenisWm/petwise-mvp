@@ -7,12 +7,6 @@ public enum AppointmentStatus {
     COMPLETED,
     CANCELED;
 
-    /**
-     * Checks if this status can transition to the given next status.
-     *
-     * @param next the next status
-     * @return true if the transition is allowed
-     */
     public boolean canTransitionTo(final AppointmentStatus next) {
         return next != null
                 && switch (this) {

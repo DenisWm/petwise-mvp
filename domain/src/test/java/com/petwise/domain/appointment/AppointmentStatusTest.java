@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Test;
     "PMD.UnitTestContainsTooManyAsserts"
 })
 class AppointmentStatusTest extends UnitTest {
-
-    /** Default constructor. */
     AppointmentStatusTest() {}
 
     @Test

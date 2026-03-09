@@ -1,8 +1,12 @@
 postgres:
   username: postgres
   password: postgres
-  schema: petwise
+  database: petwise
   url: localhost:5432
+
+# Keycloak local instance
+keycloak:
+  issuer-uri: http://localhost:9080/realms/petwise
 
 server:
   port: 8080

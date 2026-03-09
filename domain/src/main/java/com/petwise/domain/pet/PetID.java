@@ -15,7 +15,6 @@ import java.util.Objects;
 })
 public final class PetID extends Identifier<String> {
 
-    /** The raw UUID string value. */
     private final String value;
 
     private PetID(final String aValue) {
@@ -23,21 +22,10 @@ public final class PetID extends Identifier<String> {
         this.value = aValue;
     }
 
-    /**
-     * Creates a new unique PetID.
-     *
-     * @return a new PetID backed by a random UUID
-     */
     public static PetID unique() {
         return new PetID(IDUtils.uuid());
     }
 
-    /**
-     * Creates a PetID from an existing string value.
-     *
-     * @param anId the raw identifier string; must not be {@code null}
-     * @return a PetID wrapping the given value
-     */
     @SuppressWarnings("PMD.ShortVariable")
     public static PetID from(final String anId) {
         Objects.requireNonNull(anId, "'id' should not be null");

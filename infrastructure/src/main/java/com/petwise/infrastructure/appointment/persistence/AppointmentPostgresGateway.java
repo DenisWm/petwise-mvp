@@ -26,11 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @SuppressWarnings({"PMD.ShortVariable", "PMD.LiteralsFirstInComparisons"})
 public class AppointmentPostgresGateway implements AppointmentGateway {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(AppointmentPostgresGateway.class);
-
-    /** The underlying Spring Data JPA repository. */
     private final AppointmentRepository repository;
 
     /**

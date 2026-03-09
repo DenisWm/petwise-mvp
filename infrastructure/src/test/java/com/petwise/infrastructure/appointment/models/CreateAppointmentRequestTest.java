@@ -19,28 +19,22 @@ import org.springframework.boot.test.json.JacksonTester;
     "PMD.AvoidDuplicateLiterals"
 })
 class CreateAppointmentRequestTest {
-
-    /** Default constructor. */
     CreateAppointmentRequestTest() {}
 
-    /** The Jackson tester for CreateAppointmentRequest. */
     @Autowired private JacksonTester<CreateAppointmentRequest> json;
 
     @Test
     void givenValidRequest_whenSerialize_thenShouldContainAllFields() throws Exception {
-        // given
         final var startAt = Instant.parse("2025-11-28T08:00:00Z");
         final var endAt = Instant.parse("2025-11-28T18:00:00Z");
         final var request =
                 new CreateAppointmentRequest(
-                        "pet-123", ServiceType.CRECHE, startAt, endAt, "Test notes");
-
-        // when
+                        "pet-123", ServiceType.DAYCARE, startAt, endAt, "Test notes");
         final var jsonContent = this.json.write(request);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.pet_id").isEqualTo("pet-123");
-        assertThat(jsonContent).extractingJsonPathStringValue("$.service_type").isEqualTo("CRECHE");
+        assertThat(jsonContent)
+                .extractingJsonPathStringValue("$.service_type")
+                .isEqualTo("DAYCARE");
         assertThat(jsonContent)
                 .extractingJsonPathStringValue("$.start_at")
                 .isEqualTo("2025-11-28T08:00:00Z");
@@ -52,24 +46,19 @@ class CreateAppointmentRequestTest {
 
     @Test
     void givenValidJson_whenDeserialize_thenShouldMapAllFields() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
                     "pet_id": "pet-123",
-                    "service_type": "CRECHE",
+                    "service_type": "DAYCARE",
                     "start_at": "2025-11-28T08:00:00Z",
                     "end_at": "2025-11-28T18:00:00Z",
                     "notes": "Test notes"
                 }
                 """;
-
-        // when
         final var request = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(request.petId()).isEqualTo("pet-123");
-        assertThat(request.serviceType()).isEqualTo(ServiceType.CRECHE);
+        assertThat(request.serviceType()).isEqualTo(ServiceType.DAYCARE);
         assertThat(request.startAt()).isEqualTo(Instant.parse("2025-11-28T08:00:00Z"));
         assertThat(request.endAt()).isEqualTo(Instant.parse("2025-11-28T18:00:00Z"));
         assertThat(request.notes()).isEqualTo("Test notes");
@@ -77,16 +66,11 @@ class CreateAppointmentRequestTest {
 
     @Test
     void givenRequestWithHotelType_whenSerialize_thenShouldContainHotel() throws Exception {
-        // given
         final var startAt = Instant.parse("2025-12-01T10:00:00Z");
         final var endAt = Instant.parse("2025-12-03T10:00:00Z");
         final var request =
                 new CreateAppointmentRequest("pet-456", ServiceType.HOTEL, startAt, endAt, null);
-
-        // when
         final var jsonContent = this.json.write(request);
-
-        // then
         assertThat(jsonContent).extractingJsonPathStringValue("$.pet_id").isEqualTo("pet-456");
         assertThat(jsonContent).extractingJsonPathStringValue("$.service_type").isEqualTo("HOTEL");
         assertThat(jsonContent).doesNotHaveJsonPath("$.notes");
@@ -94,7 +78,6 @@ class CreateAppointmentRequestTest {
 
     @Test
     void givenJsonWithoutNotes_whenDeserialize_thenShouldMapNotesAsNull() throws Exception {
-        // given
         final var jsonContent =
                 """
                 {
@@ -104,11 +87,7 @@ class CreateAppointmentRequestTest {
                     "end_at": "2025-12-03T10:00:00Z"
                 }
                 """;
-
-        // when
         final var request = this.json.parse(jsonContent).getObject();
-
-        // then
         assertThat(request.petId()).isEqualTo("pet-123");
         assertThat(request.serviceType()).isEqualTo(ServiceType.HOTEL);
         assertThat(request.notes()).isNull();

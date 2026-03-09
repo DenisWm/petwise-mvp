@@ -10,14 +10,7 @@ package com.petwise.domain;
  * @param <T> the underlying primitive type of the identifier value
  */
 public abstract class Identifier<T> extends ValueObject {
-
-    /** Protected constructor for subclasses. */
     protected Identifier() {}
 
-    /**
-     * Returns the raw underlying value of this identifier.
-     *
-     * @return the raw identifier value; never {@code null}
-     */
     public abstract T getValue();
 }

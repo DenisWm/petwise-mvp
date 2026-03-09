@@ -16,8 +16,6 @@ import org.junit.jupiter.api.Test;
     "PMD.ShortVariable"
 })
 class NotificationExceptionTest extends UnitTest {
-
-    /** Default constructor. */
     NotificationExceptionTest() {}
 
     @Test

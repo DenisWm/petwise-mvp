@@ -16,29 +16,14 @@ import org.slf4j.LoggerFactory;
  * NotificationException} if any constraint is violated.
  */
 public final class DefaultCreateTutorUseCase extends CreateTutorUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultCreateTutorUseCase.class);
-
-    /** The gateway used to persist the tutor. */
     private final TutorGateway tutorGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aTutorGateway the tutor persistence gateway; must not be {@code null}
-     */
     public DefaultCreateTutorUseCase(final TutorGateway aTutorGateway) {
         super();
         this.tutorGateway = Objects.requireNonNull(aTutorGateway, "TutorGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Validates invariants and persists the new tutor. Throws {@link NotificationException} if
-     * validation fails.
-     */
     @Override
     public CreateTutorOutput execute(final CreateTutorCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");

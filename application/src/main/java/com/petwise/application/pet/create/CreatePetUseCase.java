@@ -5,7 +5,5 @@ import com.petwise.application.UseCase;
 /** Abstract use case for creating a new pet. Implements UC-02: Register Pet. */
 @SuppressWarnings("PMD.AbstractClassWithoutAnyMethod")
 public abstract class CreatePetUseCase extends UseCase<CreatePetCommand, CreatePetOutput> {
-
-    /** Protected constructor for subclasses. */
     protected CreatePetUseCase() {}
 }

@@ -17,29 +17,14 @@ import org.slf4j.LoggerFactory;
  * NotificationException} if any constraint is violated.
  */
 public final class DefaultCreatePetUseCase extends CreatePetUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultCreatePetUseCase.class);
-
-    /** The gateway used to persist the pet. */
     private final PetGateway petGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param aPetGateway the pet persistence gateway; must not be {@code null}
-     */
     public DefaultCreatePetUseCase(final PetGateway aPetGateway) {
         super();
         this.petGateway = Objects.requireNonNull(aPetGateway, "PetGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Validates invariants and persists the new pet. Throws {@link NotificationException} if
-     * validation fails.
-     */
     @Override
     public CreatePetOutput execute(final CreatePetCommand command) {
         Objects.requireNonNull(command, "Command cannot be null");

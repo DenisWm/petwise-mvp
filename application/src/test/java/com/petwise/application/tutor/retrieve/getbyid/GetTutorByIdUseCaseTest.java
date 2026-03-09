@@ -30,20 +30,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.LongVariable"
 })
 class GetTutorByIdUseCaseTest {
-
-    /** Default constructor. */
     GetTutorByIdUseCaseTest() {}
 
-    /** The mocked tutor gateway. */
     @Mock private TutorGateway tutorGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultGetTutorByIdUseCase useCase;
-
-    /** The tutor ID used across tests. */
     private TutorID tutorId;
-
-    /** The tutor used across tests. */
     private Tutor tutor;
 
     @BeforeEach
@@ -62,13 +53,8 @@ class GetTutorByIdUseCaseTest {
     @Test
     @DisplayName("Should return tutor output when tutor exists")
     void givenExistingTutor_whenExecute_thenShouldReturnTutorOutput() {
-        // Given
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.of(tutor));
-
-        // When
         final var output = useCase.execute(tutorId.getValue());
-
-        // Then
         assertNotNull(output);
         assertEquals(tutorId.getValue(), output.id());
         assertEquals("John Doe", output.name());
@@ -83,7 +69,6 @@ class GetTutorByIdUseCaseTest {
     @Test
     @DisplayName("Should return tutor output with null optional fields")
     void givenTutorWithNullOptionalFields_whenExecute_thenShouldReturnOutputWithNulls() {
-        // Given
         final var minimalTutor =
                 Tutor.with(
                         tutorId,
@@ -94,11 +79,7 @@ class GetTutorByIdUseCaseTest {
                         Instant.now().minusSeconds(1800));
 
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.of(minimalTutor));
-
-        // When
         final var output = useCase.execute(tutorId.getValue());
-
-        // Then
         assertNotNull(output);
         assertEquals("Minimal Tutor", output.name());
         assertNull(output.email());
@@ -110,10 +91,7 @@ class GetTutorByIdUseCaseTest {
     @Test
     @DisplayName("Should throw NotFoundException when tutor does not exist")
     void givenNonExistingTutor_whenExecute_thenShouldThrowNotFoundException() {
-        // Given
         when(tutorGateway.findById(tutorId)).thenReturn(Optional.empty());
-
-        // When & Then
         assertThrows(NotFoundException.class, () -> useCase.execute(tutorId.getValue()));
         verify(tutorGateway).findById(tutorId);
     }

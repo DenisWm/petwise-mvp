@@ -20,14 +20,7 @@ Thank you for your interest in contributing to PetWise!
 
 ## Project Philosophy
 
-PetWise is designed as a **pedagogical project** with three goals:
-
-1. **Learning Resource** - Demonstrate Clean Architecture, DDD, and modern Java/Gradle practices
-2. **Reference Implementation** - Show how to structure a real-world application
-3. **Bootstrap Template** - Provide a starting point for new Spring Boot projects
-
-{: .important }
-When contributing, code should be **clear**, **well-documented**, **properly tested**, and **aligned with architectural decisions**.
+PetWise prioritizes **clarity over cleverness**. Contributions should be well-documented, properly tested, and aligned with existing [Architecture Decision Records](architecture/decisions).
 
 ---
 
@@ -36,7 +29,7 @@ When contributing, code should be **clear**, **well-documented**, **properly tes
 ### Prerequisites
 
 - Java 21 JDK
-- Docker (for diagrams and PostgreSQL)
+- Docker (for PostgreSQL, Keycloak, and diagrams)
 - Make (optional, for diagram rendering)
 
 ### Clone and Build
@@ -111,7 +104,7 @@ If your change affects:
 - **Architecture** → Update diagrams and ADRs
 - **API** → Update annotations on API interfaces, then regenerate: `./gradlew :infrastructure:generateOpenApiDocs`
 - **Use Cases** → Update use case docs and sequence diagrams
-- **Domain Model** → Update ERD, glossary, business rules
+- **Domain Model** → Update ERD, business rules & glossary
 
 ### 6. Commit Your Changes
 

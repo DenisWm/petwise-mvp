@@ -16,30 +16,16 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultGetAppointmentByIdUseCase extends GetAppointmentByIdUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG =
             LoggerFactory.getLogger(DefaultGetAppointmentByIdUseCase.class);
-
-    /** The gateway used to look up appointments. */
     private final AppointmentGateway appointmentGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param anAppointmentGateway the appointment persistence gateway; must not be {@code null}
-     */
     public DefaultGetAppointmentByIdUseCase(final AppointmentGateway anAppointmentGateway) {
         super();
         this.appointmentGateway =
                 Objects.requireNonNull(anAppointmentGateway, "AppointmentGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Throws {@link NotFoundException} if no appointment with the given ID is found.
-     */
     @Override
     public AppointmentOutput execute(final String anId) {
         Objects.requireNonNull(anId, "Appointment ID cannot be null");

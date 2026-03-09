@@ -1,15 +1,15 @@
 ---
 layout: default
-title: Business Rules
+title: Business Rules & Glossary
 parent: Domain Model
 grand_parent: Architecture
 nav_order: 1
 ---
 
-# Business Rules – PetWise MVP
+# Business Rules & Glossary
 {: .no_toc }
 
-Core domain rules, invariants, and constraints.
+Domain terms, invariants, and constraints for the PetWise MVP.
 {: .fs-6 .fw-300 }
 
 ## Table of contents
@@ -20,17 +20,38 @@ Core domain rules, invariants, and constraints.
 
 ---
 
-In the PetWise domain model:
+## Glossary
 
-- **Tutor** is an **Aggregate Root**
-- **Pet** is an **Entity** inside the Tutor aggregate
-- **Appointment** is an **Aggregate Root**
-- **ServiceType** and **AppointmentStatus** are **Value Objects**
-- All invariants are enforced inside the **Domain Layer**
+| Term | DDD Role | Identity | Description |
+|:-----|:---------|:---------|:------------|
+| **Tutor** | Aggregate Root | `TutorID` (UUID) | Pet owner or guardian |
+| **Pet** | Entity (inside Tutor) | `PetID` (UUID) | Animal linked to a single tutor |
+| **Appointment** | Aggregate Root | `AppointmentID` (UUID) | Scheduled daycare or hotel service for a pet |
+| **ServiceType** | Value Object | — | `DAYCARE` or `HOTEL` |
+| **AppointmentStatus** | Value Object | — | `PENDING` → `ACTIVE` → `COMPLETED`, or `PENDING` → `CANCELED` |
+| **Email**, **Phone** | Value Object | — | Validated, immutable contact info |
+
+### DDD Building Blocks
+
+| Building Block | Base Class | Purpose |
+|:---------------|:-----------|:--------|
+| Aggregate Root | `AggregateRoot<ID>` | Consistency boundary, enforces invariants |
+| Entity | `Entity<ID>` | Mutable object with identity, lives inside an aggregate |
+| Value Object | `ValueObject` | Immutable, identity-free (Email, Phone) |
+| Identifier | `Identifier` | Strong-typed ID wrapper |
+| Domain Exception | `DomainException` | Signals domain rule violations |
+
+### Persistence Mapping
+
+| Domain Concept | Infrastructure Adapter |
+|:---------------|:-----------------------|
+| `TutorGateway` (port) | `TutorPostgresGateway` → `TutorRepository` (JPA) |
+| `PetGateway` (port) | `PetPostgresGateway` → `PetRepository` (JPA) |
+| `AppointmentGateway` (port) | `AppointmentPostgresGateway` → `AppointmentRepository` (JPA) |
 
 ---
 
-## 1. Tutor Rules (Aggregate Root)
+## Tutor Rules
 
 | Rule | Description |
 |:-----|:------------|
@@ -41,7 +62,7 @@ In the PetWise domain model:
 
 ---
 
-## 2. Pet Rules (Entity)
+## Pet Rules
 
 | Rule | Description |
 |:-----|:------------|
@@ -53,22 +74,22 @@ In the PetWise domain model:
 
 ---
 
-## 3. Appointment Rules (Aggregate Root)
+## Appointment Rules
 
 | Rule | Description |
 |:-----|:------------|
 | **BR-A01** | An appointment must belong to exactly one pet |
-| **BR-A02** | Appointments require service type (CRECHE/HOTEL), start time, and end time |
+| **BR-A02** | Appointments require service type (DAYCARE/HOTEL), start time, and end time |
 | **BR-A03** | `startAt` must be strictly earlier than `endAt` |
 | **BR-A04** | No overlapping PENDING/ACTIVE appointments for the same pet |
 | **BR-A05** | Status lifecycle is forward-only: PENDING→ACTIVE→COMPLETED, PENDING→CANCELED |
 | **BR-A06** | Completed appointments cannot be modified |
 | **BR-A07** | Canceled appointments cannot transition to another status |
-| **BR-A08** | Appointments are included in the daily agenda if their `startAt` falls on the selected day (UTC) |
+| **BR-A08** | Appointments appear in the daily agenda if `startAt` falls on the selected day (UTC) |
 
 ---
 
-## 4. Validation & Integrity
+## Validation & Integrity
 
 | Rule | Description |
 |:-----|:------------|
@@ -80,7 +101,7 @@ In the PetWise domain model:
 
 ---
 
-## 5. MVP Scope
+## MVP Scope Boundaries
 
 | Rule | Description |
 |:-----|:------------|

@@ -14,8 +14,6 @@ import java.util.Objects;
     "PMD.LocalVariableCouldBeFinal"
 })
 public final class TutorID extends Identifier<String> {
-
-    /** The raw UUID string value. */
     private final String value;
 
     private TutorID(final String aValue) {
@@ -23,21 +21,10 @@ public final class TutorID extends Identifier<String> {
         this.value = aValue;
     }
 
-    /**
-     * Creates a new unique TutorID.
-     *
-     * @return a new TutorID backed by a random UUID
-     */
     public static TutorID unique() {
         return new TutorID(IDUtils.uuid());
     }
 
-    /**
-     * Creates a TutorID from an existing string value.
-     *
-     * @param anId the raw identifier string; must not be {@code null}
-     * @return a TutorID wrapping the given value
-     */
     @SuppressWarnings("PMD.ShortVariable")
     public static TutorID from(final String anId) {
         Objects.requireNonNull(anId, "'id' should not be null");

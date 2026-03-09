@@ -18,38 +18,26 @@ import java.time.Instant;
 @Table(name = "tutors")
 @SuppressWarnings({"PMD.ShortVariable", "PMD.DataClass"})
 public class TutorJpaEntity {
-
-    /** Maximum length for UUID-based ID column. */
     private static final int ID_LENGTH = 36;
-
-    /** Maximum length for name and email columns. */
     private static final int TEXT_LENGTH = 255;
-
-    /** Maximum length for phone column. */
     private static final int PHONE_LENGTH = 20;
 
-    /** The unique tutor identifier. */
     @Id
     @Column(name = "id", nullable = false, length = ID_LENGTH)
     private String id;
 
-    /** The tutor's full name. */
     @Column(name = "name", nullable = false, length = TEXT_LENGTH)
     private String name;
 
-    /** The tutor's email address. */
     @Column(name = "email", length = TEXT_LENGTH)
     private String email;
 
-    /** The tutor's phone number. */
     @Column(name = "phone", length = PHONE_LENGTH)
     private String phone;
 
-    /** Timestamp of when this tutor was created. */
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    /** Timestamp of the last update to this tutor. */
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
@@ -97,11 +85,6 @@ public class TutorJpaEntity {
                 this.id, this.name, this.email, this.phone, this.createdAt, this.updatedAt);
     }
 
-    /**
-     * Returns the tutor ID.
-     *
-     * @return the ID string
-     */
     public String getId() {
         return id;
     }
@@ -115,11 +98,6 @@ public class TutorJpaEntity {
         this.id = anId;
     }
 
-    /**
-     * Returns the tutor name.
-     *
-     * @return the name
-     */
     public String getName() {
         return name;
     }
@@ -133,11 +111,6 @@ public class TutorJpaEntity {
         this.name = aName;
     }
 
-    /**
-     * Returns the tutor email.
-     *
-     * @return the email
-     */
     public String getEmail() {
         return email;
     }
@@ -151,11 +124,6 @@ public class TutorJpaEntity {
         this.email = anEmail;
     }
 
-    /**
-     * Returns the tutor phone.
-     *
-     * @return the phone
-     */
     public String getPhone() {
         return phone;
     }
@@ -169,11 +137,6 @@ public class TutorJpaEntity {
         this.phone = aPhone;
     }
 
-    /**
-     * Returns the creation timestamp.
-     *
-     * @return the creation instant
-     */
     public Instant getCreatedAt() {
         return createdAt;
     }
@@ -187,11 +150,6 @@ public class TutorJpaEntity {
         this.createdAt = aCreatedAt;
     }
 
-    /**
-     * Returns the last-updated timestamp.
-     *
-     * @return the updated instant
-     */
     public Instant getUpdatedAt() {
         return updatedAt;
     }

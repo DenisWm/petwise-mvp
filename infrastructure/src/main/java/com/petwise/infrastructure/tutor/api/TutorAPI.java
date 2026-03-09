@@ -144,11 +144,6 @@ public interface TutorAPI {
                     String tutorId,
             @RequestBody UpdateTutorRequest request);
 
-    /**
-     * Deletes a tutor by ID.
-     *
-     * @param tutorId the tutor identifier
-     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a tutor", description = "Deletes a tutor by its ID")
     @ApiResponses(

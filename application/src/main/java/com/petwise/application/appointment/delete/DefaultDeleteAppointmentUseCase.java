@@ -16,30 +16,16 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings("PMD.LongVariable")
 public final class DefaultDeleteAppointmentUseCase extends DeleteAppointmentUseCase {
-
-    /** SLF4J logger for this class. */
     private static final Logger LOG =
             LoggerFactory.getLogger(DefaultDeleteAppointmentUseCase.class);
-
-    /** The gateway used to find and delete appointments. */
     private final AppointmentGateway appointmentGateway;
 
-    /**
-     * Constructs the use case with the required gateway.
-     *
-     * @param anAppointmentGateway the appointment persistence gateway; must not be {@code null}
-     */
     public DefaultDeleteAppointmentUseCase(final AppointmentGateway anAppointmentGateway) {
         super();
         this.appointmentGateway =
                 Objects.requireNonNull(anAppointmentGateway, "AppointmentGateway cannot be null");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Finds the appointment by ID, throws {@link NotFoundException} if absent, then deletes it.
-     */
     @Override
     public void execute(final String anId) {
         Objects.requireNonNull(anId, "Appointment ID cannot be null");

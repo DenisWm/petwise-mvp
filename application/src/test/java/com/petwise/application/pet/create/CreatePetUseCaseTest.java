@@ -29,14 +29,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.AvoidDuplicateLiterals"
 })
 class CreatePetUseCaseTest extends UseCaseTest {
-
-    /** The mocked pet gateway. */
     @Mock private PetGateway petGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultCreatePetUseCase useCase;
 
-    /** Default constructor. */
     CreatePetUseCaseTest() {}
 
     @Override
@@ -47,7 +42,6 @@ class CreatePetUseCaseTest extends UseCaseTest {
     @Test
     @DisplayName("Should create pet successfully with all fields")
     void givenValidCommand_whenExecute_thenCreatePet() {
-        // given
         final var tutorId = "tutor-id-123";
         final var name = "Fluffy";
         final var species = "Cat";
@@ -58,11 +52,7 @@ class CreatePetUseCaseTest extends UseCaseTest {
         final var command = CreatePetCommand.with(tutorId, name, species, breed, birthDate, notes);
 
         when(petGateway.save(any(Pet.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertNotNull(output);
         assertNotNull(output.id());
 
@@ -80,15 +70,10 @@ class CreatePetUseCaseTest extends UseCaseTest {
     @Test
     @DisplayName("Should create pet successfully without optional fields")
     void givenCommandWithoutOptionals_whenExecute_thenCreatePet() {
-        // given
         final var command = CreatePetCommand.with("tutor-id-123", "Buddy", null, null, null, null);
 
         when(petGateway.save(any(Pet.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        // when
         final var output = useCase.execute(command);
-
-        // then
         assertNotNull(output);
         assertNotNull(output.id());
         verify(petGateway, times(1)).save(any(Pet.class));
@@ -97,10 +82,7 @@ class CreatePetUseCaseTest extends UseCaseTest {
     @Test
     @DisplayName("Should throw NotificationException when name is null")
     void givenNullName_whenExecute_thenThrowException() {
-        // given
         final var command = CreatePetCommand.with("tutor-id-123", null, null, null, null, null);
-
-        // when & then
         assertThrows(NotificationException.class, () -> useCase.execute(command));
         verify(petGateway, never()).save(any());
     }
@@ -108,10 +90,7 @@ class CreatePetUseCaseTest extends UseCaseTest {
     @Test
     @DisplayName("Should throw NotificationException when name is blank")
     void givenBlankName_whenExecute_thenThrowException() {
-        // given
         final var command = CreatePetCommand.with("tutor-id-123", "  ", null, null, null, null);
-
-        // when & then
         assertThrows(NotificationException.class, () -> useCase.execute(command));
         verify(petGateway, never()).save(any());
     }

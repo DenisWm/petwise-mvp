@@ -31,20 +31,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
     "PMD.JUnit5TestShouldBePackagePrivate"
 })
 class DeleteAppointmentUseCaseTest {
-
-    /** Default constructor. */
     DeleteAppointmentUseCaseTest() {}
 
-    /** The mocked appointment gateway. */
     @Mock private AppointmentGateway appointmentGateway;
-
-    /** The use case under test. */
     @InjectMocks private DefaultDeleteAppointmentUseCase useCase;
-
-    /** The appointment ID used across tests. */
     private AppointmentID appointmentId;
-
-    /** The appointment used across tests. */
     private Appointment appointment;
 
     @BeforeEach
@@ -54,7 +45,7 @@ class DeleteAppointmentUseCaseTest {
                 Appointment.with(
                         appointmentId,
                         PetID.unique(),
-                        ServiceType.CRECHE,
+                        ServiceType.DAYCARE,
                         AppointmentStatus.PENDING,
                         Instant.parse("2025-11-28T08:00:00Z"),
                         Instant.parse("2025-11-28T18:00:00Z"),
@@ -66,15 +57,10 @@ class DeleteAppointmentUseCaseTest {
     @Test
     @DisplayName("Should delete appointment successfully")
     void shouldDeleteAppointmentSuccessfully() {
-        // Given
         final var appointmentIdValue = appointmentId.getValue();
         when(appointmentGateway.findById(appointmentId)).thenReturn(Optional.of(appointment));
         doNothing().when(appointmentGateway).deleteById(appointmentId);
-
-        // When
         assertDoesNotThrow(() -> useCase.execute(appointmentIdValue));
-
-        // Then
         verify(appointmentGateway).findById(appointmentId);
         verify(appointmentGateway).deleteById(appointmentId);
     }
@@ -82,11 +68,8 @@ class DeleteAppointmentUseCaseTest {
     @Test
     @DisplayName("Should throw NotFoundException when appointment does not exist")
     void shouldThrowNotFoundExceptionWhenAppointmentDoesNotExist() {
-        // Given
         final var appointmentIdValue = appointmentId.getValue();
         when(appointmentGateway.findById(appointmentId)).thenReturn(Optional.empty());
-
-        // When & Then
         assertThrows(NotFoundException.class, () -> useCase.execute(appointmentIdValue));
 
         verify(appointmentGateway).findById(appointmentId);

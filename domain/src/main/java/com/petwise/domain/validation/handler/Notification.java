@@ -6,13 +6,7 @@ import com.petwise.domain.validation.ValidationHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Standard {@link ValidationHandler} that accumulates errors without interrupting the validation
- * flow.
- *
- * <p>Use the static factories to create instances: {@link #create()}, {@link #create(Error)},
- * {@link #create(Throwable)}.
- */
+/** Standard {@link ValidationHandler} that accumulates errors without interrupting the flow. */
 @SuppressWarnings({
     "PMD.AvoidCatchingThrowable",
     "PMD.ShortVariable",
@@ -21,39 +15,20 @@ import java.util.List;
     "PMD.OnlyOneReturn"
 })
 public final class Notification implements ValidationHandler {
-
-    /** Accumulated validation errors. */
     private final List<Error> errors;
 
     private Notification(final List<Error> anErrors) {
         this.errors = anErrors;
     }
 
-    /**
-     * Creates an empty {@code Notification}.
-     *
-     * @return a new, empty {@code Notification}
-     */
     public static Notification create() {
         return new Notification(new ArrayList<>());
     }
 
-    /**
-     * Creates a {@code Notification} seeded from a {@link Throwable}.
-     *
-     * @param aThrowable the throwable whose message is the initial error
-     * @return a new {@code Notification} containing one error
-     */
     public static Notification create(final Throwable aThrowable) {
         return create(new Error(aThrowable.getMessage()));
     }
 
-    /**
-     * Creates a {@code Notification} seeded with an {@link Error}.
-     *
-     * @param anError the initial error
-     * @return a new {@code Notification} containing one error
-     */
     public static Notification create(final Error anError) {
         return new Notification(new ArrayList<>()).append(anError);
     }
