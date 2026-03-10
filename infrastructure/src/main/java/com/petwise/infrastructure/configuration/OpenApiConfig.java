@@ -26,8 +26,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class OpenApiConfig {
-    private static final String SECURITY_SCHEME_NAME = "keycloak-oauth";
 
+    /** Name used to reference the security scheme throughout the spec. */
+    private static final String SECURITY_SCHEME_NAME = "keycloak-oauth2";
+
+    /** Default constructor. */
     public OpenApiConfig() {}
 
     /**
