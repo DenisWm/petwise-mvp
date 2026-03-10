@@ -18,82 +18,108 @@ How PetWise's Gradle build is organized and how to extend it.
 
 ---
 
-## Why Convention Plugins?
+## Overview
 
-Multi-module Gradle projects tend to repeat the same configuration in every `build.gradle.kts`.
-PetWise solves this with **convention plugins** inside a **composite build** (`build-logic/`), so
-each module's build file stays minimal while sharing a single set of rules.
+PetWise uses a **multi-module Gradle** setup with three layers:
 
 ```
-infrastructure → application → domain
-     │                │           │
-     └── spring-boot  └── java-library ──┘
-         -app-conventions  -conventions
+┌─────────────────┐      ┌──────────────┐      ┌────────┐
+│  infrastructure │ ───▶ │  application │ ───▶ │ domain │
+│  (Spring Boot)  │      │  (use cases) │      │ (core) │
+└─────────────────┘      └──────────────┘      └────────┘
+   spring-boot-app          java-library         java-library
+    -conventions             -conventions         -conventions
 ```
+
+Each arrow means "depends on". The **domain** module has zero framework dependencies;
+**application** orchestrates use cases; **infrastructure** wires everything with Spring Boot.
 
 ---
 
-## Convention Plugins
+## Why Convention Plugins?
 
-| Plugin | Purpose | Used by |
-|:-------|:--------|:--------|
-| `petwise.java-library-conventions` | Java 21 toolchain, JUnit 5, Spotless, JaCoCo | `domain`, `application` |
-| `petwise.spring-boot-app-conventions` | Spring Boot + all above, custom JAR name | `infrastructure` |
-| `petwise.lint-conventions` | Google Java Format via Spotless | (applied transitively) |
-| `petwise.jacoco-conventions` | Code coverage reporting | (applied transitively) |
-| `petwise.owasp-dependency-check-conventions` | CVE scanning of dependencies | (applied transitively) |
+Multi-module projects tend to repeat the same configuration in every `build.gradle.kts`.
+PetWise avoids this with **convention plugins** inside a **composite build** (`build-logic/`),
+so each module's build file stays minimal while sharing a single set of rules.
 
-All plugin sources live in `build-logic/src/main/kotlin/`.
+> **All plugin sources live in** `build-logic/src/main/kotlin/`.
+
+### Available plugins
+
+| Plugin | What it does | Applied to |
+|:-------|:-------------|:-----------|
+| `petwise.java-library-conventions` | Java 21 toolchain · JUnit 5 · Spotless · JaCoCo | `domain`, `application` |
+| `petwise.spring-boot-app-conventions` | Everything above **+** Spring Boot · custom JAR name | `infrastructure` |
+| `petwise.lint-conventions` | Google Java Format via Spotless | _(applied transitively)_ |
+| `petwise.jacoco-conventions` | Code-coverage reporting | _(applied transitively)_ |
+| `petwise.owasp-dependency-check-conventions` | CVE scanning of dependencies | _(applied transitively)_ |
 
 ---
 
 ## Version Catalog
 
-Dependency versions are centralized in `gradle/libs.versions.toml`. Modules reference dependencies
-by type-safe alias (e.g., `libs.spring.boot.starter.web`) instead of raw coordinates.
+All dependency versions live in **one place**: `gradle/libs.versions.toml`.
+
+Modules reference dependencies by their **type-safe alias** instead of raw coordinates:
+
+```kotlin
+// ✅  Use the catalog alias
+implementation(libs.spring.boot.starter.web)
+
+// ❌  Avoid hard-coded coordinates
+implementation("org.springframework.boot:spring-boot-starter-web:3.x.x")
+```
 
 ---
 
 ## Common Tasks
 
-```bash
-./gradlew build                              # Build all modules
-./gradlew test                               # Run all tests
-./gradlew test jacocoTestReport              # Tests + coverage report
-./gradlew spotlessApply                      # Auto-format code
-./gradlew dependencyCheckAnalyze             # CVE scan
-./gradlew :infrastructure:bootRun            # Run the application
-./gradlew :infrastructure:generateOpenApiDocs # Regenerate OpenAPI spec
-```
+| What you want to do | Command |
+|:---------------------|:--------|
+| Build all modules | `./gradlew build` |
+| Run all tests | `./gradlew test` |
+| Tests **+** coverage report | `./gradlew test jacocoTestReport` |
+| Auto-format code | `./gradlew spotlessApply` |
+| CVE scan | `./gradlew dependencyCheckAnalyze` |
+| Run the application | `./gradlew :infrastructure:bootRun` |
+| Regenerate OpenAPI spec | `./gradlew :infrastructure:generateOpenApiDocs` |
 
 ---
 
 ## Adding a New Module
 
-1. Create the directory and source layout:
+Follow these four steps to add a module (e.g. `new-module`):
 
-   ```bash
-   mkdir -p new-module/src/main/java new-module/src/test/java
-   ```
+**1 — Create the directory layout**
 
-2. Create `new-module/build.gradle.kts`:
+```bash
+mkdir -p new-module/src/main/java new-module/src/test/java
+```
 
-   ```kotlin
-   plugins {
-       alias(libs.plugins.java.library.convention)
-   }
-   dependencies {
-       implementation(project(":domain"))
-   }
-   ```
+**2 — Add a `build.gradle.kts`**
 
-3. Register in `settings.gradle.kts`:
+```kotlin
+// new-module/build.gradle.kts
+plugins {
+    alias(libs.plugins.java.library.convention)
+}
 
-   ```kotlin
-   include("new-module")
-   ```
+dependencies {
+    implementation(project(":domain"))
+}
+```
 
-4. Build: `./gradlew :new-module:build`
+**3 — Register the module in `settings.gradle.kts`**
+
+```kotlin
+include("new-module")
+```
+
+**4 — Verify the build**
+
+```bash
+./gradlew :new-module:build
+```
 
 ---
 

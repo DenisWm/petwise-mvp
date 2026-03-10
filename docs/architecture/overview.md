@@ -33,17 +33,17 @@ PetWise implements **Clean Architecture** drawing from:
 
 ```
 ┌──────────────────────────────────────────────────┐
-│         Infrastructure Layer                      │
+│         Infrastructure Layer                     │
 │  (Spring Boot, REST, JPA, Adapters)              │
 └──────────────────────────────────────────────────┘
                       ↓ depends on
 ┌──────────────────────────────────────────────────┐
-│         Application Layer                         │
+│         Application Layer                        │
 │  (Use Cases, Orchestration)                      │
 └──────────────────────────────────────────────────┘
                       ↓ depends on
 ┌──────────────────────────────────────────────────┐
-│         Domain Layer                              │
+│         Domain Layer                             │
 │  (Business Logic, Pure Java)                     │
 └──────────────────────────────────────────────────┘
 ```

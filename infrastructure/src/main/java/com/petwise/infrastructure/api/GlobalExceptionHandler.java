@@ -4,10 +4,14 @@ import com.petwise.domain.exceptions.DomainException;
 import com.petwise.domain.exceptions.NotFoundException;
 import com.petwise.domain.exceptions.NotificationException;
 import com.petwise.domain.validation.Error;
+import jakarta.servlet.http.HttpServletRequest;
+import java.net.URI;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
@@ -18,6 +22,11 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 /**
  * Centralised exception handler for all REST controllers.
  *
+ * <p>All error responses follow <strong>RFC 7807 Problem Details</strong> ({@code
+ * application/problem+json}) with the standard fields {@code type}, {@code title}, {@code status},
+ * {@code detail}, and {@code instance}. Domain-specific validation errors are carried in the {@code
+ * errors} extension property.
+ *
  * <p>Translates domain and application exceptions into proper HTTP responses and logs each scenario
  * at the appropriate severity level:
  *
@@ -26,79 +35,96 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  *   <li>{@link com.petwise.domain.exceptions.NotFoundException} → 404 (WARN)
  *   <li>{@link com.petwise.domain.exceptions.NotificationException} → 422 (WARN)
  *   <li>{@link DomainException} → 400 (WARN)
- *   <li>{@link AccessDeniedException} → re-thrown → 403 (handled by SecurityConfig)
- *   <li>{@link AuthenticationException} → re-thrown → 401 (handled by SecurityConfig)
+ *   <li>{@link AccessDeniedException} → 403 (WARN)
+ *   <li>{@link AuthenticationException} → 401 (WARN)
  *   <li>{@link Exception} → 500 (ERROR)
  * </ul>
  */
 @RestControllerAdvice
 @SuppressWarnings("PMD.ShortVariable")
 public class GlobalExceptionHandler {
+    /** Base URI prefix for RFC 7807 {@code type} identifiers. */
+    private static final String ERROR_BASE_URI = "https://petwise.example.com/errors/";
+
+    /** Class-level logger. */
     private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    /** Default constructor. */
     public GlobalExceptionHandler() {}
 
     /**
      * Handles {@link NotFoundException} — entity not found.
      *
      * @param exception the exception
-     * @return 404 response with error details
+     * @param request the current HTTP request
+     * @return 404 response with RFC 7807 problem details
      */
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiError> handleNotFound(final NotFoundException exception) {
+    public ResponseEntity<ProblemDetail> handleNotFound(
+            final NotFoundException exception, final HttpServletRequest request) {
         if (LOG.isWarnEnabled()) {
             LOG.warn("Resource not found: {}", exception.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(
-                        ApiError.from(
-                                HttpStatus.NOT_FOUND,
-                                exception.getMessage(),
-                                exception.getErrors()));
+        final var problem =
+                createProblemDetail(
+                        HttpStatus.NOT_FOUND,
+                        "not-found",
+                        exception.getMessage(),
+                        request,
+                        exception.getErrors());
+        return problemResponse(HttpStatus.NOT_FOUND, problem);
     }
 
     /**
      * Handles {@link NotificationException} — validation failures.
      *
      * @param exception the exception
-     * @return 422 response with error details
+     * @param request the current HTTP request
+     * @return 422 response with RFC 7807 problem details
      */
     @ExceptionHandler(NotificationException.class)
-    public ResponseEntity<ApiError> handleNotification(final NotificationException exception) {
+    public ResponseEntity<ProblemDetail> handleNotification(
+            final NotificationException exception, final HttpServletRequest request) {
         if (LOG.isWarnEnabled()) {
             LOG.warn(
                     "Validation failed: {} — errors: {}",
                     exception.getMessage(),
                     exception.getErrors());
         }
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(
-                        ApiError.from(
-                                HttpStatus.UNPROCESSABLE_ENTITY,
-                                exception.getMessage(),
-                                exception.getErrors()));
+        final var problem =
+                createProblemDetail(
+                        HttpStatus.UNPROCESSABLE_ENTITY,
+                        "validation-failed",
+                        exception.getMessage(),
+                        request,
+                        exception.getErrors());
+        return problemResponse(HttpStatus.UNPROCESSABLE_ENTITY, problem);
     }
 
     /**
      * Handles generic {@link DomainException} — domain rule violations.
      *
      * @param exception the exception
-     * @return 400 response with error details
+     * @param request the current HTTP request
+     * @return 400 response with RFC 7807 problem details
      */
     @ExceptionHandler(DomainException.class)
-    public ResponseEntity<ApiError> handleDomain(final DomainException exception) {
+    public ResponseEntity<ProblemDetail> handleDomain(
+            final DomainException exception, final HttpServletRequest request) {
         if (LOG.isWarnEnabled()) {
             LOG.warn(
                     "Domain rule violation: {} — errors: {}",
                     exception.getMessage(),
                     exception.getErrors());
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(
-                        ApiError.from(
-                                HttpStatus.BAD_REQUEST,
-                                exception.getMessage(),
-                                exception.getErrors()));
+        final var problem =
+                createProblemDetail(
+                        HttpStatus.BAD_REQUEST,
+                        "domain-rule-violation",
+                        exception.getMessage(),
+                        request,
+                        exception.getErrors());
+        return problemResponse(HttpStatus.BAD_REQUEST, problem);
     }
 
     /**
@@ -109,16 +135,23 @@ public class GlobalExceptionHandler {
      * ERROR logs.
      *
      * @param exception the exception
-     * @return 404 response with error details
+     * @param request the current HTTP request
+     * @return 404 response with RFC 7807 problem details
      */
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ApiError> handleNoResourceFound(
-            final NoResourceFoundException exception) {
+    public ResponseEntity<ProblemDetail> handleNoResourceFound(
+            final NoResourceFoundException exception, final HttpServletRequest request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Static resource not found: {}", exception.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(ApiError.from(HttpStatus.NOT_FOUND, exception.getMessage(), List.of()));
+        final var problem =
+                createProblemDetail(
+                        HttpStatus.NOT_FOUND,
+                        "resource-not-found",
+                        exception.getMessage(),
+                        request,
+                        List.of());
+        return problemResponse(HttpStatus.NOT_FOUND, problem);
     }
 
     /**
@@ -126,19 +159,23 @@ public class GlobalExceptionHandler {
      * authority for the requested resource.
      *
      * @param exception the exception
-     * @return 403 response with error details
+     * @param request the current HTTP request
+     * @return 403 response with RFC 7807 problem details
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiError> handleAccessDenied(final AccessDeniedException exception) {
+    public ResponseEntity<ProblemDetail> handleAccessDenied(
+            final AccessDeniedException exception, final HttpServletRequest request) {
         if (LOG.isWarnEnabled()) {
             LOG.warn("Access denied: {}", exception.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(
-                        ApiError.from(
-                                HttpStatus.FORBIDDEN,
-                                "Access denied — insufficient permissions",
-                                List.of()));
+        final var problem =
+                createProblemDetail(
+                        HttpStatus.FORBIDDEN,
+                        "access-denied",
+                        "Access denied — insufficient permissions",
+                        request,
+                        List.of());
+        return problemResponse(HttpStatus.FORBIDDEN, problem);
     }
 
     /**
@@ -146,73 +183,92 @@ public class GlobalExceptionHandler {
      * (missing, expired, malformed, bad signature).
      *
      * @param exception the exception
-     * @return 401 response with error details
+     * @param request the current HTTP request
+     * @return 401 response with RFC 7807 problem details
      */
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiError> handleAuthentication(final AuthenticationException exception) {
+    public ResponseEntity<ProblemDetail> handleAuthentication(
+            final AuthenticationException exception, final HttpServletRequest request) {
         if (LOG.isWarnEnabled()) {
             LOG.warn("Authentication failed: {}", exception.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(
-                        ApiError.from(
-                                HttpStatus.UNAUTHORIZED,
-                                "Authentication required — provide a valid Bearer token",
-                                List.of()));
+        final var detail =
+                exception.getMessage() != null
+                        ? exception.getMessage()
+                        : "Authentication required — provide a valid Bearer token";
+        final var problem =
+                createProblemDetail(
+                        HttpStatus.UNAUTHORIZED,
+                        "authentication-required",
+                        detail,
+                        request,
+                        List.of());
+        return problemResponse(HttpStatus.UNAUTHORIZED, problem);
     }
 
     /**
      * Catch-all for unexpected exceptions.
      *
      * @param exception the exception
-     * @return 500 response with a generic message
+     * @param request the current HTTP request
+     * @return 500 response with a generic RFC 7807 problem detail
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleUnexpected(final Exception exception) {
+    public ResponseEntity<ProblemDetail> handleUnexpected(
+            final Exception exception, final HttpServletRequest request) {
         if (LOG.isErrorEnabled()) {
             LOG.error("Unexpected error occurred", exception);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(
-                        ApiError.from(
-                                HttpStatus.INTERNAL_SERVER_ERROR,
-                                "An unexpected error occurred",
-                                List.of()));
+        final var problem =
+                createProblemDetail(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "internal-error",
+                        "An unexpected error occurred",
+                        request,
+                        List.of());
+        return problemResponse(HttpStatus.INTERNAL_SERVER_ERROR, problem);
+    }
+
+    // -------------------------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------------------------
+    /**
+     * Builds a {@link ProblemDetail} conforming to RFC 7807.
+     *
+     * @param status the HTTP status
+     * @param errorSlug short identifier appended to the base error URI (e.g. {@code "not-found"})
+     * @param detail human-readable explanation of the problem
+     * @param request the current HTTP request (used for the {@code instance} field)
+     * @param errors domain validation errors (may be empty)
+     * @return fully populated {@link ProblemDetail}
+     */
+    static ProblemDetail createProblemDetail(
+            final HttpStatus status,
+            final String errorSlug,
+            final String detail,
+            final HttpServletRequest request,
+            final List<Error> errors) {
+        final var problem = ProblemDetail.forStatus(status);
+        problem.setType(URI.create(ERROR_BASE_URI + errorSlug));
+        problem.setTitle(status.getReasonPhrase());
+        problem.setDetail(detail);
+        problem.setInstance(URI.create(request.getRequestURI()));
+        problem.setProperty("errors", errors);
+        return problem;
     }
 
     /**
-     * Lightweight error body returned to API clients.
+     * Wraps a {@link ProblemDetail} in a {@link ResponseEntity} with {@code
+     * application/problem+json} content type.
      *
-     * @param status the HTTP status code
-     * @param message a human-readable error summary
-     * @param errors the list of detailed domain errors (may be empty)
+     * @param status the HTTP status
+     * @param problem the problem detail body
+     * @return the response entity
      */
-    public record ApiError(int status, String message, List<Error> errors) {
-
-        /**
-         * Canonical constructor that defensively copies the error list.
-         *
-         * @param status the HTTP status code
-         * @param message a human-readable error summary
-         * @param errors the list of detailed domain errors (may be empty)
-         */
-        public ApiError(final int status, final String message, final List<Error> errors) {
-            this.status = status;
-            this.message = message;
-            this.errors = List.copyOf(errors);
-        }
-
-        /**
-         * Creates an {@link ApiError} from the given HTTP status, message, and error list.
-         *
-         * @param httpStatus the HTTP status
-         * @param message a human-readable error summary
-         * @param errors the list of detailed domain errors (may be empty)
-         * @return the API error
-         */
-        public static ApiError from(
-                final HttpStatus httpStatus, final String message, final List<Error> errors) {
-            return new ApiError(httpStatus.value(), message, errors);
-        }
+    private static ResponseEntity<ProblemDetail> problemResponse(
+            final HttpStatus status, final ProblemDetail problem) {
+        return ResponseEntity.status(status)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+                .body(problem);
     }
 }
